@@ -82,15 +82,15 @@ public class GameModel {
 		DeckTerritorios DeckTerritorios = new DeckTerritorios();
 		int cartasDistribuidas = 0;
 		while(cartasDistribuidas < 51){
+			System.out.println(jogadores.size());
+			System.out.println(cartasDistribuidas);
 			for (Jogador jogador:jogadores) {
 				Carta carta = DeckTerritorios.drawCard();
-				 if (carta != null) {
-					 jogador.addCarta(carta);
-					 cartasDistribuidas++;
+				 if (carta == null) {
+					 break;
 				 }
-				 else{
-					break;
-				 }
+				jogador.addCarta(carta);
+				cartasDistribuidas++;
 			}
 		}
 	}

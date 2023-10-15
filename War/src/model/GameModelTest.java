@@ -21,6 +21,8 @@ public class GameModelTest {
     // teste de adicionar jogador
     @Test
     public void testAddJogador() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
         gameModel.addJogador("Joana", CorJogador.Azul);
         assertEquals(1, gameModel.getJogadores().size());
     }
@@ -28,6 +30,8 @@ public class GameModelTest {
     // teste de adicionar mais jogadores que o limite
     @Test(expected = IllegalStateException.class)
     public void testAddJogadorMaxLimit() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
     	for (int i = 0; i < CorJogador.values().length; i++) {
     	    gameModel.addJogador("Jogador" + i, CorJogador.values()[i]);
     	}
@@ -37,6 +41,8 @@ public class GameModelTest {
     // teste do filtro de objetivos
     @Test
     public void testFiltroObjetivos() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
         gameModel.addJogador("Joana", CorJogador.Azul);
         gameModel.addJogador("Miguel", CorJogador.Vermelho);
         
@@ -51,6 +57,8 @@ public class GameModelTest {
     // teste de sorteio de objetivos
     @Test
     public void testSorteiaObjetivos() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
         gameModel.addJogador("Joana", CorJogador.Azul);
         gameModel.addJogador("Miguel", CorJogador.Vermelho);
         gameModel.sorteiaObjetivos();
@@ -64,6 +72,8 @@ public class GameModelTest {
     // teste de ordem de jogada
     @Test
     public void testSetOrdemJogada() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
         gameModel.addJogador("Joana", CorJogador.Azul);
         gameModel.addJogador("Miguel", CorJogador.Vermelho);
         gameModel.addJogador("Murilo", CorJogador.Verde);
@@ -83,4 +93,38 @@ public class GameModelTest {
         }
         assertTrue(ordemMudou);
     }
+    
+    @Test
+    public void testDistribuiCartasTerritorio() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
+    	gameModel.addJogador("Joana", CorJogador.Azul);
+        gameModel.addJogador("Miguel", CorJogador.Vermelho);
+        gameModel.addJogador("Murilo", CorJogador.Verde);
+        gameModel.distribuiCartasTerritorio();
+        
+        int totalCards = 0;
+        for (Jogador jogador : gameModel.getJogadores()) {
+            totalCards += jogador.getCartas().size();
+        }
+
+        assertEquals(51, totalCards);
+    }
+
+    @Test
+    public void testInicializaTerritorios() {
+    	GameModel.resetInstancia();
+        gameModel = GameModel.getInstancia();
+    	gameModel.addJogador("Joana", CorJogador.Azul);
+        gameModel.addJogador("Miguel", CorJogador.Vermelho);
+        gameModel.addJogador("Murilo", CorJogador.Verde);
+        gameModel.distribuiCartasTerritorio();
+        gameModel.inicializaTerritorios();
+        int totalTerritories = 0;
+        for (Jogador jogador : gameModel.getJogadores()) {
+            totalTerritories += jogador.getTerritorios().size();
+        }
+        assertEquals(51, totalTerritories);
+    }
+
 }
