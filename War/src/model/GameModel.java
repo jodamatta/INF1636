@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class GameModel {
 	private static GameModel instance = null;
-	private static final int MIN_JOGADORES = 3;
 	private static final int MAX_JOGADORES = 6;
 	private Scanner scanner;
 
@@ -45,20 +44,38 @@ public class GameModel {
 		jogadores.add(jogador);
 	}
 
-	protected List<Objetivo> filtraObjetivos() {
-		List<Objetivo> objetivos = Arrays.stream(ListaObjetivos.values()).map(Objetivo::new).collect(Collectors.toList());
-	
-		return objetivos.stream().filter(obj->obj.objetivoValido(jogadores)).collect(Collectors.toList());
-	}
-	
-	protected void sorteiaObjetivos() {
-		objetivosAtivos = filtraObjetivos();
-		Collections.shuffle(objetivosAtivos);
-		for (Jogador jogador:jogadores) {
-	        Objetivo objetivoSorteado = objetivosAtivos.remove(0);
-	        jogador.setObjetivo(objetivoSorteado.getObjetivo());  // Pass the ListaObjetivos enum
-	    }
-	}
+	protected boolean objetivoValido(ListaObjetivos objetivo, List<Jogador> jogadores) {
+        switch(objetivo) {
+            case ELIM_AZUL:
+                return jogadores.stream().anyMatch(p -> p.getCor() == CorJogador.Azul);
+            case ELIM_VERMELHO:
+                return jogadores.stream().anyMatch(p -> p.getCor() == CorJogador.Vermelho);
+            case ELIM_VERDE:
+                return jogadores.stream().anyMatch(p -> p.getCor() == CorJogador.Verde);
+            case ELIM_AMARELO:
+                return jogadores.stream().anyMatch(p -> p.getCor() == CorJogador.Amarelo);
+            case ELIM_BRANCO:
+                return jogadores.stream().anyMatch(p -> p.getCor() == CorJogador.Branco);
+            case ELIM_PRETO:
+                return jogadores.stream().anyMatch(p -> p.getCor() == CorJogador.Preto);
+            default:
+                return true;
+        }
+    }
+
+    protected List<Objetivo> filtraObjetivos() {
+        List<Objetivo> objetivos = Arrays.stream(ListaObjetivos.values()).map(Objetivo::new).collect(Collectors.toList());
+        return objetivos.stream().filter(obj -> this.objetivoValido(obj.getObjetivo(), jogadores)).collect(Collectors.toList());
+    }
+
+    protected void sorteiaObjetivos() {
+        objetivosAtivos = filtraObjetivos();
+        Collections.shuffle(objetivosAtivos);
+        for (Jogador jogador:jogadores) {
+            Objetivo objetivoSorteado = objetivosAtivos.remove(0);
+            jogador.setObjetivo(objetivoSorteado.getObjetivo());  // Pass the ListaObjetivos enum
+        }
+    }
 
 	protected void distribuiCartasTerritorio() {
 		DeckTerritorios DeckTerritorios = new DeckTerritorios();
@@ -137,8 +154,8 @@ public class GameModel {
 					int terreno;
 					terreno = scanner.nextInt();
 					scanner.nextLine(); 
-					while (terreno < 0 || terreno > c.getPaises().size() - 1){
-						System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + c.getPaises().size());
+					while (terreno < 0 || terreno > Tnumero - 1){
+						System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + Tnumero);
 						terreno = scanner.nextInt();
 						scanner.nextLine(); 
 					}
@@ -166,11 +183,11 @@ public class GameModel {
 		
 	}
 	// funcao temporaria para teste
-	public List<Jogador> getJogadores(){
+	protected List<Jogador> getJogadores(){
 		return Collections.unmodifiableList(jogadores);
 	}
 
-	public List<Continente> getContinentes(){
+	protected List<Continente> getContinentes(){
 		return Collections.unmodifiableList(continentes);
 	}
 
