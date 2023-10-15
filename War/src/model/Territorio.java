@@ -4,7 +4,8 @@ import java.util.Map;
 
 class Territorio {
     private String nome;
-    private Exercito exercito;
+    private int numeroSoldados;
+    private Jogador jogador;
     private Map<String, Integer> myMap = new HashMap<String, Integer>();
 
     {
@@ -75,11 +76,22 @@ class Territorio {
         return nome;
     }
 
-    public Exercito getExercito() {
-        return exercito;
+    public int getNumeroSoldados() {
+        return numeroSoldados;
     }
 
-    public void setExercito(Exercito exercito) {
-        this.exercito = exercito;
+    public Jogador getJogador() {
+        return jogador;
+    }
+
+    public void alteraNumSoldados(int quantidade) {
+        this.numeroSoldados += quantidade;
+        if (this.numeroSoldados < 0) {
+            throw new IllegalArgumentException("Numero de soldados nao pode ser negativo");
+        }
+    }
+
+    public void setJogador(Jogador outro_jogador) {
+        this.jogador = outro_jogador;
     }
 }

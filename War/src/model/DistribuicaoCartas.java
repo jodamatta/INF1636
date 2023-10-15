@@ -1,5 +1,4 @@
 package model;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DistribuicaoCartas {
@@ -28,8 +27,7 @@ public class DistribuicaoCartas {
         Continente america_do_sul = continentes.get(3);
         List<Territorio> paises = america_do_sul.getPaises();
         for (Territorio t : paises){
-            //faz o murilo dominar a america do sul
-            t.getExercito().setJogador(gameModel.getJogadores().get(0));
+            t.setJogador(gameModel.getJogadores().get(0));
         }
         gameModel.addExercitoContinente(gameModel.getJogadores().get(0));
     }
@@ -45,7 +43,7 @@ public class DistribuicaoCartas {
                 System.out.println(carta.getTerritorio() +  "   |   "+ carta.getSimbolo());
             }
             for (Territorio t : jogador.getTerritorios()){
-                System.out.println("T: " + t.getNome() + " | Ex num: " + t.getExercito().getNumeroSoldados() + "   | Player:" + t.getExercito().getJogador().getNome());
+                System.out.println("T: " + t.getNome() + " | Ex num: " + t.getNumeroSoldados() + "   | Player:" + t.getJogador().getNome());
             }
             k++;
 		}

@@ -117,7 +117,7 @@ public class GameModel {
 				scanner.nextLine(); 
 			}
 			exercitoNumero -= numTropas;
-			jogador.getTerritorios().get(terreno).getExercito().adicionarSoldados(numTropas);
+			jogador.getTerritorios().get(terreno).alteraNumSoldados(numTropas);;
 		}
 	}
 
@@ -152,7 +152,7 @@ public class GameModel {
 						scanner.nextLine(); 
 					}
 					exercitoNumero -= numTropas;
-					c.getPaises().get(terreno).getExercito().adicionarSoldados(numTropas);
+					c.getPaises().get(terreno).alteraNumSoldados(numTropas);;
 				}
 			}
 		}

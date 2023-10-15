@@ -50,7 +50,7 @@ class Continente {
 
     public int foiDominado(Jogador j){
         for(Territorio pais : this.paises){
-            if(pais.getExercito().getJogador().equals(j)){
+            if(pais.getJogador().equals(j)){
                 //code block
             }else{
                 return 0;
