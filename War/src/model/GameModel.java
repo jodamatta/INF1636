@@ -14,6 +14,7 @@ public class GameModel {
 	// exemplo: private List<Territorio> territorios
 	private List<Jogador> jogadores = new ArrayList<>();
 	private List<Objetivo> objetivosAtivos = new ArrayList<>();
+	private List<Territorio> territorios = new ArrayList<>(); //Miguel
 	
 	private GameModel() {
 	}
@@ -52,6 +53,9 @@ public class GameModel {
 		Collections.shuffle(jogadores);
 	}
 	
+	protected void setPrimeirosExercitos() {
+		
+	}
 	// funcao temporaria para teste
 	public List<Jogador> getJogadores(){
 		return Collections.unmodifiableList(jogadores);

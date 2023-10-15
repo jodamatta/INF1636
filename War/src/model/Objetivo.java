@@ -7,6 +7,7 @@ class Objetivo {
 	public Objetivo(ListaObjetivos objetivo) {
 		this.objetivo = objetivo;
 	}
+	
 	public ListaObjetivos getObjetivo() {
 		return objetivo;
 	}
@@ -34,4 +35,5 @@ class Objetivo {
 	public String toString() {
         return objetivo.name(); 
     }
+
 }

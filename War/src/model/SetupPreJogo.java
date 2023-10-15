@@ -63,6 +63,7 @@ public class SetupPreJogo {
 			System.out.println("Jogador " + k + "\nNome: " + jogador.getNome() + " | Cor: " + jogador.getCor() + " | Objetivo: " + jogador.getObjetivo());
 			k++;
 		}
+		
 	}
 	public static void main(String[] args) {
     	GameModel model = GameModel.getInstancia();
