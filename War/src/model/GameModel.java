@@ -109,10 +109,14 @@ public class GameModel {
 			}
 			exercitoNumero -= numTropas;
 			jogador.getTerritorios().get(terreno).getExercito().adicionarSoldados(numTropas);
-			
+
 		}
 
 
+	}
+
+	protected void addExercitoContinente(){
+		
 	}
 	
 	protected void setOrdemJogada() {

@@ -21,4 +21,8 @@ class Territorio {
     public void setExercito(Exercito exercito) {
         this.exercito = exercito;
     }
+
+    public int getContinente(){
+        
+    }
 }
