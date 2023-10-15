@@ -10,6 +10,7 @@ public class GameModel {
 	private static GameModel instance = null;
 	private static final int MAX_JOGADORES = 6;
 	private Scanner scanner;
+	private int numTrocas = 0;
 
 	// estados do jogo privados
 	// exemplo: private List<Territorio> territorios
@@ -119,8 +120,8 @@ public class GameModel {
 			int terreno;
 			terreno = scanner.nextInt();
 			scanner.nextLine(); 
-			while (terreno < 0 || terreno > jogador.getTerritorios().size() - 1){
-				System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + jogador.getTerritorios().size());
+			while (terreno < 0 || terreno > Tnumero - 1){
+				System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + (Tnumero-1));
 				terreno = scanner.nextInt();
 				scanner.nextLine(); 
 			}
@@ -155,7 +156,7 @@ public class GameModel {
 					terreno = scanner.nextInt();
 					scanner.nextLine(); 
 					while (terreno < 0 || terreno > Tnumero - 1){
-						System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + Tnumero);
+						System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + (Tnumero-1));
 						terreno = scanner.nextInt();
 						scanner.nextLine(); 
 					}
@@ -175,6 +176,61 @@ public class GameModel {
 		}
 	}
 	
+	protected int querTrocar(Jogador jogador){
+		if( jogador.verificaTroca() == 1){
+			System.out.println("Voce tem uma troca valida. Voce quer trocar? (S/N)");
+			String resposta;
+			resposta = scanner.nextLine();
+			while (!resposta.equals("S") && !resposta.equals("N")){
+				System.out.println("Resposta inválida. Escolha S ou N");
+				resposta = scanner.nextLine();
+			}
+			if(resposta.equals("S")){
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	protected void addExercitoCarta(Jogador jogador){
+		if(querTrocar(jogador) != 1){
+			return;
+		}
+		//Remove as cartas (implementar)
+		int Tnumero = jogador.getTerritorios().size();
+		int exercitoNumero = 5*numTrocas;
+		while (exercitoNumero > 0){
+
+			System.out.printf("Voce tem %d exercitos para posicionar e pode posiciona-los nos seguintes territorios:\n",exercitoNumero );
+			int k = 0;
+			for (Territorio t : jogador.getTerritorios()){
+				System.out.println(k + "  |   " + t.getNome() );
+				k++;
+			}
+			System.out.println("Escreva para qual terreno voce deseja adicionar tropas: ");
+			int terreno;
+			terreno = scanner.nextInt();
+			scanner.nextLine(); 
+			while (terreno < 0 || terreno > Tnumero - 1){
+				System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + (Tnumero - 1));
+				terreno = scanner.nextInt();
+				scanner.nextLine(); 
+			}
+			System.out.println("Escreva a quantidade de tropas: ");
+			int numTropas;
+			numTropas = scanner.nextInt();
+			scanner.nextLine();
+			while (numTropas < 0 || numTropas > exercitoNumero){
+				System.out.println("Numero de tropas inválido. Escolha um número entre 0 e " + exercitoNumero);
+				terreno = scanner.nextInt();
+				scanner.nextLine(); 
+			}
+			exercitoNumero -= numTropas;
+			jogador.getTerritorios().get(terreno).alteraNumSoldados(numTropas);;
+		}
+
+	}
+
 	protected void setOrdemJogada() {
 		Collections.shuffle(jogadores);
 	}
@@ -194,4 +250,6 @@ public class GameModel {
 	protected static void resetInstancia() {
         instance = null;
     }
+
+
 }

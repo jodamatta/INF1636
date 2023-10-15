@@ -64,7 +64,8 @@ class Territorio {
 
     public Territorio(String nome, Jogador jogador) {
         this.nome = nome;
-        this.exercito = new Exercito(1, jogador);
+        this.numeroSoldados = 1;
+        this.jogador = jogador;
     }
 
     public int getContinente(){

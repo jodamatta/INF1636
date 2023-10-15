@@ -53,4 +53,42 @@ class Jogador {
 	public void removeTerritorio(Territorio t){
 		this.territorios.remove(t);
 	}
+
+	public void removeCarta(Carta c){
+		this.cartas.remove(c);
+	}
+
+	public int verificaTroca(){
+		int triangulo = 0;
+		int circulo = 0;
+		int quadrado = 0;
+
+		for (Carta carta : this.cartas){
+			if (carta.getSimbolo() == "TRIANGULO"){
+				triangulo++;
+			}
+			else if (carta.getSimbolo() == "CIRCULO"){
+				circulo++;
+			}
+			else if (carta.getSimbolo() == "QUADRADO"){
+				quadrado++;
+			}
+		}
+		
+		if (triangulo >= 3){
+			return 1;
+		}
+		else if (circulo >= 3){
+			return 1;
+		}
+		else if (quadrado >= 3){
+			return 1;
+		}
+		else if (triangulo >= 1 && circulo >= 1 && quadrado >= 1){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
 }
