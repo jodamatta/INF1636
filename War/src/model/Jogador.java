@@ -21,13 +21,16 @@ class Jogador {
 	public String getNome() { 
 		return nome; 
 	}
-    public CorJogador getCor() { 
+    
+	public CorJogador getCor() { 
     	return cor; 
     }
-    public ListaObjetivos getObjetivo() { 
+    
+	public ListaObjetivos getObjetivo() { 
     	return objetivo; 
     }
-    public void setObjetivo(ListaObjetivos obj) { 
+    
+	public void setObjetivo(ListaObjetivos obj) { 
     	this.objetivo = obj; 
     }
 
@@ -47,4 +50,7 @@ class Jogador {
 		return this.territorios;
 	}
 
+	public void removeTerritorio(Territorio t){
+		this.territorios.remove(t);
+	}
 }

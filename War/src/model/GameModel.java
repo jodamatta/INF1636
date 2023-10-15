@@ -173,4 +173,8 @@ public class GameModel {
 	public List<Continente> getContinentes(){
 		return Collections.unmodifiableList(continentes);
 	}
+
+	protected static void resetInstancia() {
+        instance = null;
+    }
 }
