@@ -14,7 +14,7 @@ public class GameModel {
 	// exemplo: private List<Territorio> territorios
 	private List<Jogador> jogadores = new ArrayList<>();
 	private List<Objetivo> objetivosAtivos = new ArrayList<>();
-	private List<Territorio> territorios = new ArrayList<>(); //Miguel
+	private List<Carta> CartasTerritorios = new ArrayList<>(); //Miguel
 	
 	private GameModel() {
 	}
@@ -47,6 +47,32 @@ public class GameModel {
 	        Objetivo objetivoSorteado = objetivosAtivos.remove(0);
 	        jogador.setObjetivo(objetivoSorteado.getObjetivo());  // Pass the ListaObjetivos enum
 	    }
+	}
+
+	protected void distribuiCartasTerritorio() {
+		DeckTerritorios DeckTerritorios = new DeckTerritorios();
+		int cartasDistribuidas = 0;
+		while(cartasDistribuidas < DeckTerritorios.getSize()){
+			for (Jogador jogador:jogadores) {
+				Carta carta = DeckTerritorios.drawCard();
+				 if (carta != null) {
+					 jogador.addCarta(carta);
+					 cartasDistribuidas++;
+				 }
+				 else{
+					break;
+				 }
+			}
+		}
+	}
+
+	protected void inicializaTerritorios(){
+		for (Jogador jogador : jogadores){
+			for (Carta carta : jogador.getCartas()){
+				Territorio territorio = new Territorio(carta.getTerritorio(), jogador);
+				jogador.addTerritorio(territorio);
+			}
+		}
 	}
 	
 	protected void setOrdemJogada() {

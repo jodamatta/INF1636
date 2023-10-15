@@ -3,20 +3,20 @@ package model;
 //Miguel
 
 class Carta{
-    private int simbolo;
-    private Territorio territorio;
+    private String simbolo;
+    private String nomeTerritorio;
 
-    public Carta(int simbolo, Territorio territorio) {
+    public Carta(String nomeTerritorio, String simbolo) {
         this.simbolo = simbolo;
-        this.territorio = territorio;
+        this.nomeTerritorio = nomeTerritorio;
     }
 
-    public int getSimbolo() {
+    public String getSimbolo() {
         return simbolo;
     }
 
-    public Territorio getTerritorio() {
-        return territorio;
+    public String getTerritorio() {
+        return nomeTerritorio;
     }
 }
 

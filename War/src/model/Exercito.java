@@ -15,6 +15,10 @@ class Exercito {
         return numeroSoldados;
     }
 
+    public Jogador getJogador() {
+        return jogador;
+    }
+
     public void setNumeroSoldados(int numeroSoldados) {
         this.numeroSoldados = numeroSoldados;
     }

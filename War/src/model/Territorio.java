@@ -1,5 +1,5 @@
 package model;
-//Miguel
+
 
 class Territorio {
     private String nome;
@@ -7,7 +7,7 @@ class Territorio {
 
     public Territorio(String nome, Jogador jogador) {
         this.nome = nome;
-        this.exercito = new Exercito(0, jogador);
+        this.exercito = new Exercito(1, jogador);
     }
 
     public String getNome() {
