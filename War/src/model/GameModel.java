@@ -3,13 +3,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class GameModel {
 	private static GameModel instance = null;
 	private static final int MIN_JOGADORES = 3;
 	private static final int MAX_JOGADORES = 6;
-	
+	private Scanner scanner;
+
 	// estados do jogo privados
 	// exemplo: private List<Territorio> territorios
 	private List<Jogador> jogadores = new ArrayList<>();
@@ -17,6 +19,7 @@ public class GameModel {
 	private List<Carta> CartasTerritorios = new ArrayList<>(); //Miguel
 	
 	private GameModel() {
+		this.scanner = new Scanner(System.in);
 	}
 	
 	public static GameModel getInstancia() {
@@ -73,6 +76,43 @@ public class GameModel {
 				jogador.addTerritorio(territorio);
 			}
 		}
+	}
+
+	protected void addExercitoTerritorio(Jogador jogador){
+		int Tnumero = jogador.getTerritorios().size();
+		int exercitoNumero = Tnumero/2;
+		while (exercitoNumero > 0){
+
+			System.out.printf("Voce tem %d exercitos para posicionar e pode posiciona-los nos seguintes territorios:\n",exercitoNumero );
+			int k = 0;
+			for (Territorio t : jogador.getTerritorios()){
+				System.out.println(k + "  |   " + t.getNome() );
+				k++;
+			}
+			System.out.println("Escreva para qual terreno voce deseja adicionar tropas: ");
+			int terreno;
+			terreno = scanner.nextInt();
+			scanner.nextLine(); 
+			while (terreno < 0 || terreno > jogador.getTerritorios().size() - 1){
+				System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + jogador.getTerritorios().size());
+				terreno = scanner.nextInt();
+				scanner.nextLine(); 
+			}
+			System.out.println("Escreva a quantidade de tropas: ");
+			int numTropas;
+			numTropas = scanner.nextInt();
+			scanner.nextLine();
+			while (numTropas < 0 || numTropas > exercitoNumero){
+				System.out.println("Numero de tropas inválido. Escolha um número entre 0 e " + exercitoNumero);
+				terreno = scanner.nextInt();
+				scanner.nextLine(); 
+			}
+			exercitoNumero -= numTropas;
+			jogador.getTerritorios().get(terreno).getExercito().adicionarSoldados(numTropas);
+			
+		}
+
+
 	}
 	
 	protected void setOrdemJogada() {

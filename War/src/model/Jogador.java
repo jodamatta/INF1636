@@ -47,5 +47,4 @@ class Jogador {
 		return this.territorios;
 	}
 
-
 }

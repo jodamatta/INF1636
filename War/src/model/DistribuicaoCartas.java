@@ -23,6 +23,8 @@ public class DistribuicaoCartas {
         gameModel.distribuiCartasTerritorio();
         gameModel.inicializaTerritorios();
 
+        gameModel.addExercitoTerritorio(gameModel.getJogadores().get(0));
+
     }
 
 
