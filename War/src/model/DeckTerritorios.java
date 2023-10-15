@@ -26,7 +26,7 @@ class DeckTerritorios {
                         "JORDANIA", "LETONIA", "SIBERIA", "SIRIA", "ARGENTINA", "ITALIA", "SUECIA", "NOVAZELANDIA"
                 },
                 { // Circulo
-                        "ALGERIA", "NIGERIA", "CALGARY", "GROELANDIA", "QUEBEC", "ARABIA_SAUDITA", "BANGLADESH",
+                        "ARGELIA", "NIGERIA", "CALGARY", "GROELANDIA", "QUEBEC", "ARABIA_SAUDITA", "BANGLADESH",
                         "CAZAQUISTAO", "ESTONIA", "JAPAO", "PAQUISTAO", "BRASIL", "ESPANHA", "REINO_UNIDO", "UCRANIA",
                         "PERTH" }
         };

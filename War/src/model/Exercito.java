@@ -5,7 +5,7 @@ package model;
 class Exercito {
     private int numeroSoldados;
     private Jogador jogador;
-    
+
     public Exercito(int numeroSoldados, Jogador jogador) {
         this.numeroSoldados = numeroSoldados;
         this.jogador = jogador;
@@ -32,5 +32,10 @@ class Exercito {
         if (this.numeroSoldados < 0) {
             this.numeroSoldados = 0;
         }
+    }
+
+    public void setJogador(Jogador outro_jogador) {
+        this.jogador = outro_jogador;
+        this.jogador.removeTerritorio(null);
     }
 }
