@@ -13,7 +13,6 @@ public class GameModel {
 	private int numTrocas = 0;
 
 	// estados do jogo privados
-	// exemplo: private List<Territorio> territorios
 	private List<Jogador> jogadores = new ArrayList<>();
 	private List<Objetivo> objetivosAtivos = new ArrayList<>();
 	private List<Continente> continentes = new ArrayList<>(Arrays.asList(
@@ -25,7 +24,6 @@ public class GameModel {
 		new Continente("Oceania")
 	)); 
 	
-	List<String> myList = new ArrayList<>(Arrays.asList("element1", "element2", "element3", "element4", "element5"));
 	private GameModel() {
 		this.scanner = new Scanner(System.in);
 	}
@@ -82,8 +80,6 @@ public class GameModel {
 		DeckTerritorios DeckTerritorios = new DeckTerritorios();
 		int cartasDistribuidas = 0;
 		while(cartasDistribuidas < 51){
-			System.out.println(jogadores.size());
-			System.out.println(cartasDistribuidas);
 			for (Jogador jogador:jogadores) {
 				Carta carta = DeckTerritorios.drawCard();
 				 if (carta == null) {
