@@ -13,7 +13,6 @@ class DeckTerritorios {
     }
 
     private void initializeDeckTerritorios() {
-        // Create territory cards for Risk
         String symbol;
         String[][] territories = {
                 { // Triangulo
@@ -52,7 +51,6 @@ class DeckTerritorios {
 
             }
         }
-        // Shuffle the DeckTerritorios to randomize the order
         shuffleDeckTerritorios();
     }
 
@@ -64,7 +62,7 @@ class DeckTerritorios {
         if (!cards.isEmpty()) {
             return cards.remove(0);
         }
-        return null; // No more cards in the DeckTerritorios
+        return null; 
     }
 
     public int getSize() {
