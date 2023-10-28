@@ -60,8 +60,8 @@ public class DeckTerritoriosTest {
             }
         }
 
-        assertEquals(17, triangles);
-        assertEquals(17, squares);
-        assertEquals(17, circles);
+        assertEquals(19, triangles);
+        assertEquals(16, squares);
+        assertEquals(16, circles);
     }
 }

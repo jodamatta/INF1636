@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -19,8 +20,9 @@ class JanelaInicial {
     private JComboBox<Integer> numJogadoresComboBox;
     private Label lblNumJogadoresPrompt;
     private GameModel gameModel;
+    private List<String> coresDisponiveis;
     private int max_jogadores;
-    private List<String> availableColors = new ArrayList<>(Arrays.asList(gameModel.getCores()));
+    private ItemListener corBoxListener;
 
 
     public JanelaInicial() {
@@ -30,6 +32,9 @@ class JanelaInicial {
     
 
     private void initUI() {
+    	coresDisponiveis = new ArrayList<>();
+    	coresDisponiveis.add("--Selecione Cor--");
+    	coresDisponiveis.addAll(Arrays.asList(gameModel.getCores()));
     	max_jogadores = gameModel.getMaxJogadores();
         frame = new Frame("Risk Game Start Window");
         frame.setSize(1200, 700); 
@@ -91,36 +96,35 @@ class JanelaInicial {
         campoNomeJogadores = new JTextField[max_jogadores];
         coresComboBox = new JComboBox[max_jogadores];
         
+        corBoxListener = new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if(!e.getItem().equals("--Selecione Cor--")) {
+                    	coresDisponiveis.remove(e.getItem());
+                    	//refreshComboBoxes();
+                    }
+                } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    if(!e.getItem().equals("--Selecione Cor--")) {
+                    	coresDisponiveis.add((String) e.getItem());
+                        refreshComboBoxes();
+                    }
+                }
+            }
+        };
         
         for (int i = 0; i < max_jogadores; i++) {
             campoNomeJogadores[i] = new JTextField();
             campoNomeJogadores[i].setBounds(100, 100 + (i * 60), 200, 30);
             frame.add(campoNomeJogadores[i]);
 
-            coresComboBox[i] = new JComboBox<>(gameModel.getCores());
+            coresComboBox[i] = new JComboBox<>(coresDisponiveis.toArray(new String[0]));
+            coresComboBox[i].setSelectedItem("--Selecione Cor--");
+
             coresComboBox[i].setBounds(320, 100 + (i * 60), 150, 30);
             
             // cria um ItemListener pro ComboBox
-            coresComboBox[i].addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                    	// se selecionamos uma cor, temos que remove-la das opcoes
-                        for (JComboBox<String> box : coresComboBox) {
-                            if (box != e.getSource()) {  
-                                box.removeItem(e.getItem());
-                            }
-                        }
-                    } else if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    	// se tiramos uma cor, devolvemos ela pras opcoes
-                        for (JComboBox<String> box : coresComboBox) {
-                            if (box != e.getSource() && box.getItemCount() < gameModel.getCores().length) { 
-                                box.addItem((String) e.getItem());
-                            }
-                        }
-                    }
-                }
-            });
+            coresComboBox[i].addItemListener(corBoxListener);
 
             frame.add(coresComboBox[i]);
 
@@ -128,6 +132,7 @@ class JanelaInicial {
             campoNomeJogadores[i].setVisible(false);
             coresComboBox[i].setVisible(false);
         }
+        
 
         
         btnIniciaJogo = new Button("Start Game");
@@ -138,6 +143,31 @@ class JanelaInicial {
         
         frame.setVisible(true);
     }
+    
+    private void refreshComboBoxes() {
+        for (JComboBox<String> box : coresComboBox) {
+            box.removeItemListener(corBoxListener);  // Remove listener
+            
+            Object selected = box.getSelectedItem();
+            System.out.println(selected);
+            
+            box.removeAllItems();
+            box.addItem("--Selecione Cor--");
+            for (String color : coresDisponiveis) {
+                box.addItem(color);
+            }
+            
+            if (coresDisponiveis.contains(selected) || "--Selecione Cor--".equals(selected)) {
+                box.setSelectedItem(selected);
+            }/* else {
+                box.setSelectedItem("--Selecione Cor--");
+            }*/
+            
+            box.addItemListener(corBoxListener);  // Add listener back
+        }
+    }
+
+
     
     private void mostraSetupJogadores(int numJogadores) {
         btnNovoJogo.setVisible(false);
