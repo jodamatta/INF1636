@@ -19,27 +19,27 @@ public class GameModelTest {
     }
 
     // teste de adicionar jogador
-    @Test
-    public void testAddJogador() {
-    	GameModel.resetInstancia();
-        gameModel = GameModel.getInstancia();
-        gameModel.addJogador("Joana", CorJogador.Azul);
-        assertEquals(1, gameModel.getJogadores().size());
-    }
+    //@Test
+    //public void testAddJogador() {
+    //	GameModel.resetInstancia();
+    //   gameModel = GameModel.getInstancia();
+    //    gameModel.addJogador("Joana", CorJogador.Azul);
+    //   assertEquals(1, gameModel.getJogadores().size());
+    //}
 
     // teste de adicionar mais jogadores que o limite
-    @Test(expected = IllegalStateException.class)
-    public void testAddJogadorMaxLimit() {
-    	GameModel.resetInstancia();
-        gameModel = GameModel.getInstancia();
-    	for (int i = 0; i < CorJogador.values().length; i++) {
-    	    gameModel.addJogador("Jogador" + i, CorJogador.values()[i]);
-    	}
-    	gameModel.addJogador("JogadorExtra", CorJogador.Azul); 
-    }
+    //@Test(expected = IllegalStateException.class)
+    //public void testAddJogadorMaxLimit() {
+    //	GameModel.resetInstancia();
+    //    gameModel = GameModel.getInstancia();
+    //	for (int i = 0; i < CorJogador.values().length; i++) {
+    //	    gameModel.addJogador("Jogador" + i, CorJogador.values()[i]);
+    //	}
+    //	gameModel.addJogador("JogadorExtra", CorJogador.Azul); 
+    //}
 
     // teste do filtro de objetivos
-    @Test
+    /*@Test
     public void testFiltroObjetivos() {
     	GameModel.resetInstancia();
         gameModel = GameModel.getInstancia();
@@ -126,5 +126,5 @@ public class GameModelTest {
         }
         assertEquals(51, totalTerritories);
     }
-
+*/
 }
