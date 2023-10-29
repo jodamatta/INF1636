@@ -310,6 +310,7 @@ public class GameModel {
 	public static void resetInstancia() {
         instance = null;
     }
+	
 	public void startGame(){
 		sorteiaObjetivos();
 		distribuiCartasTerritorio();
