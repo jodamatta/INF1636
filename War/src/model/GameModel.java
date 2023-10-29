@@ -355,7 +355,9 @@ public class GameModel {
 		distribuiCartasTerritorio();
 		inicializaTerritorios();
 		setOrdemJogada();
-		
+		for (Jogador jogador : jogadores){
+			jogador.limpaMao();
+		}
 		instance_view.chamaJogo();
 	}
 
@@ -382,38 +384,15 @@ public class GameModel {
 	}
 
 	public void hardCodedSetup() {
-        // Add 3 jogadores, distribui as cartas e inicializa as tropas:
-        String nome1 = "Murilo";
-        String nome2 = "Joana";
-        String nome3 = "Miguel";
-        String cor1 = "Amarelo";
-        String cor2 = "Vermelho";
-        String cor3 = "Verde";
-        instance.addJogador(nome1, cor1);
-        instance.addJogador(nome2, cor2);
-        instance.addJogador(nome3, cor3);
-        instance.distribuiCartasTerritorio();
-        instance.inicializaTerritorios();
-		
-        // Add tropas aleatoriamente pra simular uma situação de meio de jogo:
-        List<Jogador> todosJogadores = instance.getJogadores();
-
-		for (Jogador jogador : todosJogadores){
-			jogador.limpaMao();
-		}
-
-        for (Jogador jogador : todosJogadores) {
+        for (Jogador jogador : jogadores) {
             for (Territorio t : jogador.getTerritorios()) {
 
                 Random random = new Random();
                 int randomNumber = random.nextInt(5);
                 t.alteraNumSoldados(randomNumber);
-
             }
         }
-
-		Jogador jogador1 = todosJogadores.get(0);
-		jogador1.addCarta(deckCartas.drawCard());
+		Jogador jogador1 = jogadores.get(0);
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
@@ -421,10 +400,11 @@ public class GameModel {
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
     }
+
 	public static void main(String[] args){
 		GameModel gameInstance = GameModel.getInstancia();
-		System.out.println('a');
 		//gameInstance.hardStartGame();
+		//gameInstance.hardCodedSetup();
 		gameInstance.startGame();
 	}
 
