@@ -36,7 +36,8 @@ public class SimulacaoAtaque {
         }
         printTerritorios();
         //Simula uma ação de ataque partindo do jogador 0 - Murilo
-        gameModel.ataqueJogador(todosJogadores.get(0));
+        //gameModel.ataqueJogador(todosJogadores.get(0));
+        
     }
 
     void printTerritorios() {

@@ -58,14 +58,14 @@ public class JanelaCartas extends Frame {
     dicionario.put("SIRIA", "war_carta_as_siria.png");
     dicionario.put("TAILANDIA", "war_carta_as_tailandia.png");
     dicionario.put("TURQUIA", "war_carta_as_turquia.png");
-    dicionario.put("ESPANHA", "war_carta_oc_espanha.png");
-    dicionario.put("FRANCA", "war_carta_oc_franca.png");
-    dicionario.put("ITALIA", "war_carta_oc_italia.png");
-    dicionario.put("POLONIA", "war_carta_oc_polonia.png");
-    dicionario.put("REINO_UNIDO", "war_carta_oc_reinounido.png");
-    dicionario.put("ROMENIA", "war_carta_oc_romenia.png");
-    dicionario.put("SUECIA", "war_carta_oc_suecia.png");
-    dicionario.put("UCRANIA", "war_carta_oc_ucrania.png");
+    dicionario.put("ESPANHA", "war_carta_eu_espanha.png");
+    dicionario.put("FRANCA", "war_carta_eu_franca.png");
+    dicionario.put("ITALIA", "war_carta_eu_italia.png");
+    dicionario.put("POLONIA", "war_carta_eu_polonia.png");
+    dicionario.put("REINO_UNIDO", "war_carta_eu_reinounido.png");
+    dicionario.put("ROMENIA", "war_carta_eu_romenia.png");
+    dicionario.put("SUECIA", "war_carta_eu_suecia.png");
+    dicionario.put("UCRANIA", "war_carta_eu_ucrania.png");
     dicionario.put("AUSTRALIA", "war_carta_oc_australia.png");
     dicionario.put("INDONESIA", "war_carta_oc_indonesia.png");
     dicionario.put("NOVAZELANDIA", "war_carta_oc_novazelandia.png");
@@ -88,14 +88,14 @@ public class JanelaCartas extends Frame {
         for (String nome : nomesTerritorios) {        	
         	JLabel label = new JLabel();
         	label.setBounds(0 + offSetX, 0+offsetY, 160, 300);
-        	System.out.println(dictPath.get(nome));
         	label.setIcon(new ImageIcon(dictPath.get(nome)));
         	add(label);
         	offSetX += 150;
         	if (offSetX > 1500) {
         		offSetX = 0;
-        		offsetY = 300;
+        		offsetY += 300;
         	}
+        	
         }
 
         addWindowListener(new WindowAdapter() {
