@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import view.GameView;
 
 public class GameModel {
 	private static GameModel instance = null;
+	private static GameView instance_view;
 	private static final int MAX_JOGADORES = 6;
 	private Scanner scanner;
 	private int numTrocas = 0;
@@ -311,13 +313,28 @@ public class GameModel {
 	public static void resetInstancia() {
         instance = null;
     }
+
+	public void hardStartGame(){
+		instance_view = GameView.getInstanciaView();
+		GameModel gameInstance = GameModel.getInstancia();	
+		gameInstance.addJogador("Joana", "Azul");
+		gameInstance.addJogador("Miguel", "Verde");
+		gameInstance.addJogador("Murilo", "Vermelho");
+		beginGame();
+	}
 	
 	public void startGame(){
+		instance_view = GameView.getInstanciaView();	
+		instance_view.chamaInicio();
+	}
+
+	public void beginGame(){
 		sorteiaObjetivos();
 		distribuiCartasTerritorio();
 		inicializaTerritorios();
 		setOrdemJogada();
 		
+		instance_view.chamaJogo();
 	}
 
 	public String getTerritorioCor(String nomeTerritorio){
@@ -364,4 +381,9 @@ public class GameModel {
             }
         }
     }
+	public static void main(String[] args){
+		GameModel gameInstance = GameModel.getInstancia();
+		System.out.println('a');
+		gameInstance.hardStartGame();
+	}
 }

@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
-class JanelaInicial {
+class JanelaInicial extends Frame{
 	private Frame frame;
     private Button btnNovoJogo;
     private Button btnContinuaJogo;
@@ -27,6 +30,7 @@ class JanelaInicial {
     private List<String> coresDisponiveis;
     private int max_jogadores;
     private ItemListener corBoxListener;
+    private BufferedImage imagemDeFundo;
 
 
     public JanelaInicial() {
@@ -36,6 +40,12 @@ class JanelaInicial {
     
 
     private void initUI() {
+        try {
+            imagemDeFundo = ImageIO.read(new File("C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\War_Titulo.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+
     	coresDisponiveis = new ArrayList<>();
     	coresDisponiveis.add("--Selecione Cor--");
     	coresDisponiveis.addAll(Arrays.asList(gameModel.getCores()));
@@ -213,8 +223,14 @@ class JanelaInicial {
     	for (int i = 0; i < numJogadores; i++) {
             gameModel.addJogador(nomesJogadores.get(i), coresEscolhidas.get(i));
         }
-        gameModel.startGame();
+        gameModel.beginGame();
         return;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        g.drawImage(imagemDeFundo, 0, 0, this);
     }
     
     public static void main(String[] args) {
