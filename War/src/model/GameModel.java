@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -184,7 +185,7 @@ public class GameModel {
 	}
 	
 	public int querTrocar(Jogador jogador){
-		if( jogador.verificaTroca() == 1){
+		if( jogador.verificaTroca() != 0){
 			System.out.println("Voce tem uma troca valida. Voce quer trocar? (S/N)");
 			String resposta;
 			resposta = scanner.nextLine();
@@ -203,7 +204,7 @@ public class GameModel {
 		if(querTrocar(jogador) != 1){
 			return;
 		}
-		//Remove as cartas (implementar)
+		jogador.removerCartas(jogador.verificaTroca());
 		int Tnumero = jogador.getTerritorios().size();
 		int exercitoNumero = 5*numTrocas;
 		while (exercitoNumero > 0){
@@ -319,4 +320,48 @@ public class GameModel {
 		
 	}
 
+	public String getTerritorioCor(String nomeTerritorio){
+		for (Territorio t : territorios){
+			if (t.getNome() == nomeTerritorio){
+				return t.getJogador().getCor().toString();
+			}
+		}
+		return null;
+	}
+
+	public int getNumSoldados(String nomeTerritorio){
+		for (Territorio t : territorios){
+			if (t.getNome() == nomeTerritorio){
+				return t.getNumeroSoldados();
+			}
+		}
+		return 0;
+	}
+
+	public void hardCodedSetup() {
+        // Add 3 jogadores, distribui as cartas e inicializa as tropas:
+        String nome1 = "Murilo";
+        String nome2 = "Joana";
+        String nome3 = "Miguel";
+        String cor1 = "Amarelo";
+        String cor2 = "Vermelho";
+        String cor3 = "Verde";
+        instance.addJogador(nome1, cor1);
+        instance.addJogador(nome2, cor2);
+        instance.addJogador(nome3, cor3);
+        instance.distribuiCartasTerritorio();
+        instance.inicializaTerritorios();
+
+        // Add tropas aleatoriamente pra simular uma situação de meio de jogo:
+        List<Jogador> todosJogadores = instance.getJogadores();
+        for (Jogador jogador : todosJogadores) {
+            for (Territorio t : jogador.getTerritorios()) {
+
+                Random random = new Random();
+                int randomNumber = random.nextInt(5);
+                t.alteraNumSoldados(randomNumber);
+
+            }
+        }
+    }
 }
