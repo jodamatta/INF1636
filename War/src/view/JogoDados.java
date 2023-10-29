@@ -1,16 +1,14 @@
 package view;
 
 import java.awt.*;
-import javax.swing.*;
 
 public class JogoDados {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Jogo de Dados");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Frame frame = new Frame("Jogo de Dados");
         frame.setSize(150, 150);
 
-        PainelDado dado = new PainelDado(5, Color.PINK, TipoDado.DEFESA); // Dado de defesa, por exemplo
+        PainelDado dado = new PainelDado(3, Color.RED, TipoDado.ATAQUE); // Dado de defesa, por exemplo
         
         frame.add(dado);
 
@@ -22,7 +20,7 @@ public class JogoDados {
         DEFESA
     }
 
-    static class PainelDado extends JPanel {
+    static class PainelDado extends Panel {
 
         private int valorDado;
         private Color corJogador;
@@ -35,8 +33,8 @@ public class JogoDados {
         }
 
         @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
+        public void paint(Graphics g) {
+            super.paint(g);
 
             Graphics2D g2d = (Graphics2D) g;
 
