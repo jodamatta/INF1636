@@ -14,6 +14,7 @@ public class GameModel {
 
 	// estados do jogo privados
 	private static List<Jogador> jogadores = new ArrayList<>();
+	private static List<Territorio> territorios = new ArrayList<>();
 	private List<Objetivo> objetivosAtivos = new ArrayList<>();
 	private List<Continente> continentes = new ArrayList<>(Arrays.asList(
 		new Continente("Africa"),
@@ -104,6 +105,7 @@ public class GameModel {
 		for (Jogador jogador : jogadores){
 			for (Carta carta : jogador.getCartas()){
 				Territorio territorio = new Territorio(carta.getTerritorio(), jogador);
+				territorios.add(territorio);
 				jogador.addTerritorio(territorio);
 				continentes.get(territorio.getContinente()).addPais(territorio);
 			}
@@ -257,6 +259,52 @@ public class GameModel {
 
 	public List<Continente> getContinentes(){
 		return Collections.unmodifiableList(continentes);
+	}
+
+	public void ataqueJogador(Jogador j){
+		Ataque att = new Ataque(j);
+		List<Territorio> territoriosQuePodemFazerAtaques = att.getOrigemDisponivel();
+		System.out.println(j.getNome() + ", você pode fazer um ataque a partir dos seguintes territórios:" );
+		int k = 0;
+		int Tnumero = territoriosQuePodemFazerAtaques.size();
+		for (Territorio t : territoriosQuePodemFazerAtaques){
+			System.out.println(k + " | " + t.getNome());
+			k++;
+		}
+		System.out.println("Selecine o territorio: ");
+		int terreno;
+		terreno = scanner.nextInt();
+		scanner.nextLine();
+		while (terreno < 0 || terreno > Tnumero - 1){
+						System.out.println("territorio inválido. Escolha um territorio entre 0 e " + (Tnumero-1));
+						terreno = scanner.nextInt();
+						scanner.nextLine(); 
+					}
+		Territorio paisOrigem = territoriosQuePodemFazerAtaques.get(terreno);
+		att.setPaisOrigem(paisOrigem);
+		System.out.println("Voce escolheu atacar a partir de " + paisOrigem.getNome() );
+		System.out.println("Alvos disponiveis: ");
+		int l = 0;
+		List <String> listaAlvo = att.getAlvos();
+		for (String alvo : listaAlvo){
+			System.out.println(l + " | " + alvo);
+			l++;
+		}
+		System.out.println("Selecine o alvo: ");
+		int alvo;
+		alvo = scanner.nextInt();
+		scanner.nextLine();
+		for (Territorio t : territorios){
+			if (listaAlvo.get(alvo) == t.getNome()){
+				att.setAlvo(t);
+			}
+		}
+		Territorio Talvo = att.getAlvo();
+		if (Talvo != null){
+			System.out.println("Alvo: " + Talvo.getNome() + " | " + "Sob controle de : " + Talvo.getJogador().getNome() + " | " + "Número de defensores: " + Talvo.getNumeroSoldados());
+		}
+
+
 	}
 
 	public static void resetInstancia() {

@@ -69,7 +69,6 @@ class Territorio {
     }
 
     public int getContinente(){
-        System.out.println("Continente: " + this.nome + " | " + myMap.get(this.nome));
         return myMap.get(this.nome);
     }
 
