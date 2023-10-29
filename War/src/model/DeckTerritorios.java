@@ -69,5 +69,7 @@ class DeckTerritorios {
         return cards.size();
     }
 
-    
+    public void addCarta(Carta carta){
+        cards.add(carta);
+    }
 }

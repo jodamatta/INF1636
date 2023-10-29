@@ -5,18 +5,19 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import model.GameModel;
 
-import java.awt.Label;
-
 public class JanelaCartas extends Frame {
     private GameModel gameModel;
     Map<String,  String> dictPath = new HashMap<>();
     Map<String, String> dicionario = new HashMap<>();
+    Map<String, String> dictObejetivos = new HashMap<>();
+    private Button btnTrocaCartas;
 
     {
     dicionario.put("AFRICA_DO_SUL", "war_carta_af_africadosul.png");
@@ -71,6 +72,7 @@ public class JanelaCartas extends Frame {
     dicionario.put("NOVAZELANDIA", "war_carta_oc_novazelandia.png");
     dicionario.put("PERTH", "war_carta_oc_perth.png");
     }
+    
     public JanelaCartas() {
         gameModel = GameModel.getInstancia();
         initUI();
@@ -82,10 +84,10 @@ public class JanelaCartas extends Frame {
         setTitle("Janela Cartas");
         setSize(1200, 700);
         setLayout(null);
-        Set<String> nomesTerritorios = dictPath.keySet();
+        List<String> nomesCatas = gameModel.getCartasJogadorAtual();
         int offSetX = 0;
         int offsetY = 0;
-        for (String nome : nomesTerritorios) {        	
+        for (String nome : nomesCatas) {        	
         	JLabel label = new JLabel();
         	label.setBounds(0 + offSetX, 0+offsetY, 160, 300);
         	label.setIcon(new ImageIcon(dictPath.get(nome)));
@@ -101,10 +103,15 @@ public class JanelaCartas extends Frame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
 
+        btnTrocaCartas = new Button("Trocar Cartas");
+        btnTrocaCartas.setBounds(1070, 640, 120, 30); // Define posição e tamanho do botão
+        btnTrocaCartas.addActionListener(e -> {gameModel.addExercitoCarta(); dispose();});
+        add(btnTrocaCartas);
+        displayObjetivo();
         setVisible(true);
     }
 
@@ -125,7 +132,7 @@ public class JanelaCartas extends Frame {
     }
     
     private void preencheDictPath(String [] arr) {
-    	 String basePath = "C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images\\";
+    	 String basePath = "C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\";
     	    for (int i = 0; i < arr.length; i++) {
     	        String countryName = arr[i];
     	        String path = basePath + dicionario.get(countryName);
@@ -136,5 +143,28 @@ public class JanelaCartas extends Frame {
     }
     public static void main(String[] args) {
         new JanelaCartas();
+    }
+
+    {
+        dictObejetivos.put("CONQ_24", "Conquistar 24 territorios");
+        dictObejetivos.put("CONQ_18_2", "Conquistar 18 territorios, cada um com no minimo 2 exercitos");
+        dictObejetivos.put("CONQ_AS_LATAM", "Conquistar Asia e America do Sul");
+        dictObejetivos.put("CONQ_NA_AF", "Conquistar America do Norte e Africa");
+        dictObejetivos.put("CONQ_NA_AU", "Conquistar America do Norte e Australasia");
+        dictObejetivos.put("CONQ_EU_LATAM", "Conquistar Europa e America do Sul");
+        dictObejetivos.put("CONQ_EU_AU", "Conquistar Europa e Australasia");
+        dictObejetivos.put("ELIM_AZUL", "Eliminar o jogador azul");
+        dictObejetivos.put("ELIM_VERMELHO", "Eliminar o jogador vermelho");
+        dictObejetivos.put("ELIM_AMARELO", "Eliminar o jogador amarelo");
+        dictObejetivos.put("ELIM_VERDE", "Eliminar o jogador verde");
+        dictObejetivos.put("ELIM_BRANCO", "Eliminar o jogador branco");
+        dictObejetivos.put("ELIM_PRETO", "Eliminar o jogador preto");
+    }
+
+    private void displayObjetivo(){
+        String objetivo = "Objetivo: " + dictObejetivos.get(gameModel.getObjetivoJogadorAtual());
+        Label lblObjetivo = new Label(objetivo);
+        lblObjetivo.setBounds(70, 650, 400, 30);
+        add(lblObjetivo);
     }
 }

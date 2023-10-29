@@ -93,30 +93,36 @@ class Jogador {
 		}
 	}
 
-	public void removerCartas(int tipoRemocao) {
+	public void removerCartas(int tipoRemocao, DeckTerritorios deckCartas) {
         if (tipoRemocao == 1) {
-            removerCartasPorSimbolo("TRIANGULO", 3);
+            removerCartasPorSimbolo("TRIANGULO", 3, deckCartas);
         } else if (tipoRemocao == 2) {
-            removerCartasPorSimbolo("CIRCULO", 3);
+            removerCartasPorSimbolo("CIRCULO", 3, deckCartas);
         } else if (tipoRemocao == 3) {
-            removerCartasPorSimbolo("QUADRADO", 3);
+            removerCartasPorSimbolo("QUADRADO", 3, deckCartas);
         } else if (tipoRemocao == 4) {
-            removerCartasPorSimbolo("TRIANGULO",1);
-            removerCartasPorSimbolo("QUADRADO",1);
-            removerCartasPorSimbolo("CIRCULO",1);
+            removerCartasPorSimbolo("TRIANGULO",1, deckCartas);
+            removerCartasPorSimbolo("QUADRADO",1, deckCartas);
+            removerCartasPorSimbolo("CIRCULO",1, deckCartas);
         }
     }
 
-    private void removerCartasPorSimbolo(String simbolo, int quantidade) {
+    private void removerCartasPorSimbolo(String simbolo, int quantidade, DeckTerritorios deckCartas) {
         int removidas = 0;
         Iterator<Carta> iterator = cartas.iterator();
 
         while (iterator.hasNext() && removidas < quantidade) {
             Carta carta = iterator.next();
             if (carta.getSimbolo().equals(simbolo)) {
-                iterator.remove();
+                deckCartas.addCarta(carta);
+				iterator.remove();
                 removidas++;
             }
         }
     }	
+
+	public void limpaMao(){
+		this.cartas.clear();
+	}
+
 }

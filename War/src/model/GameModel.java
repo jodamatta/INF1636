@@ -14,6 +14,8 @@ public class GameModel {
 	private static final int MAX_JOGADORES = 6;
 	private Scanner scanner;
 	private int numTrocas = 0;
+	private int numJogadorAtual = 0;
+	private DeckTerritorios deckCartas = new DeckTerritorios();
 
 	// estados do jogo privados
 	private static List<Jogador> jogadores = new ArrayList<>();
@@ -90,11 +92,11 @@ public class GameModel {
     }
 
 	public void distribuiCartasTerritorio() {
-		DeckTerritorios DeckTerritorios = new DeckTerritorios();
+		DeckTerritorios deckTerritoriosInical = new DeckTerritorios();
 		int cartasDistribuidas = 0;
 		while(cartasDistribuidas < 51){
 			for (Jogador jogador:jogadores) {
-				Carta carta = DeckTerritorios.drawCard();
+				Carta carta = deckTerritoriosInical.drawCard();
 				 if (carta == null) {
 					 break;
 				 }
@@ -202,11 +204,12 @@ public class GameModel {
 		return 0;
 	}
 
-	public void addExercitoCarta(Jogador jogador){
-		if(querTrocar(jogador) != 1){
+	public void addExercitoCarta(){
+		Jogador jogador = jogadores.get(numJogadorAtual);
+		if(jogador.verificaTroca() == 0){
 			return;
 		}
-		jogador.removerCartas(jogador.verificaTroca());
+		jogador.removerCartas(jogador.verificaTroca(), deckCartas);
 		int Tnumero = jogador.getTerritorios().size();
 		int exercitoNumero = 5*numTrocas;
 		while (exercitoNumero > 0){
@@ -244,13 +247,32 @@ public class GameModel {
 	public void setOrdemJogada() {
 		Collections.shuffle(jogadores);
 	}
-	
-	public void setPrimeirosExercitos() {
-		
-	}
 
 	public static List<Jogador> getJogadores(){
 		return Collections.unmodifiableList(jogadores);
+	}
+	
+	public String getNomeJogadorAtual(){
+		return jogadores.get(numJogadorAtual).getNome();
+	}
+
+	public String getCorJogadorAtual(){
+		return jogadores.get(numJogadorAtual).getCor().toString();
+	}
+
+	public void passaVez(){
+		numJogadorAtual++;
+		if (numJogadorAtual == jogadores.size()){
+			numJogadorAtual = 0;
+		}
+	}
+
+	public List<String> getTerritoriosJogadorAtual(){
+		return jogadores.get(numJogadorAtual).getTerritorios().stream().map(Territorio::getNome).collect(Collectors.toList());
+	}
+
+	public List<String> getCartasJogadorAtual(){
+		return jogadores.get(numJogadorAtual).getCartas().stream().map(Carta::getTerritorio).collect(Collectors.toList());
 	}
 	
 	public void printPlayers() {
@@ -355,6 +377,10 @@ public class GameModel {
 		return 0;
 	}
 
+	public String getObjetivoJogadorAtual(){
+		return jogadores.get(numJogadorAtual).getObjetivo().toString();
+	}
+
 	public void hardCodedSetup() {
         // Add 3 jogadores, distribui as cartas e inicializa as tropas:
         String nome1 = "Murilo";
@@ -368,9 +394,14 @@ public class GameModel {
         instance.addJogador(nome3, cor3);
         instance.distribuiCartasTerritorio();
         instance.inicializaTerritorios();
-
+		
         // Add tropas aleatoriamente pra simular uma situação de meio de jogo:
         List<Jogador> todosJogadores = instance.getJogadores();
+
+		for (Jogador jogador : todosJogadores){
+			jogador.limpaMao();
+		}
+
         for (Jogador jogador : todosJogadores) {
             for (Territorio t : jogador.getTerritorios()) {
 
@@ -380,10 +411,21 @@ public class GameModel {
 
             }
         }
+
+		Jogador jogador1 = todosJogadores.get(0);
+		jogador1.addCarta(deckCartas.drawCard());
+		jogador1.addCarta(deckCartas.drawCard());
+		jogador1.addCarta(deckCartas.drawCard());
+		jogador1.addCarta(deckCartas.drawCard());
+		jogador1.addCarta(deckCartas.drawCard());
+		jogador1.addCarta(deckCartas.drawCard());
+		jogador1.addCarta(deckCartas.drawCard());
     }
 	public static void main(String[] args){
 		GameModel gameInstance = GameModel.getInstancia();
 		System.out.println('a');
-		gameInstance.hardStartGame();
+		//gameInstance.hardStartGame();
+		gameInstance.startGame();
 	}
+
 }

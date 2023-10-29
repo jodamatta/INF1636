@@ -14,7 +14,6 @@ public class GameView {
 	}
 
     public void chamaInicio(){
-        System.out.println('a');
         new JanelaInicial();
     }
 

@@ -31,7 +31,7 @@ public class JanelaJogo extends Frame{
         gameModel = GameModel.getInstancia();
         gameModel.hardCodedSetup();
         try {
-            imagemDeFundo = ImageIO.read(new File("C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg"));
+            imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
