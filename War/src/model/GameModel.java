@@ -82,7 +82,7 @@ public class GameModel {
         Collections.shuffle(objetivosAtivos);
         for (Jogador jogador:jogadores) {
             Objetivo objetivoSorteado = objetivosAtivos.remove(0);
-            jogador.setObjetivo(objetivoSorteado.getObjetivo());  // Pass the ListaObjetivos enum
+            jogador.setObjetivo(objetivoSorteado.getObjetivo());  
         }
     }
 
@@ -310,6 +310,12 @@ public class GameModel {
 	public static void resetInstancia() {
         instance = null;
     }
-
+	public void startGame(){
+		sorteiaObjetivos();
+		distribuiCartasTerritorio();
+		inicializaTerritorios();
+		setOrdemJogada();
+		
+	}
 
 }

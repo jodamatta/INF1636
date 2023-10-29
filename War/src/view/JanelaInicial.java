@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 import javax.swing.*;
 
@@ -19,6 +20,9 @@ class JanelaInicial {
     private JComboBox<String>[] coresComboBox;
     private JComboBox<Integer> numJogadoresComboBox;
     private Label lblNumJogadoresPrompt;
+    private Label lblCoresRepetidas;
+    private Label lblCorInvalida;
+    private Label lblNomeInvalido;
     private GameModel gameModel;
     private List<String> coresDisponiveis;
     private int max_jogadores;
@@ -36,7 +40,7 @@ class JanelaInicial {
     	coresDisponiveis.add("--Selecione Cor--");
     	coresDisponiveis.addAll(Arrays.asList(gameModel.getCores()));
     	max_jogadores = gameModel.getMaxJogadores();
-        frame = new Frame("Risk Game Start Window");
+        frame = new Frame("Janela Inicial");
         frame.setSize(1200, 700); 
         frame.setLayout(null); 
         frame.addWindowListener(new WindowAdapter() {
@@ -86,6 +90,22 @@ class JanelaInicial {
         lblNumJogadoresPrompt.setBounds(470, 460, 150, 30);
         frame.add(lblNumJogadoresPrompt);
         lblNumJogadoresPrompt.setVisible(false);
+
+        //labels de erros 
+        lblCoresRepetidas = new Label("Por favor, selecione cores unicas.");
+        lblCoresRepetidas.setBounds(550, 460, 180, 30);
+        frame.add(lblCoresRepetidas);
+        lblCoresRepetidas.setVisible(false);
+
+        lblCorInvalida = new Label("Por favor, selecione cores validas.");
+        lblCorInvalida.setBounds(550, 460, 180, 30);
+        frame.add(lblCorInvalida);
+        lblCorInvalida.setVisible(false);
+
+        lblNomeInvalido = new Label("Por favor, selecione nomes validos.");
+        lblNomeInvalido.setBounds(550, 460, 180, 30);
+        frame.add(lblNomeInvalido);
+        lblNomeInvalido.setVisible(false);
         
         // qtd de jogadores
         Integer[] playerOptions = {2, 3, 4, 5, 6};  
@@ -99,17 +119,18 @@ class JanelaInicial {
         corBoxListener = new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    if(!e.getItem().equals("--Selecione Cor--")) {
-                    	coresDisponiveis.remove(e.getItem());
-                    	//refreshComboBoxes();
-                    }
-                } else if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    if(!e.getItem().equals("--Selecione Cor--")) {
-                    	coresDisponiveis.add((String) e.getItem());
-                        refreshComboBoxes();
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    String corDesselecionada = (String) e.getItem();
+                    if (!"--Selecione Cor--".equals(corDesselecionada)) {
+                        coresDisponiveis.add(corDesselecionada);
                     }
                 }
+                else if (e.getStateChange() == ItemEvent.SELECTED) {
+                    String corSelecionada = (String) e.getItem();
+                    if(!"--Selecione Cor--".equals(corSelecionada)) {
+                    	coresDisponiveis.remove(corSelecionada);
+                    }
+                } 
             }
         };
         
@@ -135,39 +156,14 @@ class JanelaInicial {
         
 
         
-        btnIniciaJogo = new Button("Start Game");
+        btnIniciaJogo = new Button("Comecar Jogo");
         btnIniciaJogo.setBounds(550, 500, 200, 50);
-        btnIniciaJogo.addActionListener(e -> startGame());
+        btnIniciaJogo.addActionListener(e -> startGame((int) numJogadoresComboBox.getSelectedItem()));
         btnIniciaJogo.setVisible(false); 
         frame.add(btnIniciaJogo);
         
         frame.setVisible(true);
     }
-    
-    private void refreshComboBoxes() {
-        for (JComboBox<String> box : coresComboBox) {
-            box.removeItemListener(corBoxListener);  // Remove listener
-            
-            Object selected = box.getSelectedItem();
-            System.out.println(selected);
-            
-            box.removeAllItems();
-            box.addItem("--Selecione Cor--");
-            for (String color : coresDisponiveis) {
-                box.addItem(color);
-            }
-            
-            if (coresDisponiveis.contains(selected) || "--Selecione Cor--".equals(selected)) {
-                box.setSelectedItem(selected);
-            }/* else {
-                box.setSelectedItem("--Selecione Cor--");
-            }*/
-            
-            box.addItemListener(corBoxListener);  // Add listener back
-        }
-    }
-
-
     
     private void mostraSetupJogadores(int numJogadores) {
         btnNovoJogo.setVisible(false);
@@ -180,8 +176,45 @@ class JanelaInicial {
         btnIniciaJogo.setVisible(true);
     }
     
-    private void startGame() {
-    	gameModel.printPlayers();
+    private void startGame(int numJogadores) {
+        List<String> coresEscolhidas = new ArrayList<>();
+        List<String> nomesJogadores = new ArrayList<>();
+        lblCoresRepetidas.setVisible(false);
+        lblCorInvalida.setVisible(false);
+        lblNomeInvalido.setVisible(false);
+
+        for(int i = 0; i < numJogadores; i++){
+            String nomeJogador = campoNomeJogadores[i].getText().trim();
+            String corJogador = (String) coresComboBox[i].getSelectedItem();
+
+            if("--Selecione Cor--".equals(corJogador)){
+                lblCoresRepetidas.setVisible(false);
+                lblNomeInvalido.setVisible(false);
+                lblCorInvalida.setVisible(true);
+                return;
+            }
+            else if("".equals(nomeJogador)){
+                lblCorInvalida.setVisible(false);
+                lblCoresRepetidas.setVisible(false);
+                lblNomeInvalido.setVisible(true);
+                return;
+            } 
+            else if(coresEscolhidas.contains(corJogador)){
+                lblCorInvalida.setVisible(false);
+                lblNomeInvalido.setVisible(false);
+                lblCoresRepetidas.setVisible(true);
+                return;
+            }
+            else {
+            nomesJogadores.add(nomeJogador);
+            coresEscolhidas.add(corJogador);
+            }
+        }
+    	for (int i = 0; i < numJogadores; i++) {
+            gameModel.addJogador(nomesJogadores.get(i), coresEscolhidas.get(i));
+        }
+        gameModel.startGame();
+        return;
     }
     
     public static void main(String[] args) {
