@@ -24,8 +24,12 @@ public class JanelaJogo extends Frame{
     private List<Button> btnTerritorios;
     private BufferedImage imagemDeFundo;
     Map<String,  int[]> dictTerritorioPosicao = new HashMap<>();
+    Map<String, Color> dictStrCor = new HashMap<>();
+
 
     public JanelaJogo() {
+        gameModel = GameModel.getInstancia();
+        gameModel.hardCodedSetup();
         try {
             imagemDeFundo = ImageIO.read(new File("War\\src\\view\\images\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
@@ -117,22 +121,34 @@ public class JanelaJogo extends Frame{
         dictTerritorioPosicao.put("PERTH", new int[]{940, 540});
     }
 
+    {
+        dictStrCor.put("Vermelho", Color.RED);
+        dictStrCor.put("Azul", Color.BLUE);
+        dictStrCor.put("Verde", Color.GREEN);
+        dictStrCor.put("Amarelo", Color.YELLOW);
+        dictStrCor.put("Rosa", Color.PINK);
+        dictStrCor.put("Laranja", Color.ORANGE);
+        dictStrCor.put("Preto", Color.BLACK);
+        dictStrCor.put("Branco", Color.WHITE);
+    }
+    
     private void initTerritorios() {
         btnTerritorios = new ArrayList<>();
         Set<String> nomesTerritorios = dictTerritorioPosicao.keySet();
         
         for (String nome : nomesTerritorios) {
+            String numExercitos = String.valueOf(gameModel.getNumSoldados(nome));
+            //String numExercitos = "1";
             int[] coordenadas = dictTerritorioPosicao.get(nome);
-            if (coordenadas != null) {
-                Button btnTerritorio = new Button("3");
-                btnTerritorio.setBounds(coordenadas[0], coordenadas[1], 30, 30);
-                
-                btnTerritorio.setBackground(Color.RED); 
-                btnTerritorio.setForeground(Color.WHITE);
-                
-                btnTerritorios.add(btnTerritorio);
-                add(btnTerritorio);
-            }
+            Button btnTerritorio = new Button(numExercitos);
+            btnTerritorio.setBounds(coordenadas[0], coordenadas[1], 30, 30);
+            
+            String corJogador = gameModel.getTerritorioCor(nome);
+            btnTerritorio.setBackground(dictStrCor.get(corJogador)); 
+            btnTerritorio.setForeground(Color.WHITE);
+            
+            btnTerritorios.add(btnTerritorio);
+            add(btnTerritorio);
         }
     }
 
