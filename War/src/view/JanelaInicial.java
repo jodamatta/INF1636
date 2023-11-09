@@ -1,6 +1,7 @@
 package view;
 
 import model.GameModel;
+import controller.GameController;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ class JanelaInicial extends Frame{
     private Label lblCorInvalida;
     private Label lblNomeInvalido;
     private GameModel gameModel;
+    private GameController gameController;
     private List<String> coresDisponiveis;
     private int max_jogadores;
     private ItemListener corBoxListener;
@@ -35,6 +37,7 @@ class JanelaInicial extends Frame{
 
     public JanelaInicial() {
     	gameModel = GameModel.getInstancia();
+        gameController = GameController.getInstanciaController();
         initUI();
     }
     
@@ -168,7 +171,7 @@ class JanelaInicial extends Frame{
         
         btnIniciaJogo = new Button("Comecar Jogo");
         btnIniciaJogo.setBounds(550, 500, 200, 50);
-        btnIniciaJogo.addActionListener(e -> startGame((int) numJogadoresComboBox.getSelectedItem()));
+        btnIniciaJogo.addActionListener(e -> gameController.startGame((int) numJogadoresComboBox.getSelectedItem()));
         btnIniciaJogo.setVisible(false); 
         frame.add(btnIniciaJogo);
         
@@ -186,46 +189,7 @@ class JanelaInicial extends Frame{
         btnIniciaJogo.setVisible(true);
     }
     
-    private void startGame(int numJogadores) {
-        List<String> coresEscolhidas = new ArrayList<>();
-        List<String> nomesJogadores = new ArrayList<>();
-        lblCoresRepetidas.setVisible(false);
-        lblCorInvalida.setVisible(false);
-        lblNomeInvalido.setVisible(false);
-
-        for(int i = 0; i < numJogadores; i++){
-            String nomeJogador = campoNomeJogadores[i].getText().trim();
-            String corJogador = (String) coresComboBox[i].getSelectedItem();
-
-            if("--Selecione Cor--".equals(corJogador)){
-                lblCoresRepetidas.setVisible(false);
-                lblNomeInvalido.setVisible(false);
-                lblCorInvalida.setVisible(true);
-                return;
-            }
-            else if("".equals(nomeJogador)){
-                lblCorInvalida.setVisible(false);
-                lblCoresRepetidas.setVisible(false);
-                lblNomeInvalido.setVisible(true);
-                return;
-            } 
-            else if(coresEscolhidas.contains(corJogador)){
-                lblCorInvalida.setVisible(false);
-                lblNomeInvalido.setVisible(false);
-                lblCoresRepetidas.setVisible(true);
-                return;
-            }
-            else {
-            nomesJogadores.add(nomeJogador);
-            coresEscolhidas.add(corJogador);
-            }
-        }
-    	for (int i = 0; i < numJogadores; i++) {
-            gameModel.addJogador(nomesJogadores.get(i), coresEscolhidas.get(i));
-        }
-        gameModel.beginGame();
-        return;
-    }
+    
 
     @Override
     public void paint(Graphics g) {
