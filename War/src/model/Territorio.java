@@ -5,6 +5,7 @@ import java.util.Map;
 class Territorio {
     private String nome;
     private int numeroSoldados;
+    private int numeroSoldadosCansados;
     private Jogador jogador;
     private Map<String, Integer> myMap = new HashMap<String, Integer>();
 
@@ -66,6 +67,15 @@ class Territorio {
         this.nome = nome;
         this.numeroSoldados = 1;
         this.jogador = jogador;
+    }
+
+    public void descansaExercito() {
+        this.numeroSoldados = this.numeroSoldadosCansados + this.numeroSoldados;
+        this.numeroSoldadosCansados = 0;
+    }
+
+    public void addExercitoCansado(int quantidade) {
+        this.numeroSoldadosCansados += quantidade;
     }
 
     public int getContinente(){
