@@ -383,6 +383,21 @@ public class GameModel {
 		return jogadores.get(numJogadorAtual).getObjetivo().toString();
 	}
 
+	public void movimentaExercito(int numExercMovi, Territorio origem, Territorio destino){
+		if (origem.getNumeroSoldados() - numExercMovi < 1){
+			System.out.println("Numero de exercitos invalido");
+			return;
+		}
+		origem.alteraNumSoldados(-numExercMovi);
+		destino.addExercitoCansado(numExercMovi);
+	}
+
+	public void descansaTodosExercitos(){
+		Jogador jogador = jogadores.get(numJogadorAtual);
+		for (Territorio t : jogador.getTerritorios()){
+			t.descansaExercito();
+		}
+	}
 	public void hardCodedSetup() {
         for (Jogador jogador : jogadores) {
             for (Territorio t : jogador.getTerritorios()) {
@@ -403,9 +418,9 @@ public class GameModel {
 
 	public static void main(String[] args){
 		GameModel gameInstance = GameModel.getInstancia();
-		//gameInstance.hardStartGame();
-		//gameInstance.hardCodedSetup();
-		gameInstance.startGame();
+		gameInstance.hardStartGame();
+		gameInstance.hardCodedSetup();
+		//gameInstance.startGame();
 	}
 
 }
