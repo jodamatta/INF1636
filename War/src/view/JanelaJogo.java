@@ -1,6 +1,5 @@
 package view;
 
-import model.GameModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -10,13 +9,10 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.geom.*;
 
 public class JanelaJogo extends Frame{
+    private GameView gameView;
     private Frame frame;
-    private GameModel gameModel;
-    private static JanelaInicial janelaInicial;
     private Button btnTerminaRodada;
     private Button btnTrocaCartas;
     private Button btnMover; 
@@ -28,8 +24,7 @@ public class JanelaJogo extends Frame{
 
 
     public JanelaJogo() {
-        gameModel = GameModel.getInstancia();
-        //gameModel.hardCodedSetup();
+        gameView = GameView.getInstanciaView();
         try {
             imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
@@ -140,13 +135,13 @@ public class JanelaJogo extends Frame{
         Set<String> nomesTerritorios = dictTerritorioPosicao.keySet();
         
         for (String nome : nomesTerritorios) {
-            String numExercitos = String.valueOf(gameModel.getNumSoldados(nome));
+            String numExercitos = String.valueOf(gameView.getNumSoldadosView(nome));
             //String numExercitos = "1";
             int[] coordenadas = dictTerritorioPosicao.get(nome);
             Button btnTerritorio = new Button(numExercitos);
             btnTerritorio.setBounds(coordenadas[0], coordenadas[1], 30, 30);
             
-            String corJogador = gameModel.getTerritorioCor(nome);
+            String corJogador = gameView.getTerritorioCorView(nome);
             btnTerritorio.setBackground(dictStrCor.get(corJogador)); 
             btnTerritorio.setForeground(Color.WHITE);
             

@@ -46,9 +46,6 @@ public class GameModel {
 	}
 	
 	public void addJogador(String nome, String cor) {
-		if (jogadores.size()>= MAX_JOGADORES) {
-			throw new IllegalStateException("Numero máximo de jogadores atingido.");
-		}
 		CorJogador color = CorJogador.valueOf(cor);
 		Jogador jogador = new Jogador(nome, color);
 		jogadores.add(jogador);
@@ -248,7 +245,7 @@ public class GameModel {
 		Collections.shuffle(jogadores);
 	}
 
-	public static List<Jogador> getJogadores(){
+	public List<Jogador> getJogadores(){
 		return Collections.unmodifiableList(jogadores);
 	}
 	
@@ -347,7 +344,7 @@ public class GameModel {
 	
 	public void startGame(){
 		instance_view = GameView.getInstanciaView();	
-		instance_view.chamaInicio();
+		instance_view.chamaJanelaInicio();
 	}
 
 	public void beginGame(){
@@ -358,7 +355,7 @@ public class GameModel {
 		for (Jogador jogador : jogadores){
 			jogador.limpaMao();
 		}
-		instance_view.chamaJogo();
+		instance_view.chamaJanelaJogo();
 	}
 
 	public String getTerritorioCor(String nomeTerritorio){
