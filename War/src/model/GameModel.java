@@ -334,9 +334,12 @@ public class GameModel {
 		att.setNumAtacantes(numAtacantes);
 		att.setNumDefensores(numDefensores);
 		System.out.printf("Dados: \n");
-		att.rollDices();
-		att.avaliaAtaque();
-
+		att.rolaDados();
+		boolean teveConquista = att.avaliaAtaque();
+		if (teveConquista) {
+			att.setExercitosDeslocados(2);
+			att.conquistaAndDeslocamento();
+		}
 
 	}
 

@@ -19,6 +19,7 @@ class Ataque {
     private int numExercitoDefesa = 0;
     private int atacantesPerdidos = 0;
     private int defensoresPerdidos =0;
+    private int exercitosDeslocados =0;
     private int[] dadosAtaque;
     private int[] dadosDefesa;
     private Map<String, List<String>> dictFronteiras = new HashMap<String, List<String>>();
@@ -198,7 +199,19 @@ class Ataque {
     	this.defensor = defensor;
     }
     
-    public void rollDices() {
+    public void setExercitosDeslocados(int n) {
+    	this.exercitosDeslocados = n;
+    }
+    
+    public void hardCodeRolaDados() {
+    	//Colocar dados em ordem decrescente
+    	int[] dadosAtt = {6,5,4};
+    	int[] dadosDeff = {5,4,3};
+    	this.dadosAtaque = dadosAtt;
+    	this.dadosDefesa = dadosDeff;
+    }
+    
+    public void rolaDados() {
     	Random random = new Random();
     	this.dadosAtaque = new int[this.numExercitoAtaque];
     	this.dadosDefesa = new int[this.numExercitoDefesa];
@@ -234,7 +247,9 @@ class Ataque {
         System.out.print("\n");
     }
     
-    public void avaliaAtaque() {
+    public boolean avaliaAtaque() {
+    	//Retorna true se o território alvo for dominado
+    	//Se não, retorna false e subtrai os exercitos perdidos
     	int avaliacoes = Math.min(numExercitoAtaque, numExercitoDefesa);
     	
     	for (int i = 0; i < avaliacoes; i++) {
@@ -248,25 +263,31 @@ class Ataque {
     	}
     	System.out.printf("Defensores perdidos %d\n", this.defensoresPerdidos);
     	System.out.printf("Atacantes perdidos %d\n", this.atacantesPerdidos);
+    	
     	int tropasNoTerritorioDefesa = this.paisAvlo.getNumeroSoldados();
     	if (defensoresPerdidos >= tropasNoTerritorioDefesa) {
-    		System.out.printf("Rolou troca de posse\n");
-    		System.out.printf("Antes  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
-    		this.paisAvlo.alteraNumSoldados(-this.defensoresPerdidos); //Deveria zerar os exercitos
-    		this.paisAvlo.setJogador(this.atacante);
-    		this.paisAvlo.alteraNumSoldados(this.numExercitoAtaque);
-    		System.out.printf("Depois  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
+    		return true;
     	}
     	else {
     		this.paisAvlo.alteraNumSoldados(-this.defensoresPerdidos);
     		this.paisDeOrigem.alteraNumSoldados(-this.atacantesPerdidos);
+    		return false;
     	}
     	
     	
     }
     
 
-
+    public void conquistaAndDeslocamento() {
+    	//System.out.printf("Rolou troca de posse\n");
+		//System.out.printf("Antes  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
+		this.paisAvlo.alteraNumSoldados(-this.defensoresPerdidos);
+		this.paisAvlo.setJogador(this.atacante);
+		this.paisDeOrigem.alteraNumSoldados(-this.exercitosDeslocados);
+		this.paisAvlo.alteraNumSoldados(this.exercitosDeslocados);
+		//System.out.printf("Depois  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
+    }
+   
     public List<Territorio> getOrigemDisponivel(){
         List<Territorio> territoriosDoAtacante = atacante.getTerritorios();
 		List<Territorio> territoriosQuePodemFazerAtaques = territoriosDoAtacante.stream()
@@ -276,7 +297,16 @@ class Ataque {
         }
 
     List<String> getAlvos(){
-        return dictFronteiras.get(this.paisDeOrigem.getNome());
+    	List<String> nomesDosTerritoriosDoAtacante = atacante.getTerritorios().stream()
+    			.map(Territorio::getNome)  
+    			.collect(Collectors.toList());
+    	 
+    	List<String> fronteira = dictFronteiras.get(this.paisDeOrigem.getNome());
+    	
+    	List<String> fronteiraFiltrada = fronteira.stream()
+                .filter(pais -> !nomesDosTerritoriosDoAtacante.contains(pais))
+                .collect(Collectors.toList());
+        return fronteiraFiltrada;
     }
 
     public void setAlvo(Territorio t){
