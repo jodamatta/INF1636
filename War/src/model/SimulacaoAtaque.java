@@ -29,14 +29,13 @@ public class SimulacaoAtaque {
             for (Territorio t : jogador.getTerritorios()) {
 
                 Random random = new Random();
-                int randomNumber = random.nextInt(5);
+                int randomNumber = random.nextInt(2);
                 t.alteraNumSoldados(randomNumber);
 
             }
         }
         printTerritorios();
-        //Simula uma ação de ataque partindo do jogador 0 - Murilo
-        //gameModel.ataqueJogador(todosJogadores.get(0));
+        gameModel.ataqueJogador(todosJogadores.get(0));
         
     }
 

@@ -96,9 +96,10 @@ class Territorio {
 
     public void alteraNumSoldados(int quantidade) {
         this.numeroSoldados += quantidade;
-        if (this.numeroSoldados < 0) {
-            throw new IllegalArgumentException("Numero de soldados nao pode ser negativo");
-        }
+        //if (this.numeroSoldados < 0) {
+          //  throw new IllegalArgumentException("Numero de soldados nao pode ser negativo");
+        //}
+        //Pode ser negativo agora
     }
 
     public void setJogador(Jogador outro_jogador) {

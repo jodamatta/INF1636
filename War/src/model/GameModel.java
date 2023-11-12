@@ -325,6 +325,16 @@ public class GameModel {
 		if (Talvo != null){
 			System.out.println("Alvo: " + Talvo.getNome() + " | " + "Sob controle de : " + Talvo.getJogador().getNome() + " | " + "Número de defensores: " + Talvo.getNumeroSoldados());
 		}
+		
+		int numAtacantes = 2;
+		int numDefensores = 1;
+		System.out.printf("Simulando ataque com %d exercitos atacantes e %d exercitos de defesa.\n", numAtacantes, numDefensores);
+		
+		att.setNumAtacantes(numAtacantes);
+		att.setNumDefensores(numDefensores);
+		System.out.printf("Dados: \n");
+		att.rollDices();
+		att.avaliaAtaque();
 
 
 	}

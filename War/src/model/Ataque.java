@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Comparator;
 
 class Ataque {
 	private int numMaxExercitoAtacante = 3;
@@ -202,7 +203,6 @@ class Ataque {
     	this.dadosAtaque = new int[this.numExercitoAtaque];
     	this.dadosDefesa = new int[this.numExercitoDefesa];
     	
-
         for (int i = 0; i < this.numExercitoAtaque; i++) {
             int randomNumber = random.nextInt(6) + 1;
             this.dadosAtaque[i] = randomNumber;
@@ -212,6 +212,57 @@ class Ataque {
             int randomNumber = random.nextInt(6) + 1;
             this.dadosDefesa[i] = randomNumber;
         } 
+        // Convert to Integer array for descending sort
+        Integer[] boxedDadosAtaque = Arrays.stream(this.dadosAtaque).boxed().toArray(Integer[]::new);
+        Integer[] boxedDadosDefesa = Arrays.stream(this.dadosDefesa).boxed().toArray(Integer[]::new);
+
+        // Sorting in descending order
+        Arrays.sort(boxedDadosAtaque, java.util.Collections.reverseOrder());
+        Arrays.sort(boxedDadosDefesa, java.util.Collections.reverseOrder());
+        // Convert back to int array
+        this.dadosAtaque = Arrays.stream(boxedDadosAtaque).mapToInt(Integer::intValue).toArray();
+        this.dadosDefesa = Arrays.stream(boxedDadosDefesa).mapToInt(Integer::intValue).toArray();
+
+        System.out.print("Ataque:\n");
+        for (int number : dadosAtaque) {
+            System.out.print(number + " ");
+        }
+        System.out.print("\nDefesa:\n");
+        for (int number : dadosDefesa) {
+            System.out.print(number + " ");
+        }
+        System.out.print("\n");
+    }
+    
+    public void avaliaAtaque() {
+    	int avaliacoes = Math.min(numExercitoAtaque, numExercitoDefesa);
+    	
+    	for (int i = 0; i < avaliacoes; i++) {
+    		if (this.dadosAtaque[i] > this.dadosDefesa[i]) {
+    			this.defensoresPerdidos += 1;
+    		}
+    		else {
+    			this.atacantesPerdidos +=1;
+    		}
+    		
+    	}
+    	System.out.printf("Defensores perdidos %d\n", this.defensoresPerdidos);
+    	System.out.printf("Atacantes perdidos %d\n", this.atacantesPerdidos);
+    	int tropasNoTerritorioDefesa = this.paisAvlo.getNumeroSoldados();
+    	if (defensoresPerdidos >= tropasNoTerritorioDefesa) {
+    		System.out.printf("Rolou troca de posse\n");
+    		System.out.printf("Antes  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
+    		this.paisAvlo.alteraNumSoldados(-this.defensoresPerdidos); //Deveria zerar os exercitos
+    		this.paisAvlo.setJogador(this.atacante);
+    		this.paisAvlo.alteraNumSoldados(this.numExercitoAtaque);
+    		System.out.printf("Depois  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
+    	}
+    	else {
+    		this.paisAvlo.alteraNumSoldados(-this.defensoresPerdidos);
+    		this.paisDeOrigem.alteraNumSoldados(-this.atacantesPerdidos);
+    	}
+    	
+    	
     }
     
 
@@ -239,5 +290,6 @@ class Ataque {
     public void setPaisOrigem(Territorio t){
         this.paisDeOrigem = t;
     }
+    
 
 }
