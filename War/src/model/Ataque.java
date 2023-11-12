@@ -277,7 +277,6 @@ class Ataque {
     	
     }
     
-
     public void conquistaAndDeslocamento() {
     	//System.out.printf("Rolou troca de posse\n");
 		//System.out.printf("Antes  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());

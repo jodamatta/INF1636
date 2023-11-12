@@ -2,12 +2,14 @@ package controller;
 
 import model.GameModel;
 import view.GameView;
+import java.util.List;
 
 public class GameController {
     private static GameController instance = null;
     private static GameModel gameModel; 
     private static GameView gameView;
-
+    private int ataqueFlag = 0;
+    private int numExercitosAtacantes = 1;
     public GameController(){
     }
 
@@ -30,7 +32,6 @@ public class GameController {
     public void janelaJogoController(){
         gameView.chamaJanelaJogo();
     }
-
 
     public String[] getCoresController(){
         return gameModel.getCores();
@@ -65,7 +66,11 @@ public class GameController {
                 addExercitoTerritorioController(nomeTerritorio);
                 break;
             case 1:
-                //Mecanica de ataque
+                if(ataqueFlag == 0){
+                    ataqueTerritorioController(nomeTerritorio);
+                } else{
+                    destinoAtaqueController(nomeTerritorio);
+                }
                 break;
             case 2:
                 //Mecanica de movimento
@@ -76,8 +81,32 @@ public class GameController {
         }
     }
 
+    public void destinoAtaqueController(String nomeTerritorio){
+        int numAtacantes = gameView.getNumAtacantesView();
+        gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
+        gameView.atualizaNumSoldadosView(nomeTerritorio);
+        ataqueFlag = 0;
+    }
+
+    public void ataqueTerritorioController(String nomeTerritorio){
+        List<String> alvos = gameModel.ataqueTerritorio(nomeTerritorio);
+        if(alvos == null){
+            return;
+        }
+        gameView.ataqueTerritorioView(nomeTerritorio, alvos);
+    }
+
+    public void btnAtaqueController(String nomeTerritorio){
+        numExercitosAtacantes = numExercitosAtacantes + 1;
+        if(numExercitosAtacantes > 3 || numExercitosAtacantes > gameModel.getNumSoldados(nomeTerritorio)-1){
+            numExercitosAtacantes = 1;
+        }
+        gameView.atualizaBtnAtaque(nomeTerritorio, numExercitosAtacantes);
+        //gameModel.setTerritorioAtaque(nomeTerritorio);
+    }
+
     public void passaVezController(){
-        //Code block
+         gameView.passaVezView();
     }
 
     public void addExercitoTerritorioController(String nomeTerritorio){

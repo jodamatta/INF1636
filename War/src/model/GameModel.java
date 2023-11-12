@@ -18,6 +18,7 @@ public class GameModel {
 	private int faseRodada = 0;
 	private DeckTerritorios deckCartas = new DeckTerritorios();
 	private int numExercitosDisponiveis = 0;
+	private Ataque ataqueAtual;
 	// estados do jogo privados
 	private static List<Jogador> jogadores = new ArrayList<>();
 	private static List<Territorio> territorios = new ArrayList<>();
@@ -274,7 +275,7 @@ public class GameModel {
 		faseRodada = 0;
 		descansaTodosExercitos();
 		exercitosDisponiveis();
-		//instance_controller.passaVezController(exercitosDisponiveis);
+		instance_controller.passaVezController();
 	}
 
 	public void passaFase(){
@@ -412,8 +413,34 @@ public class GameModel {
 		numExercitosDisponiveis -= numExercitos;
 	}
 
+	public List<String> ataqueTerritorio(String nomeTerritorio){
+		for (Territorio t : territorios){
+			if (t.getNome() == nomeTerritorio && t.getJogador() == jogadores.get(numJogadorAtual) && t.getNumeroSoldados() > 1){
+				ataqueAtual = new Ataque(jogadores.get(numJogadorAtual));
+				ataqueAtual.setPaisOrigem(t);
+				List<String> alvos = ataqueAtual.getAlvos();
+				return alvos;
+			}
+		}
+		return null;
+	}
+	
 	public int getNumSoldadosDisponiveis(){
 		return numExercitosDisponiveis;
+	}
+
+	public void destinoAtaque(String nomeTerritorio, int numExercitos){
+		for (Territorio t : territorios){
+			if (t.getNome() == nomeTerritorio){
+				ataqueAtual.setAlvo(t);
+				ataqueAtual.setNumAtacantes(numExercitos);
+				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
+				ataqueAtual.setJogadorDefensor(t.getJogador());
+				ataqueAtual.rolaDados();
+				ataqueAtual.avaliaAtaque();
+				return;
+			}
+		}
 	}
 
 	public static void resetInstancia() {
@@ -440,8 +467,8 @@ public class GameModel {
         for (Jogador jogador : jogadores){
             jogador.limpaMao();
         }
-		passaVez();
         instance_controller.janelaJogoController();
+		passaVez();
     }
 
 	public void hardCodedSetup() {
