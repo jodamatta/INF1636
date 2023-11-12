@@ -205,6 +205,7 @@ public class JanelaJogo extends Frame{
         }
         remove(btnAtaque);
     }
+
     public int getNumAtacantes() {
         if (btnAtaque != null) {
             try {
@@ -231,4 +232,6 @@ public class JanelaJogo extends Frame{
     public static void main(String[] args) {
         new JanelaJogo();
     }
+
+    
 }

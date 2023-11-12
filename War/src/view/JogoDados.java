@@ -3,18 +3,6 @@ package view;
 import java.awt.*;
 
 public class JogoDados {
-
-    public static void main(String[] args) {
-        Frame frame = new Frame("Jogo de Dados");
-        frame.setSize(150, 150);
-
-        PainelDado dado = new PainelDado(3, Color.RED, TipoDado.ATAQUE); // Dado de defesa, por exemplo
-        
-        frame.add(dado);
-
-        frame.setVisible(true);
-    }
-
     enum TipoDado {
         ATAQUE,
         DEFESA
@@ -61,6 +49,17 @@ public class JogoDados {
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(100, 100); // Define o tamanho do painel
+        }
+
+        public static void main(String[] args) {
+            Frame frame = new Frame("Jogo de Dados");
+            frame.setSize(150, 150);
+
+            PainelDado dado = new PainelDado(3, Color.RED, TipoDado.ATAQUE); // Dado de defesa, por exemplo
+            
+            frame.add(dado);
+            
+            frame.setVisible(true);
         }
     }
 }

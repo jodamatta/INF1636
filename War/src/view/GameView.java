@@ -90,6 +90,7 @@ public class GameView {
     public int getNumAtacantesView(){
         return janelaJogo.getNumAtacantes();
     }
+    
     public void btnAtaqueView(String nomeTerritorio){
         controller.btnAtaqueController(nomeTerritorio);
     }
