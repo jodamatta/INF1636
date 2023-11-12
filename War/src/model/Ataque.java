@@ -5,14 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Random;
 
 class Ataque {
+	private int numMaxExercitoAtacante = 3;
     private Jogador atacante;
     private Jogador defensor;
     private Territorio paisDeOrigem = null;
     private Territorio paisAvlo = null;
-    private int NumExercitoAtaque = 0;
-    private int NumExercitoDefesa = 0;
+    private int numExercitoAtaque = 0;
+    private int numExercitoDefesa = 0;
+    private int atacantesPerdidos = 0;
+    private int defensoresPerdidos =0;
+    private int[] dadosAtaque;
+    private int[] dadosDefesa;
     private Map<String, List<String>> dictFronteiras = new HashMap<String, List<String>>();
 
     {
@@ -30,9 +37,6 @@ class Ataque {
         )));
         dictFronteiras.put("MEXICO",new ArrayList<>(Arrays.asList(
             "VENEZUELA", "TEXAS", "CALIFORNIA"
-        )));
-        dictFronteiras.put("CALIFORNIA",new ArrayList<>(Arrays.asList(
-            "TEXAS", "MEXICO", "VANCOUVER"
         )));
         dictFronteiras.put("CALIFORNIA",new ArrayList<>(Arrays.asList(
             "TEXAS", "MEXICO", "VANCOUVER"
@@ -177,9 +181,40 @@ class Ataque {
         )));
     }
 
-    public Ataque(Jogador j){
-        this.atacante = j;
+    public Ataque(Jogador atacante){
+        this.atacante = atacante;
     }
+    
+    public void setNumAtacantes(int numAtacantes) {
+    	this.numExercitoAtaque = numAtacantes;
+    }
+    
+    public void setNumDefensores(int numDefensores) {
+    	this.numExercitoDefesa = numDefensores;
+    }
+    
+    public void setJogadorDefensor(Jogador defensor) {
+    	this.defensor = defensor;
+    }
+    
+    public void rollDices() {
+    	Random random = new Random();
+    	this.dadosAtaque = new int[this.numExercitoAtaque];
+    	this.dadosDefesa = new int[this.numExercitoDefesa];
+    	
+
+        for (int i = 0; i < this.numExercitoAtaque; i++) {
+            int randomNumber = random.nextInt(6) + 1;
+            this.dadosAtaque[i] = randomNumber;
+        }
+        
+        for (int i = 0; i < this.numExercitoDefesa; i++) {
+            int randomNumber = random.nextInt(6) + 1;
+            this.dadosDefesa[i] = randomNumber;
+        } 
+    }
+    
+
 
     public List<Territorio> getOrigemDisponivel(){
         List<Territorio> territoriosDoAtacante = atacante.getTerritorios();
