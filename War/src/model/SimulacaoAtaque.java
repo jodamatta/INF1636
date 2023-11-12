@@ -27,12 +27,10 @@ public class SimulacaoAtaque {
         List<Jogador> todosJogadores = gameModel.getJogadores();
         for (Jogador jogador : todosJogadores) {
             for (Territorio t : jogador.getTerritorios()) {
-            	
-            	if (t.getJogador().getNome() == todosJogadores.get(0).getNome() ) {            		
-            		Random random = new Random();
-            		int randomNumber = random.nextInt(3);
-            		t.alteraNumSoldados(randomNumber);
-            	}
+
+                Random random = new Random();
+                int randomNumber = random.nextInt(2);
+                t.alteraNumSoldados(randomNumber);
 
             }
         }
