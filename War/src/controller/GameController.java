@@ -9,8 +9,6 @@ public class GameController {
     private static GameView gameView;
 
     public GameController(){
-        gameModel = GameModel.getInstancia();
-        gameView = GameView.getInstanciaView();
     }
 
     public static GameController getInstanciaController(){
@@ -19,6 +17,20 @@ public class GameController {
 		}
 		return instance;
     }
+
+    public void initGameController(){
+        gameModel = GameModel.getInstancia();
+        gameView = GameView.getInstanciaView();
+    }
+
+    public void janelaInicialController(){
+        gameView.chamaJanelaInicio();
+    }
+
+    public void janelaJogoController(){
+        gameView.chamaJanelaJogo();
+    }
+
 
     public String[] getCoresController(){
         return gameModel.getCores();
@@ -44,6 +56,28 @@ public class GameController {
 			throw new IllegalStateException("Nao ha jogadores registrados");
 		}
         gameModel.beginGame();
+    }
+
+    public void btnTerritorioController(String nomeTerritorio){
+        int faseRodada = gameModel.getFaseRodada();
+        switch (faseRodada) {
+            case 0:
+                //Mecanica de adicionar tropas
+            case 1:
+                //Mecanica de ataque
+            case 2:
+                //Mecanica de movimento
+            default:
+                System.out.println("Rodada fora se sincronia");
+                break;
+        }
+    }
+
+    public void addExercitoTerritorioController(String nomeTerritorio){
+        int numExercitos = 1;
+        //pega o numero de exercitos perguntando pro jogador
+        gameModel.addExercitoTerritorio(nomeTerritorio, numExercitos);
+        gameView.atualizaNumSoldadosView(nomeTerritorio);
     }
 }
 

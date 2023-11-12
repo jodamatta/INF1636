@@ -94,6 +94,10 @@ class Territorio {
         return jogador;
     }
 
+    public int getNumeroSoldadosCansados() {
+        return numeroSoldadosCansados;
+    }
+    
     public void alteraNumSoldados(int quantidade) {
         this.numeroSoldados += quantidade;
         //if (this.numeroSoldados < 0) {

@@ -7,14 +7,16 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import view.GameView;
+import controller.GameController;
 
 public class GameModel {
 	private static GameModel instance = null;
-	private static GameView instance_view;
+	private static GameController instance_controller;
 	private static final int MAX_JOGADORES = 6;
 	private Scanner scanner;
 	private int numTrocas = 0;
 	private int numJogadorAtual = 0;
+	private int faseRodada = 0;
 	private DeckTerritorios deckCartas = new DeckTerritorios();
 
 	// estados do jogo privados
@@ -31,7 +33,6 @@ public class GameModel {
 	)); 
 	
 	private GameModel() {
-		this.scanner = new Scanner(System.in);
 	}
 	
 	public static GameModel getInstancia() {
@@ -339,35 +340,6 @@ public class GameModel {
 
 	}
 
-	public static void resetInstancia() {
-        instance = null;
-    }
-
-	public void hardStartGame(){
-		instance_view = GameView.getInstanciaView();
-		GameModel gameInstance = GameModel.getInstancia();	
-		gameInstance.addJogador("Joana", "Azul");
-		gameInstance.addJogador("Miguel", "Verde");
-		gameInstance.addJogador("Murilo", "Vermelho");
-		beginGame();
-	}
-	
-	public void startGame(){
-		instance_view = GameView.getInstanciaView();	
-		instance_view.chamaJanelaInicio();
-	}
-
-	public void beginGame(){
-		sorteiaObjetivos();
-		distribuiCartasTerritorio();
-		inicializaTerritorios();
-		setOrdemJogada();
-		for (Jogador jogador : jogadores){
-			jogador.limpaMao();
-		}
-		instance_view.chamaJanelaJogo();
-	}
-
 	public String getTerritorioCor(String nomeTerritorio){
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
@@ -391,12 +363,16 @@ public class GameModel {
 	}
 
 	public void movimentaExercito(int numExercMovi, Territorio origem, Territorio destino){
-		if (origem.getNumeroSoldados() - numExercMovi < 1){
+		if (origem.getNumeroSoldados() - numExercMovi < 1 && origem.getNumeroSoldadosCansados() == 0){
 			System.out.println("Numero de exercitos invalido");
 			return;
 		}
 		origem.alteraNumSoldados(-numExercMovi);
 		destino.addExercitoCansado(numExercMovi);
+	}
+
+	public int getFaseRodada(){
+		return faseRodada;
 	}
 
 	public void descansaTodosExercitos(){
@@ -405,6 +381,43 @@ public class GameModel {
 			t.descansaExercito();
 		}
 	}
+
+	public void addExercitoTerritorio(String nomeTerritorio, int numExercitos){
+		for (Territorio t : territorios){
+			if (t.getNome() == nomeTerritorio){
+				t.alteraNumSoldados(numExercitos);
+			}
+		}
+	}
+
+	public static void resetInstancia() {
+        instance = null;
+    }
+
+	public void hardStartGame(){
+		GameModel gameInstance = GameModel.getInstancia();	
+		gameInstance.addJogador("Joana", "Azul");
+		gameInstance.addJogador("Miguel", "Verde");
+		gameInstance.addJogador("Murilo", "Vermelho");
+		beginGame();
+	}
+	
+	public void startGame(){
+        instance_controller.janelaInicialController();
+    }
+
+	public void beginGame(){
+        sorteiaObjetivos();
+        distribuiCartasTerritorio();
+        inicializaTerritorios();
+        setOrdemJogada();
+        for (Jogador jogador : jogadores){
+            jogador.limpaMao();
+        }
+        instance_controller.janelaJogoController();
+    }
+
+
 	public void hardCodedSetup() {
         for (Jogador jogador : jogadores) {
             for (Territorio t : jogador.getTerritorios()) {
@@ -425,9 +438,12 @@ public class GameModel {
 
 	public static void main(String[] args){
 		GameModel gameInstance = GameModel.getInstancia();
-		gameInstance.hardStartGame();
-		gameInstance.hardCodedSetup();
-		//gameInstance.startGame();
+		instance_controller = GameController.getInstanciaController();
+		instance_controller.initGameController();
+		System.out.println("Iniciando jogo...");
+		//gameInstance.hardStartGame();
+		//gameInstance.hardCodedSetup();
+		gameInstance.startGame();
 	}
 
 }

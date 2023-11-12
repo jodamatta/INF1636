@@ -4,6 +4,7 @@ import controller.GameController;
 public class GameView {
     private static GameView instance = null;
     private GameController controller;
+    private JanelaJogo janelaJogo;
 
     private GameView(){
         controller = GameController.getInstanciaController();
@@ -49,10 +50,16 @@ public class GameView {
     }
 
     public void chamaJanelaJogo(){
-        new JanelaJogo();
+        janelaJogo = new JanelaJogo();
+    }
+
+    public void atualizaNumSoldadosView(String nomeTerritorio){
+        janelaJogo.atualizaNumSoldados(nomeTerritorio);
     }
 
     public void continuaJogo(){
 
     }
+
+
 }
