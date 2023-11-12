@@ -62,22 +62,49 @@ public class GameController {
         int faseRodada = gameModel.getFaseRodada();
         switch (faseRodada) {
             case 0:
-                //Mecanica de adicionar tropas
+                addExercitoTerritorioController(nomeTerritorio);
+                break;
             case 1:
                 //Mecanica de ataque
+                break;
             case 2:
                 //Mecanica de movimento
+                break;
             default:
-                System.out.println("Rodada fora se sincronia");
+                System.out.println("Rodada fora de sincronia");
                 break;
         }
     }
 
+    public void passaVezController(){
+        //Code block
+    }
+
     public void addExercitoTerritorioController(String nomeTerritorio){
-        int numExercitos = 1;
-        //pega o numero de exercitos perguntando pro jogador
-        gameModel.addExercitoTerritorio(nomeTerritorio, numExercitos);
+        int numExercitosDisponiveis = gameModel.getNumSoldadosDisponiveis();
+        if (numExercitosDisponiveis == 0) {
+            return;
+        }
+
+        gameModel.addExercitoTerritorio(nomeTerritorio, 1);
+        gameModel.diminuiNumSoldadosDisponiveis(1);
         gameView.atualizaNumSoldadosView(nomeTerritorio);
+    }
+
+    public String getCorJogadorAtualController(){
+        return gameModel.getCorJogadorAtual();
+    }
+    
+    public int getNumSoldadosDisponiveisController(){
+        return gameModel.getNumSoldadosDisponiveis();
+    }
+
+    public int getFaseRodadaController(){
+        return gameModel.getFaseRodada();
+    }
+
+    public void passaFaseController(){
+        gameModel.passaFase();
     }
 }
 

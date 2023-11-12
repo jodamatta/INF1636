@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import view.GameView;
 import controller.GameController;
 
 public class GameModel {
@@ -18,7 +17,7 @@ public class GameModel {
 	private int numJogadorAtual = 0;
 	private int faseRodada = 0;
 	private DeckTerritorios deckCartas = new DeckTerritorios();
-
+	private int numExercitosDisponiveis = 0;
 	// estados do jogo privados
 	private static List<Jogador> jogadores = new ArrayList<>();
 	private static List<Territorio> territorios = new ArrayList<>();
@@ -258,10 +257,31 @@ public class GameModel {
 		return jogadores.get(numJogadorAtual).getCor().toString();
 	}
 
+	public void exercitosDisponiveis(){
+		Jogador jogador = jogadores.get(numJogadorAtual);
+		int numTerritorios = jogador.getTerritorios().size();
+		numExercitosDisponiveis = numTerritorios/2;
+		for(Continente c : continentes){
+			if(c.foiDominado(jogador) == 1){
+				numExercitosDisponiveis += c.getBonus();
+			}
+		}
+		
+	}
+
 	public void passaVez(){
-		numJogadorAtual++;
-		if (numJogadorAtual == jogadores.size()){
-			numJogadorAtual = 0;
+		numJogadorAtual = (numJogadorAtual +1) % jogadores.size();
+		faseRodada = 0;
+		descansaTodosExercitos();
+		exercitosDisponiveis();
+		//instance_controller.passaVezController(exercitosDisponiveis);
+	}
+
+	public void passaFase(){
+		faseRodada++;
+		if(faseRodada == 3){
+			passaVez();
+			faseRodada = 0;
 		}
 	}
 
@@ -334,10 +354,8 @@ public class GameModel {
 		att.setNumAtacantes(numAtacantes);
 		att.setNumDefensores(numDefensores);
 		System.out.printf("Dados: \n");
-		att.rollDices();
+		att.rolaDados();
 		att.avaliaAtaque();
-
-
 	}
 
 	public String getTerritorioCor(String nomeTerritorio){
@@ -384,10 +402,18 @@ public class GameModel {
 
 	public void addExercitoTerritorio(String nomeTerritorio, int numExercitos){
 		for (Territorio t : territorios){
-			if (t.getNome() == nomeTerritorio){
+			if (t.getNome() == nomeTerritorio && t.getJogador() == jogadores.get(numJogadorAtual)){
 				t.alteraNumSoldados(numExercitos);
 			}
 		}
+	}
+
+	public void diminuiNumSoldadosDisponiveis(int numExercitos){
+		numExercitosDisponiveis -= numExercitos;
+	}
+
+	public int getNumSoldadosDisponiveis(){
+		return numExercitosDisponiveis;
 	}
 
 	public static void resetInstancia() {
@@ -414,9 +440,9 @@ public class GameModel {
         for (Jogador jogador : jogadores){
             jogador.limpaMao();
         }
+		passaVez();
         instance_controller.janelaJogoController();
     }
-
 
 	public void hardCodedSetup() {
         for (Jogador jogador : jogadores) {
@@ -441,9 +467,9 @@ public class GameModel {
 		instance_controller = GameController.getInstanciaController();
 		instance_controller.initGameController();
 		System.out.println("Iniciando jogo...");
-		//gameInstance.hardStartGame();
+		gameInstance.hardStartGame();
 		//gameInstance.hardCodedSetup();
-		gameInstance.startGame();
+		//gameInstance.startGame();
 	}
 
 }

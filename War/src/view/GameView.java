@@ -55,11 +55,26 @@ public class GameView {
 
     public void atualizaNumSoldadosView(String nomeTerritorio){
         janelaJogo.atualizaNumSoldados(nomeTerritorio);
+
     }
 
+    public String getCorJogadorAtualView(){
+        return controller.getCorJogadorAtualController();
+    }
+
+    public int getNumSoldadosDisponiveisView(){
+        return controller.getNumSoldadosDisponiveisController();
+    }
+    
     public void continuaJogo(){
 
     }
 
+    public void btnTerritorioController(String nomeTerritorio){
+        controller.btnTerritorioController(nomeTerritorio);
+    }
 
+    public void passaFaseView(){
+        controller.passaFaseController();
+    }
 }

@@ -14,12 +14,12 @@ import controller.GameController;
 
 public class JanelaJogo extends Frame{
     private GameView gameView;
-    private GameController controller;
     private Frame frame;
     private Button btnTerminaRodada;
     private Button btnTrocaCartas;
     private Button btnMover; 
     private Button btnSalvarJogo;
+    private Button btnCorJogador;
     private List<Button> btnTerritorios;
     private BufferedImage imagemDeFundo;
     Map<String,  int[]> dictTerritorioPosicao = new HashMap<>();
@@ -29,7 +29,6 @@ public class JanelaJogo extends Frame{
 
     public JanelaJogo() {
         gameView = GameView.getInstanciaView();
-        controller = GameController.getInstanciaController();
         try {
             imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
@@ -50,8 +49,11 @@ public class JanelaJogo extends Frame{
     }
 
     private void initButtons() {
-        btnTerminaRodada = new Button("Terminar Rodada");
+        btnTerminaRodada = new Button("Passar a fase");
         btnTerminaRodada.setBounds(1070, 640, 120, 30); // Define posição e tamanho do botão
+        btnTerminaRodada.addActionListener(e -> {
+            gameView.passaFaseView();
+        });
         add(btnTerminaRodada);
         btnTrocaCartas = new Button("Ver cartas");
         btnTrocaCartas.addActionListener(e -> {
@@ -60,13 +62,14 @@ public class JanelaJogo extends Frame{
         btnTrocaCartas.setBounds(945, 640, 120, 30);
         add(btnTrocaCartas);
 
-        btnMover = new Button("Mover Exército");
-        btnMover.setBounds(820, 640, 120, 30);
-        add(btnMover);
-
         btnSalvarJogo = new Button("Salvar Jogo");
         btnSalvarJogo.setBounds(10, 30, 120, 30);
         add(btnSalvarJogo);
+
+        btnCorJogador = new Button("");
+        btnCorJogador.setBounds(150, 30, 30, 30);
+        add(btnCorJogador);
+        setCorJogadorbtn();
     }
 
     {
@@ -134,6 +137,13 @@ public class JanelaJogo extends Frame{
         dictStrCor.put("Branco", Color.WHITE);
     }
     
+    private void setCorJogadorbtn(){
+        String corJogador = gameView.getCorJogadorAtualView();
+        btnCorJogador.setBackground(dictStrCor.get(corJogador));
+        String numExercitosDisponiveis = String.valueOf(gameView.getNumSoldadosDisponiveisView());
+        btnCorJogador.setLabel(numExercitosDisponiveis);
+    }
+
     private Button criaBtnTerritorio(String nome){
         String numExercitos = String.valueOf(gameView.getNumSoldadosView(nome));
         int[] coordenadas = dictTerritorioPosicao.get(nome);
@@ -144,7 +154,7 @@ public class JanelaJogo extends Frame{
         btnTerritorio.setBackground(dictStrCor.get(corJogador)); 
         btnTerritorio.setForeground(Color.WHITE);
         btnTerritorio.addActionListener(e -> {
-            controller.btnTerritorioController(nome);
+            gameView.btnTerritorioController(nome);
         });
         return btnTerritorio;
     }
@@ -164,9 +174,9 @@ public class JanelaJogo extends Frame{
         Button btnTerritorio = dictTerritorioBtn.get(nomeTerritorio);
         String numExercitos = String.valueOf(gameView.getNumSoldadosView(nomeTerritorio));
         btnTerritorio.setLabel(numExercitos);
+        String numExercitosDisponiveis = String.valueOf(gameView.getNumSoldadosDisponiveisView());
+        btnCorJogador.setLabel(numExercitosDisponiveis);
     }
-
-
 
 
     @Override

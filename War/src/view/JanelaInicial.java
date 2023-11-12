@@ -39,7 +39,7 @@ class JanelaInicial extends Frame{
 
     private void initUI() {
         try {
-            imagemDeFundo = ImageIO.read(new File("C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\War_Titulo.jpg"));
+            imagemDeFundo = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\War_Titulo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
