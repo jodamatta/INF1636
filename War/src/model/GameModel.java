@@ -115,77 +115,6 @@ public class GameModel {
 		}
 	}
 
-	public void addExercitoTerritorio(Jogador jogador){
-		int Tnumero = jogador.getTerritorios().size();
-		int exercitoNumero = Tnumero/2;
-		while (exercitoNumero > 0){
-
-			System.out.printf("Voce tem %d exercitos para posicionar e pode posiciona-los nos seguintes territorios:\n",exercitoNumero );
-			int k = 0;
-			for (Territorio t : jogador.getTerritorios()){
-				System.out.println(k + "  |   " + t.getNome() );
-				k++;
-			}
-			System.out.println("Escreva para qual terreno voce deseja adicionar tropas: ");
-			int terreno;
-			terreno = scanner.nextInt();
-			scanner.nextLine(); 
-			while (terreno < 0 || terreno > Tnumero - 1){
-				System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + (Tnumero-1));
-				terreno = scanner.nextInt();
-				scanner.nextLine(); 
-			}
-			System.out.println("Escreva a quantidade de tropas: ");
-			int numTropas;
-			numTropas = scanner.nextInt();
-			scanner.nextLine();
-			while (numTropas < 0 || numTropas > exercitoNumero){
-				System.out.println("Numero de tropas inválido. Escolha um número entre 0 e " + exercitoNumero);
-				terreno = scanner.nextInt();
-				scanner.nextLine(); 
-			}
-			exercitoNumero -= numTropas;
-			jogador.getTerritorios().get(terreno).alteraNumSoldados(numTropas);;
-		}
-	}
-
-	public void addExercitoContinente(Jogador jogador){
-		for(Continente c : continentes){
-			if(c.foiDominado(jogador) == 1){
-				int Tnumero = c.getPaises().size();
-				int exercitoNumero = c.getBonus();
-				while (exercitoNumero > 0){
-					System.out.printf("Voce tem %d exercitos para posicionar e pode posiciona-los nos seguintes territorios:\n",exercitoNumero );
-					int k = 0;
-					for (Territorio t : c.getPaises()){
-						System.out.println(k + "  |   " + t.getNome() );
-						k++;
-					}
-					System.out.println("Escreva para qual terreno voce deseja adicionar tropas: ");
-					int terreno;
-					terreno = scanner.nextInt();
-					scanner.nextLine(); 
-					while (terreno < 0 || terreno > Tnumero - 1){
-						System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + (Tnumero-1));
-						terreno = scanner.nextInt();
-						scanner.nextLine(); 
-					}
-					System.out.println("Escreva a quantidade de tropas: ");
-					int numTropas;
-					numTropas = scanner.nextInt();
-					scanner.nextLine();
-					while (numTropas < 0 || numTropas > exercitoNumero){
-						System.out.println("Numero de tropas inválido. Escolha um número entre 0 e " + exercitoNumero);
-						terreno = scanner.nextInt();
-						scanner.nextLine(); 
-					}
-					exercitoNumero -= numTropas;
-					c.getPaises().get(terreno).alteraNumSoldados(numTropas);;
-				}
-			}
-		}
-	}
-	
 	public int querTrocar(Jogador jogador){
 		if( jogador.verificaTroca() != 0){
 			System.out.println("Voce tem uma troca valida. Voce quer trocar? (S/N)");
@@ -305,60 +234,6 @@ public class GameModel {
 		return Collections.unmodifiableList(continentes);
 	}
 
-	/*public void ataqueJogador(Jogador j){
-		Ataque att = new Ataque(j);
-		List<Territorio> territoriosQuePodemFazerAtaques = att.getOrigemDisponivel();
-		System.out.println(j.getNome() + ", você pode fazer um ataque a partir dos seguintes territórios:" );
-		int k = 0;
-		int Tnumero = territoriosQuePodemFazerAtaques.size();
-		for (Territorio t : territoriosQuePodemFazerAtaques){
-			System.out.println(k + " | " + t.getNome());
-			k++;
-		}
-		System.out.println("Selecine o territorio: ");
-		int terreno;
-		terreno = scanner.nextInt();
-		scanner.nextLine();
-		while (terreno < 0 || terreno > Tnumero - 1){
-						System.out.println("territorio inválido. Escolha um territorio entre 0 e " + (Tnumero-1));
-						terreno = scanner.nextInt();
-						scanner.nextLine(); 
-					}
-		Territorio paisOrigem = territoriosQuePodemFazerAtaques.get(terreno);
-		att.setPaisOrigem(paisOrigem);
-		System.out.println("Voce escolheu atacar a partir de " + paisOrigem.getNome() );
-		System.out.println("Alvos disponiveis: ");
-		int l = 0;
-		List <String> listaAlvo = att.getAlvos();
-		for (String alvo : listaAlvo){
-			System.out.println(l + " | " + alvo);
-			l++;
-		}
-		System.out.println("Selecine o alvo: ");
-		int alvo;
-		alvo = scanner.nextInt();
-		scanner.nextLine();
-		for (Territorio t : territorios){
-			if (listaAlvo.get(alvo) == t.getNome()){
-				att.setAlvo(t);
-			}
-		}
-		Territorio Talvo = att.getAlvo();
-		if (Talvo != null){
-			System.out.println("Alvo: " + Talvo.getNome() + " | " + "Sob controle de : " + Talvo.getJogador().getNome() + " | " + "Número de defensores: " + Talvo.getNumeroSoldados());
-		}
-		
-		int numAtacantes = 2;
-		int numDefensores = 1;
-		System.out.printf("Simulando ataque com %d exercitos atacantes e %d exercitos de defesa.\n", numAtacantes, numDefensores);
-		
-		att.setNumAtacantes(numAtacantes);
-		att.setNumDefensores(numDefensores);
-		System.out.printf("Dados: \n");
-		att.rolaDados();
-		att.avaliaAtaque();
-	}*/
-
 	public String getTerritorioCor(String nomeTerritorio){
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
@@ -377,11 +252,40 @@ public class GameModel {
 		return 0;
 	}
 
+	public int getNumSoldadosTotal(String nomeTerritorio){
+		Territorio t = stringToTerritorio(nomeTerritorio);
+		return t.getNumeroSoldados() + t.getNumeroSoldadosCansados();
+	}
+
 	public String getObjetivoJogadorAtual(){
 		return jogadores.get(numJogadorAtual).getObjetivo().toString();
 	}
 
-	public void movimentaExercito(int numExercMovi, Territorio origem, Territorio destino){
+	public Territorio stringToTerritorio(String nomeTerritorio){
+		for (Territorio t : territorios){
+			if (t.getNome() == nomeTerritorio){
+				return t;
+			}
+		}
+		return null;
+	}
+
+	public List<String> getVizinhosAliados(String nomeTerritorio){
+		Territorio territorio = stringToTerritorio(nomeTerritorio);
+		Jogador jogador = territorio.getJogador();
+        List<String> vizinhos = territorio.getVizinhos();
+        List<String> vizinhosAliados = new ArrayList<String>();
+        for (String vizinho : vizinhos) {
+            if (jogador.equals(stringToTerritorio(vizinho).getJogador())) {
+                vizinhosAliados.add(vizinho);
+            }
+        }
+        return vizinhosAliados;
+    }
+
+	public void movimentaExercito(int numExercMovi, String nomeOrigem, String nomeDestino){
+		Territorio origem = stringToTerritorio(nomeOrigem);
+		Territorio destino = stringToTerritorio(nomeDestino);
 		if (origem.getNumeroSoldados() - numExercMovi < 1 && origem.getNumeroSoldadosCansados() == 0){
 			System.out.println("Numero de exercitos invalido");
 			return;
@@ -390,13 +294,22 @@ public class GameModel {
 		destino.addExercitoCansado(numExercMovi);
 	}
 
+	public int getNumSoldadosMovimentoValido(String nomeTerritorio){
+		Territorio territorio = stringToTerritorio(nomeTerritorio);
+		int numSoldados = territorio.getNumeroSoldados();
+		int numSoldadosCansados = territorio.getNumeroSoldadosCansados();
+		if (numSoldadosCansados == 0){
+			return numSoldados-1;
+		}
+		return numSoldados;
+	}
+	
 	public int getFaseRodada(){
 		return faseRodada;
 	}
 
 	public void descansaTodosExercitos(){
-		Jogador jogador = jogadores.get(numJogadorAtual);
-		for (Territorio t : jogador.getTerritorios()){
+		for (Territorio t : territorios){
 			t.descansaExercito();
 		}
 	}

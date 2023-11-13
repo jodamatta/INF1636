@@ -34,7 +34,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\joana\\\\OneDrive\\\\Documentos\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\\\\\War\\\\\\\\src\\\\\\\\view\\\\\\\\images\\\\\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -53,7 +53,7 @@ public class JanelaJogo extends Frame{
     }
 
     public void initButtons() {
-        btnTerminaRodada = new Button("Passar a fase");
+        btnTerminaRodada = new Button("Passar de fase");
         btnTerminaRodada.setBounds(1070, 640, 120, 30); // Define posição e tamanho do botão
         btnTerminaRodada.addActionListener(e -> {
             gameView.passaFaseView();
@@ -205,9 +205,27 @@ public class JanelaJogo extends Frame{
             gameView.btnAtaqueView(nomeTerritorio);
         });
         add(btnAtaque);
-
     }
 
+    public void movimentoTerritorio(String nomeTerritorio, List<String> vizinhos){
+        for (String nome : dictTerritorioBtn.keySet()) {
+            if(!vizinhos.contains(nome)){
+                dictTerritorioBtn.get(nome).setVisible(false);
+            }
+        }
+
+        int[] coordenadas = dictTerritorioPosicao.get(nomeTerritorio);     
+        btnMover = new Button("1");
+        btnMover.setBounds(coordenadas[0], coordenadas[1], 30, 30);
+        String corJogador = gameView.getCorJogadorAtualView();
+        btnMover.setBackground(dictStrCor.get(corJogador));
+        btnMover.setForeground(Color.WHITE);
+        btnMover.addActionListener(e -> {
+            gameView.btnMoverView(nomeTerritorio);
+        });
+        add(btnMover);
+    }
+    
     public void voltaTerriorios(){
         String cor;
         for (String nome : dictTerritorioBtn.keySet()) {
@@ -216,7 +234,12 @@ public class JanelaJogo extends Frame{
             cor = gameView.atualizaCor(nome);
             dictTerritorioBtn.get(nome).setBackground(dictStrCor.get(cor));
         }
-        remove(btnAtaque);
+        if(btnAtaque != null){
+            remove(btnAtaque);
+        }
+        if(btnMover != null){
+            remove(btnMover);
+        }
     }
 
     public int getNumAtacantes() {
@@ -231,9 +254,24 @@ public class JanelaJogo extends Frame{
         return 0; // ou outro valor padrão, dependendo do seu caso
     }
 
-    
+    public int getNumMovimento(){
+        if (btnMover != null) {
+            try {
+                return Integer.parseInt(btnMover.getLabel());
+            } catch (NumberFormatException e) {
+                // Trata a exceção se o texto não for um número válido
+                e.printStackTrace(); // ou outra forma de lidar com o erro, se necessário
+            }
+        }
+        return 0; // ou outro valor padrão, dependendo do seu caso
+    }
+
     public void atualizaBtnAtaque(int numExercitosAtacantes){
         btnAtaque.setLabel(String.valueOf(numExercitosAtacantes));
+    }
+
+    public void atualizaBtnMover(int numExercitosMovimento){
+        btnMover.setLabel(String.valueOf(numExercitosMovimento));
     }
 
     @Override

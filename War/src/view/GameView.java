@@ -108,7 +108,22 @@ public class GameView {
         controller.btnAtaqueController(nomeTerritorio);
     }
 
+    public int getNumMovimentoView(){
+        return janelaJogo.getNumMovimento();
+    }
+    public void btnMoverView(String nomeTerritorio){
+        controller.btnMoverController(nomeTerritorio);
+    }
+
     public void atualizaBtnAtaque(String nomeTerritorio, int numExercitosAtacantes){
         janelaJogo.atualizaBtnAtaque(numExercitosAtacantes);
     }
+
+    public void atualizaBtnMover(String nomeTerritorio, int numExercitosMovimento){
+        janelaJogo.atualizaBtnMover(numExercitosMovimento);
+    }
+    public void movimentoTerritorioView(String nomeTerritorio, List<String> vizinhos){
+        janelaJogo.movimentoTerritorio(nomeTerritorio, vizinhos);
+    }
+
 }

@@ -9,7 +9,11 @@ public class GameController {
     private static GameModel gameModel; 
     private static GameView gameView;
     private int ataqueFlag = 0;
+    private int movimentoFlag = 0;
     private int numExercitosAtacantes = 1;
+    private String movOrigem = null;
+    private String movDestino = null;
+    private int numExercitosMovimento = 0;
     public GameController(){
     }
 
@@ -45,7 +49,7 @@ public class GameController {
     }
 
     public int getNumSoldadosController(String nomeTerritorio){
-        return gameModel.getNumSoldados(nomeTerritorio);
+        return gameModel.getNumSoldadosTotal(nomeTerritorio);
     }
 
     public String getTerritorioCorController(String nomeTerritorio){
@@ -62,12 +66,12 @@ public class GameController {
     public void btnTerritorioController(String nomeTerritorio){
         int faseRodada = gameModel.getFaseRodada();
         boolean ataque;
+        boolean movimento;
         switch (faseRodada) {
             case 0:
                 addExercitoTerritorioController(nomeTerritorio);
                 break;
             case 1:
-                System.out.println("case 1");
                 if(ataqueFlag == 0){
                     ataque = ataqueTerritorioController(nomeTerritorio);
                     if(ataque){
@@ -76,14 +80,23 @@ public class GameController {
                     
                 } else{
                     ataqueFlag = 0;
-                    System.out.println("destino ataque");
                     destinoAtaqueController(nomeTerritorio);
-                    gameView.atualizaNumSoldadosView(nomeTerritorio);
                     gameModel.mataAtaque();
                 }
                 break;
             case 2:
-                //Mecanica de movimento
+                if(movimentoFlag == 0){
+                    movimento = setTerritorioMovimento(nomeTerritorio);
+                    if(movimento){
+                        movOrigem = nomeTerritorio;
+                        movimentoFlag = 1;
+                    } 
+                } else{
+                    movimentoFlag = 0;
+                    movimentoTerritorio(nomeTerritorio);
+                    gameView.voltaTerrioriosView();
+                    mataMovimento();
+                }
                 break;
             default:
                 System.out.println("Rodada fora de sincronia");
@@ -91,13 +104,36 @@ public class GameController {
         }
     }
 
+    public void mataMovimento(){
+        movOrigem = null;
+        movDestino = null;
+        numExercitosMovimento = 0;
+    }
+
+    public void movimentoTerritorio(String nomeTerritorio){
+        movDestino = nomeTerritorio;
+        int numMovimento = gameView.getNumMovimentoView();
+        gameModel.movimentaExercito(numMovimento, movOrigem, movDestino);
+    }
+
+    public boolean setTerritorioMovimento(String nomeTerritorio){
+        List<String> vizinhos = gameModel.getVizinhosAliados(nomeTerritorio);
+        int numExVal = gameModel.getNumSoldadosMovimentoValido(nomeTerritorio);
+        if (numExVal == 0) {
+            return false;
+        }
+        if(vizinhos == null || vizinhos.isEmpty()){
+            return false;
+        }
+        gameView.movimentoTerritorioView(nomeTerritorio, vizinhos);
+        return true;
+    }
+
+
     public void destinoAtaqueController(String nomeTerritorio){
-        System.out.println("dentro de destino ataque");
         int numAtacantes = gameView.getNumAtacantesView();
         gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
-        System.out.println("atacando o cara");
         gameView.voltaTerrioriosView();
-        //gameView.atualizaNumSoldadosView(nomeTerritorio);
         ataqueFlag = 0;
     }
 
@@ -118,6 +154,14 @@ public class GameController {
         }
         gameView.atualizaBtnAtaque(nomeTerritorio, numExercitosAtacantes);
         //gameModel.setTerritorioAtaque(nomeTerritorio);
+    }
+
+    public void btnMoverController(String nomeTerritorio){
+        numExercitosMovimento = numExercitosMovimento + 1;
+        if(numExercitosMovimento > gameModel.getNumSoldadosMovimentoValido(nomeTerritorio)){
+            numExercitosMovimento = 0;
+        }
+        gameView.atualizaBtnMover(nomeTerritorio, numExercitosMovimento);
     }
 
     public void passaVezController(){
@@ -152,6 +196,7 @@ public class GameController {
 
     public void passaFaseController(){
         gameModel.passaFase();
+        gameView.voltaTerrioriosView();
     }
 }
 
