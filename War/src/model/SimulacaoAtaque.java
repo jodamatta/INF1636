@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 public class SimulacaoAtaque {
-    //REMOVER NO FUTURO
+    /* 
     private GameModel gameModel;
 
     void hardCodedSetup() {
@@ -58,5 +58,5 @@ public class SimulacaoAtaque {
     public static void main(String[] args) {
         SimulacaoAtaque SimAtaque = new SimulacaoAtaque();
         SimAtaque.hardCodedSetup();
-    }
+    }*/
 }

@@ -305,7 +305,7 @@ public class GameModel {
 		return Collections.unmodifiableList(continentes);
 	}
 
-	public void ataqueJogador(Jogador j){
+	/*public void ataqueJogador(Jogador j){
 		Ataque att = new Ataque(j);
 		List<Territorio> territoriosQuePodemFazerAtaques = att.getOrigemDisponivel();
 		System.out.println(j.getNome() + ", você pode fazer um ataque a partir dos seguintes territórios:" );
@@ -357,7 +357,7 @@ public class GameModel {
 		System.out.printf("Dados: \n");
 		att.rolaDados();
 		att.avaliaAtaque();
-	}
+	}*/
 
 	public String getTerritorioCor(String nomeTerritorio){
 		for (Territorio t : territorios){
@@ -401,12 +401,14 @@ public class GameModel {
 		}
 	}
 
-	public void addExercitoTerritorio(String nomeTerritorio, int numExercitos){
+	public boolean addExercitoTerritorio(String nomeTerritorio, int numExercitos){
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio && t.getJogador() == jogadores.get(numJogadorAtual)){
 				t.alteraNumSoldados(numExercitos);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public void diminuiNumSoldadosDisponiveis(int numExercitos){
@@ -419,25 +421,44 @@ public class GameModel {
 				ataqueAtual = new Ataque(jogadores.get(numJogadorAtual));
 				ataqueAtual.setPaisOrigem(t);
 				List<String> alvos = ataqueAtual.getAlvos();
+				for(String alvo:alvos){
+					System.out.println(alvo);
+					for(Territorio tt: territorios){
+						if(alvo == tt.getNome()){
+							System.out.println(tt.getJogador().getCor());
+						}
+					}
+				}
 				return alvos;
 			}
 		}
 		return null;
 	}
-	
+
+	public void mataAtaque(){
+		ataqueAtual = null;
+	}
+
 	public int getNumSoldadosDisponiveis(){
 		return numExercitosDisponiveis;
 	}
 
 	public void destinoAtaque(String nomeTerritorio, int numExercitos){
+		boolean foiDominado;
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
+				System.out.println("if");
 				ataqueAtual.setAlvo(t);
 				ataqueAtual.setNumAtacantes(numExercitos);
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
 				ataqueAtual.setJogadorDefensor(t.getJogador());
 				ataqueAtual.rolaDados();
-				ataqueAtual.avaliaAtaque();
+				foiDominado = ataqueAtual.avaliaAtaque();
+				if(foiDominado){
+					System.out.println('a');
+					ataqueAtual.setExercitosDeslocados(1);
+					ataqueAtual.conquistaAndDeslocamento();
+				}
 				return;
 			}
 		}

@@ -59,6 +59,14 @@ public class GameView {
 
     }
 
+    public void atualizaDonoView(String nomeTerritorio, String nomeJogador){
+        janelaJogo.atualizaDono(nomeTerritorio, nomeJogador);
+    }
+
+    public void voltaTerrioriosView(){
+        janelaJogo.voltaTerriorios();
+    }
+
     public String getCorJogadorAtualView(){
         return controller.getCorJogadorAtualController();
     }
@@ -89,6 +97,11 @@ public class GameView {
 
     public int getNumAtacantesView(){
         return janelaJogo.getNumAtacantes();
+    }
+
+    public String atualizaCor(String nomeTerritorio){
+        return controller.getTerritorioCorController(nomeTerritorio);
+        
     }
     
     public void btnAtaqueView(String nomeTerritorio){

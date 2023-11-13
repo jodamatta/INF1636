@@ -61,15 +61,25 @@ public class GameController {
 
     public void btnTerritorioController(String nomeTerritorio){
         int faseRodada = gameModel.getFaseRodada();
+        boolean ataque;
         switch (faseRodada) {
             case 0:
                 addExercitoTerritorioController(nomeTerritorio);
                 break;
             case 1:
+                System.out.println("case 1");
                 if(ataqueFlag == 0){
-                    ataqueTerritorioController(nomeTerritorio);
+                    ataque = ataqueTerritorioController(nomeTerritorio);
+                    if(ataque){
+                        ataqueFlag = 1;
+                    }
+                    
                 } else{
+                    ataqueFlag = 0;
+                    System.out.println("destino ataque");
                     destinoAtaqueController(nomeTerritorio);
+                    gameView.atualizaNumSoldadosView(nomeTerritorio);
+                    gameModel.mataAtaque();
                 }
                 break;
             case 2:
@@ -82,18 +92,23 @@ public class GameController {
     }
 
     public void destinoAtaqueController(String nomeTerritorio){
+        System.out.println("dentro de destino ataque");
         int numAtacantes = gameView.getNumAtacantesView();
         gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
-        gameView.atualizaNumSoldadosView(nomeTerritorio);
+        System.out.println("atacando o cara");
+        gameView.voltaTerrioriosView();
+        //gameView.atualizaNumSoldadosView(nomeTerritorio);
         ataqueFlag = 0;
     }
 
-    public void ataqueTerritorioController(String nomeTerritorio){
+    public boolean ataqueTerritorioController(String nomeTerritorio){
         List<String> alvos = gameModel.ataqueTerritorio(nomeTerritorio);
-        if(alvos == null){
-            return;
+        if(alvos == null || alvos.isEmpty()){
+            System.out.println("Sem alvos validos");
+            return false;
         }
         gameView.ataqueTerritorioView(nomeTerritorio, alvos);
+        return true;
     }
 
     public void btnAtaqueController(String nomeTerritorio){
@@ -110,14 +125,17 @@ public class GameController {
     }
 
     public void addExercitoTerritorioController(String nomeTerritorio){
+        boolean addValido;
         int numExercitosDisponiveis = gameModel.getNumSoldadosDisponiveis();
         if (numExercitosDisponiveis == 0) {
             return;
         }
 
-        gameModel.addExercitoTerritorio(nomeTerritorio, 1);
-        gameModel.diminuiNumSoldadosDisponiveis(1);
-        gameView.atualizaNumSoldadosView(nomeTerritorio);
+        addValido = gameModel.addExercitoTerritorio(nomeTerritorio, 1);
+        if(addValido){
+            gameModel.diminuiNumSoldadosDisponiveis(1);
+            gameView.atualizaNumSoldadosView(nomeTerritorio);
+        }
     }
 
     public String getCorJogadorAtualController(){

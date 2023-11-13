@@ -34,7 +34,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\joana\\\\OneDrive\\\\Documentos\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -182,6 +182,12 @@ public class JanelaJogo extends Frame{
         btnCorJogador.setLabel(numExercitosDisponiveis);
     }
 
+    public void atualizaDono(String nomeTerritorio, String nomeJogador){
+        Button btnTerritorio = dictTerritorioBtn.get(nomeTerritorio);
+        String corJogador = gameView.getTerritorioCorView(nomeJogador);
+        btnTerritorio.setBackground(dictStrCor.get(corJogador));
+    }
+
     public void ataqueAlvos(String nomeTerritorio, List<String> alvos){
         for (String nome : dictTerritorioBtn.keySet()) {
             if(!alvos.contains(nome)){
@@ -199,12 +205,16 @@ public class JanelaJogo extends Frame{
             gameView.btnAtaqueView(nomeTerritorio);
         });
         add(btnAtaque);
+
     }
 
     public void voltaTerriorios(){
+        String cor;
         for (String nome : dictTerritorioBtn.keySet()) {
             atualizaNumSoldados(nome);
             dictTerritorioBtn.get(nome).setVisible(true);
+            cor = gameView.atualizaCor(nome);
+            dictTerritorioBtn.get(nome).setBackground(dictStrCor.get(cor));
         }
         remove(btnAtaque);
     }

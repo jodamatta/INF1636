@@ -282,9 +282,11 @@ class Ataque {
 		//System.out.printf("Antes  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
 		this.paisAvlo.alteraNumSoldados(-this.defensoresPerdidos);
 		this.paisAvlo.setJogador(this.atacante);
+        this.atacante.addTerritorio(paisAvlo);
+        this.defensor.removeTerritorio(paisAvlo);
 		this.paisDeOrigem.alteraNumSoldados(-this.exercitosDeslocados);
 		this.paisAvlo.alteraNumSoldados(this.exercitosDeslocados);
-		//System.out.printf("Depois  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
+		System.out.printf("Depois  | Dono: %s	NumeTropas: %d\n",this.paisAvlo.getJogador().getNome(), this.paisAvlo.getNumeroSoldados());
     }
    
     public List<Territorio> getOrigemDisponivel(){
