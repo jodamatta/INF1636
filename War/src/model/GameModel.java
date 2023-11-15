@@ -188,6 +188,9 @@ public class GameModel {
 		Jogador jogador = jogadores.get(numJogadorAtual);
 		int numTerritorios = jogador.getTerritorios().size();
 		numExercitosDisponiveis = numTerritorios/2;
+		if(numExercitosDisponiveis < 3){
+			numExercitosDisponiveis = 3;
+		}
 		for(Continente c : continentes){
 			if(c.foiDominado(jogador) == 1){
 				numExercitosDisponiveis += c.getBonus();
