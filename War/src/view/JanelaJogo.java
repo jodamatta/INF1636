@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
-import controller.GameController;
 
 public class JanelaJogo extends Frame{
     private GameView gameView;
@@ -27,6 +27,8 @@ public class JanelaJogo extends Frame{
     Map<String, Color> dictStrCor = new HashMap<>();
     Map<String, Button> dictTerritorioBtn = new HashMap<>();
 
+    private List<BufferedImage> dadosAtaque;
+    private List<BufferedImage> dadosDefesa;
 
     public JanelaJogo() {
         gameView = GameView.getInstanciaView();
@@ -38,6 +40,7 @@ public class JanelaJogo extends Frame{
         } catch (IOException e) {
             e.printStackTrace();
         };
+        
         frame = new Frame("Janela de Jogo do war");
         setSize(1200, 700);
         setLayout(null); // Desabilita o layout manager para posicionamento manual dos botões
@@ -49,12 +52,16 @@ public class JanelaJogo extends Frame{
                 System.exit(0);
             }
         });
+
+        dadosAtaque = new ArrayList<>();
+        dadosDefesa = new ArrayList<>();
+        carregarImagemDado("War\\src\\view\\images\\dado_ataque_1.png");
         setVisible(true);
     }
 
     public void initButtons() {
-        btnTerminaRodada = new Button("Passar de fase");
-        btnTerminaRodada.setBounds(1070, 640, 120, 30); // Define posição e tamanho do botão
+        btnTerminaRodada = new Button("Terminar rodada");
+        btnTerminaRodada.setBounds(1040, 640, 150, 30); // Define posição e tamanho do botão
         btnTerminaRodada.addActionListener(e -> {
             gameView.passaFaseView();
         });
@@ -63,7 +70,7 @@ public class JanelaJogo extends Frame{
         btnTrocaCartas.addActionListener(e -> {
         	new JanelaCartas();
         });
-        btnTrocaCartas.setBounds(945, 640, 120, 30);
+        btnTrocaCartas.setBounds(915, 640, 120, 30);
         add(btnTrocaCartas);
 
         btnSalvarJogo = new Button("Salvar Jogo");
@@ -74,6 +81,7 @@ public class JanelaJogo extends Frame{
         btnCorJogador.setBounds(150, 30, 30, 30);
         add(btnCorJogador);
         setCorJogadorbtn();
+        
     }
 
     {
@@ -141,6 +149,24 @@ public class JanelaJogo extends Frame{
         dictStrCor.put("Branco", Color.WHITE);
     }
     
+    public void setLabelPassa(int faseRodada, boolean rodadaInicialFlag){
+        if (rodadaInicialFlag) {
+            btnTerminaRodada.setLabel("Terminar rodada");
+            return;
+        }
+
+        if(faseRodada == 0){
+            btnTerminaRodada.setLabel("Passar para ataque");
+        }
+        else if(faseRodada == 1){
+            btnTerminaRodada.setLabel("Passar para movimento");
+        }
+        else if(faseRodada == 2){
+            removeDados(getGraphics());
+            btnTerminaRodada.setLabel("Terminar rodada");
+        }
+    }
+   
     public void setCorJogadorbtn(){
         String corJogador = gameView.getCorJogadorAtualView();
         btnCorJogador.setBackground(dictStrCor.get(corJogador));
@@ -189,12 +215,13 @@ public class JanelaJogo extends Frame{
     }
 
     public void ataqueAlvos(String nomeTerritorio, List<String> alvos){
+         
         for (String nome : dictTerritorioBtn.keySet()) {
             if(!alvos.contains(nome)){
                 dictTerritorioBtn.get(nome).setVisible(false);
             }
         }
-
+        
         int[] coordenadas = dictTerritorioPosicao.get(nomeTerritorio);     
         btnAtaque = new Button("1");
         btnAtaque.setBounds(coordenadas[0], coordenadas[1], 30, 30);
@@ -272,6 +299,71 @@ public class JanelaJogo extends Frame{
 
     public void atualizaBtnMover(int numExercitosMovimento){
         btnMover.setLabel(String.valueOf(numExercitosMovimento));
+    }
+
+    public void finalizaJogo(String nomeJogador, String corJogador) {
+        exibirVencedor(nomeJogador, corJogador);
+        int opcao = JOptionPane.showConfirmDialog(
+                this,
+                "Deseja continuar jogando?",
+                "Continuar?",
+                JOptionPane.YES_NO_OPTION);
+
+        if (opcao == JOptionPane.YES_OPTION) {
+            //code block
+        } else {
+            System.exit(0); // Encerrar o programa
+        }
+    }
+
+    private void exibirVencedor(String nomeJogador, String corJogador) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Parabéns! O jogador vencedor é: " + nomeJogador + " (Cor: " + corJogador + ")",
+                "Vencedor!",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void carregarImagemDado(String caminho) {
+        for (int i = 1; i < 7; i++) {
+            try {
+                BufferedImage imagemDadoAtaque = ImageIO.read(new File("War\\src\\view\\images\\dado_ataque_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoDefesa = ImageIO.read(new File("War\\src\\view\\images\\dado_defesa_"+ String.valueOf(i) +".png"));
+                dadosAtaque.add(imagemDadoAtaque);
+                dadosDefesa.add(imagemDadoDefesa);
+                repaint();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void exibiDados(List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum){
+        paintDados(getGraphics(), dadosAtaquesnum, dadosDefesasnum);
+    }
+
+    public void removeDados(Graphics g){
+        for (String nome : dictTerritorioBtn.keySet()) {
+            dictTerritorioBtn.get(nome).setVisible(false);
+        }
+        for (String nome : dictTerritorioBtn.keySet()) {
+            dictTerritorioBtn.get(nome).setVisible(true);
+        }
+    }
+
+    public void paintDados(Graphics g, List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum) {
+        int x = 450;
+        int y = 450;
+        for (int i = 0; i < dadosAtaquesnum.size(); i++) {
+            g.drawImage(this.dadosAtaque.get(dadosAtaquesnum.get(i) - 1), x, y, this);
+            y += 50;
+        }
+        x = 500;
+        y = 450;
+        for (int i = 0; i < dadosDefesasnum.size(); i++) {
+            g.drawImage(this.dadosDefesa.get(dadosDefesasnum.get(i) - 1), x, y, this);
+            y += 50;
+        }
     }
 
     @Override

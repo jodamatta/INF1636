@@ -319,5 +319,20 @@ class Ataque {
         this.paisDeOrigem = t;
     }
     
+    public List<Integer> getDadosAtaque() {
+    	List<Integer> listDadosAtaque = new ArrayList<>();
+        for (int valor : dadosAtaque) {
+            listDadosAtaque.add(valor);
+        }
+        return listDadosAtaque;
+    }
 
+    public List<Integer> getDadosDefesa() {
+    	List<Integer> listDadosDefesa = new ArrayList<>();
+        for (int valor : dadosDefesa) {
+            listDadosDefesa.add(valor);
+        }
+        return listDadosDefesa;
+    }
+    
 }

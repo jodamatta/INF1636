@@ -84,14 +84,15 @@ public class GameView {
     }
 
     public void passaFaseView(){
-        controller.passaFaseController();
+        boolean rodadaInicialFlag = controller.passaFaseController();
+        janelaJogo.setLabelPassa(controller.getFaseRodadaController(), rodadaInicialFlag);
     }
 
     public void ataqueTerritorioView(String nomeTerritorio, List<String> alvos){
         janelaJogo.ataqueAlvos(nomeTerritorio, alvos);
     }
     
-    public void passaVezView(){
+    public void setCorJogadorView(){
         janelaJogo.setCorJogadorbtn();
     }
 
@@ -111,6 +112,7 @@ public class GameView {
     public int getNumMovimentoView(){
         return janelaJogo.getNumMovimento();
     }
+
     public void btnMoverView(String nomeTerritorio){
         controller.btnMoverController(nomeTerritorio);
     }
@@ -122,8 +124,32 @@ public class GameView {
     public void atualizaBtnMover(String nomeTerritorio, int numExercitosMovimento){
         janelaJogo.atualizaBtnMover(numExercitosMovimento);
     }
+
     public void movimentoTerritorioView(String nomeTerritorio, List<String> vizinhos){
         janelaJogo.movimentoTerritorio(nomeTerritorio, vizinhos);
     }
 
+    public List<String> getCartasJogadorAtualView(){
+        return controller.getCartasJogadorAtualController();
+    }
+
+    public void addExercitoCartaView(){
+        controller.addExercitoCartaController();
+    }
+
+    public String getObjetivoJogadorAtualView(){
+        return controller.getObjetivoJogadorAtualController();
+    }
+
+    public void jogoTeste(){
+        controller.jogoTesteController();
+    }
+
+    public void chamaJanelaFimJogo(String nomeJogador, String corJogador){
+        janelaJogo.finalizaJogo(nomeJogador, corJogador);
+    }
+
+    public void exibiDados(List<Integer> listDadosAtaque, List<Integer> listDadosDefesa){
+        janelaJogo.exibiDados(listDadosAtaque, listDadosDefesa);
+    }
 }

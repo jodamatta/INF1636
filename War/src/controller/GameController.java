@@ -129,11 +129,13 @@ public class GameController {
         return true;
     }
 
-
     public void destinoAtaqueController(String nomeTerritorio){
         int numAtacantes = gameView.getNumAtacantesView();
         gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
+        List<Integer> listDadosAtaque = gameModel.getDadosAtaque();
+        List<Integer> listDadosDefesa = gameModel.getDadosDefesa();
         gameView.voltaTerrioriosView();
+        gameView.exibiDados(listDadosAtaque, listDadosDefesa);
         ataqueFlag = 0;
     }
 
@@ -164,8 +166,8 @@ public class GameController {
         gameView.atualizaBtnMover(nomeTerritorio, numExercitosMovimento);
     }
 
-    public void passaVezController(){
-         gameView.passaVezView();
+    public void setCorJogadorController(){
+         gameView.setCorJogadorView();
     }
 
     public void addExercitoTerritorioController(String nomeTerritorio){
@@ -194,34 +196,38 @@ public class GameController {
         return gameModel.getFaseRodada();
     }
 
-    public void passaFaseController(){
-        gameModel.passaFase();
+    public boolean passaFaseController(){
+        boolean rodadaInicialFlag = gameModel.passaFase();
+        gameView.voltaTerrioriosView();
+        return rodadaInicialFlag;
+    }
+
+    public List<String> getCartasJogadorAtualController(){
+        return gameModel.getCartasJogadorAtual();
+    }
+
+    public void addExercitoCartaController(){
+        gameModel.addExercitoCarta();
+    }
+
+    public String getObjetivoJogadorAtualController(){
+        return gameModel.getObjetivoJogadorAtual();
+    }
+
+    public void jogoTesteController(){
+        gameModel.jogoTeste();
+    }
+
+    public void voltaTerrioriosController(){
         gameView.voltaTerrioriosView();
     }
-}
 
+    public String getCorPorNome(String nomeJogador){
+        return gameModel.getCorPorNome(nomeJogador);
+    }
 
-/*
- * JANELA INICIAL
- * 1. Novo Jogo
- *  1.1 nome dos jogadores e suas cores
- *  1.2 começar jogo
- * 2. Continuar jogo (IMPLEMENTAREMOS DEPOIS)
- * 
- * JANELA JOGO
- * 1. Adicionar tropas (fase 1)
- *  1.1 Verificar Continente (em tropas ganhas por conquista de continente)
- * 2. Ataque (fase 2)
- *  2.1 Verificar fronteiras
- * 3. Movimento (fase 3)
- *  3.1 Verificar fronteiras
- * 4. Passar pro proximo jogador
- * 5. Ver Cartas
- *  5.1 Trocar cartas
- * 
- * OBS
- * -> Implementar a logica das fases no controller (passar o inteiro da fase como parametro)
- * 
- * REGRAS QUE ABRIMOS MÃO
- * 1. Botar tropas da conquista de continente só no próprio continente
- */
+    public void janelaFimJogoController(String nomeJogador){
+        gameView.chamaJanelaFimJogo(nomeJogador, getCorPorNome(nomeJogador));
+    }
+
+}   

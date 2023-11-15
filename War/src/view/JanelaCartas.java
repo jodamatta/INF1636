@@ -10,10 +10,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import model.GameModel;
-
 public class JanelaCartas extends Frame {
-    private GameModel gameModel;
+    private GameView gameView;
     Map<String,  String> dictPath = new HashMap<>();
     Map<String, String> dicionario = new HashMap<>();
     Map<String, String> dictObejetivos = new HashMap<>();
@@ -74,7 +72,7 @@ public class JanelaCartas extends Frame {
     }
     
     public JanelaCartas() {
-        gameModel = GameModel.getInstancia();
+        gameView = GameView.getInstanciaView();
         initUI();
     }
 
@@ -84,7 +82,7 @@ public class JanelaCartas extends Frame {
         setTitle("Janela Cartas");
         setSize(1200, 700);
         setLayout(null);
-        List<String> nomesCatas = gameModel.getCartasJogadorAtual();
+        List<String> nomesCatas = gameView.getCartasJogadorAtualView();
         int offSetX = 0;
         int offsetY = 0;
         for (String nome : nomesCatas) {        	
@@ -109,7 +107,7 @@ public class JanelaCartas extends Frame {
 
         btnTrocaCartas = new Button("Trocar Cartas");
         btnTrocaCartas.setBounds(1070, 640, 120, 30); // Define posição e tamanho do botão
-        btnTrocaCartas.addActionListener(e -> {gameModel.addExercitoCarta(); dispose();});
+        btnTrocaCartas.addActionListener(e -> {gameView.addExercitoCartaView(); dispose();});
         add(btnTrocaCartas);
         displayObjetivo();
         setVisible(true);
@@ -162,7 +160,7 @@ public class JanelaCartas extends Frame {
     }
 
     private void displayObjetivo(){
-        String objetivo = "Objetivo: " + dictObejetivos.get(gameModel.getObjetivoJogadorAtual());
+        String objetivo = "Objetivo: " + dictObejetivos.get(gameView.getObjetivoJogadorAtualView());
         Label lblObjetivo = new Label(objetivo);
         lblObjetivo.setBounds(70, 650, 400, 30);
         add(lblObjetivo);

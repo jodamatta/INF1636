@@ -19,6 +19,8 @@ public class GameModel {
 	private DeckTerritorios deckCartas = new DeckTerritorios();
 	private int numExercitosDisponiveis = 0;
 	private Ataque ataqueAtual;
+	private int rodadaInicialFlag = 0;
+	private boolean alguemVenceu = false;
 	// estados do jogo privados
 	private static List<Jogador> jogadores = new ArrayList<>();
 	private static List<Territorio> territorios = new ArrayList<>();
@@ -137,38 +139,33 @@ public class GameModel {
 			return;
 		}
 		jogador.removerCartas(jogador.verificaTroca(), deckCartas);
-		int Tnumero = jogador.getTerritorios().size();
-		int exercitoNumero = 5*numTrocas;
-		while (exercitoNumero > 0){
-
-			System.out.printf("Voce tem %d exercitos para posicionar e pode posiciona-los nos seguintes territorios:\n",exercitoNumero );
-			int k = 0;
-			for (Territorio t : jogador.getTerritorios()){
-				System.out.println(k + "  |   " + t.getNome() );
-				k++;
-			}
-			System.out.println("Escreva para qual terreno voce deseja adicionar tropas: ");
-			int terreno;
-			terreno = scanner.nextInt();
-			scanner.nextLine(); 
-			while (terreno < 0 || terreno > Tnumero - 1){
-				System.out.println("Terreno inválido. Escolha um terreno entre 0 e " + (Tnumero - 1));
-				terreno = scanner.nextInt();
-				scanner.nextLine(); 
-			}
-			System.out.println("Escreva a quantidade de tropas: ");
-			int numTropas;
-			numTropas = scanner.nextInt();
-			scanner.nextLine();
-			while (numTropas < 0 || numTropas > exercitoNumero){
-				System.out.println("Numero de tropas inválido. Escolha um número entre 0 e " + exercitoNumero);
-				terreno = scanner.nextInt();
-				scanner.nextLine(); 
-			}
-			exercitoNumero -= numTropas;
-			jogador.getTerritorios().get(terreno).alteraNumSoldados(numTropas);;
+		int exercitoNumero = 0;
+		switch(numTrocas){
+			case 0:
+				exercitoNumero = 4;
+				break;
+			case 1:
+				exercitoNumero = 6;
+				break;
+			case 2:
+				exercitoNumero = 8;
+				break;
+			case 3:
+				exercitoNumero = 10;
+				break;
+			case 4:
+				exercitoNumero = 12;
+				break;
+			case 5:
+				exercitoNumero = 15;
+				break;
+			default:
+				exercitoNumero = 15 + (numTrocas-5)*5;
+				break;
 		}
-
+		numTrocas++;
+		this.numExercitosDisponiveis += exercitoNumero;
+		instance_controller.setCorJogadorController();
 	}
 
 	public void setOrdemJogada() {
@@ -204,15 +201,25 @@ public class GameModel {
 		faseRodada = 0;
 		descansaTodosExercitos();
 		exercitosDisponiveis();
-		instance_controller.passaVezController();
+		instance_controller.setCorJogadorController();
 	}
 
-	public void passaFase(){
-		faseRodada++;
-		if(faseRodada == 3){
+	public boolean passaFase(){
+		checaFimJogo();
+		if (rodadaInicialFlag < jogadores.size()){
 			passaVez();
-			faseRodada = 0;
+			rodadaInicialFlag++;
+		} else{
+			faseRodada++;
+			if(faseRodada == 3){
+				passaVez();
+				faseRodada = 0;
+			}
 		}
+		if (rodadaInicialFlag < jogadores.size()){
+			return true;
+		}
+		return false;
 	}
 
 	public List<String> getTerritoriosJogadorAtual(){
@@ -334,14 +341,6 @@ public class GameModel {
 				ataqueAtual = new Ataque(jogadores.get(numJogadorAtual));
 				ataqueAtual.setPaisOrigem(t);
 				List<String> alvos = ataqueAtual.getAlvos();
-				for(String alvo:alvos){
-					System.out.println(alvo);
-					for(Territorio tt: territorios){
-						if(alvo == tt.getNome()){
-							System.out.println(tt.getJogador().getCor());
-						}
-					}
-				}
 				return alvos;
 			}
 		}
@@ -360,7 +359,6 @@ public class GameModel {
 		boolean foiDominado;
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
-				System.out.println("if");
 				ataqueAtual.setAlvo(t);
 				ataqueAtual.setNumAtacantes(numExercitos);
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
@@ -368,7 +366,6 @@ public class GameModel {
 				ataqueAtual.rolaDados();
 				foiDominado = ataqueAtual.avaliaAtaque();
 				if(foiDominado){
-					System.out.println('a');
 					ataqueAtual.setExercitosDeslocados(1);
 					ataqueAtual.conquistaAndDeslocamento();
 				}
@@ -377,9 +374,88 @@ public class GameModel {
 		}
 	}
 
+	public List<Integer> getDadosAtaque(){
+		return ataqueAtual.getDadosAtaque();
+	}
+
+	public List<Integer> getDadosDefesa(){
+		return ataqueAtual.getDadosDefesa();
+	}
+	
+	public Jogador corToJogador(String cor){
+		for (Jogador j : jogadores){
+			if (j.getCor().toString() == cor){
+				return j;
+			}
+		}
+		return null;
+	}
+
+	public boolean verificaObjetivo(Jogador jogador){
+		if(alguemVenceu){
+			return false;
+		}
+
+		ListaObjetivos objetivo = jogador.getObjetivo();
+		switch (objetivo) {
+            case ELIM_AZUL:
+                return corToJogador("Azul").getTerritorios().isEmpty(); //checar
+            case ELIM_VERMELHO:
+                return corToJogador("Vermelho").getTerritorios().isEmpty();
+            case ELIM_VERDE:
+				return corToJogador("Verde").getTerritorios().isEmpty();
+			case ELIM_AMARELO:
+				return corToJogador("Amarelo").getTerritorios().isEmpty();
+			case ELIM_BRANCO:
+				return corToJogador("Branco").getTerritorios().isEmpty();
+			case ELIM_PRETO:
+				return corToJogador("Preto").getTerritorios().isEmpty();
+			case CONQ_24:
+				return jogador.getTerritorios().size() >= 24;
+			case CONQ_18_2:
+				return jogador.getTerritorios().size() >= 18 && jogador.getTerritorios().stream().allMatch(t -> t.getNumeroSoldados() >= 2);
+			case CONQ_AS_LATAM:
+				return (continentes.get(2).foiDominado(jogador) * continentes.get(3).foiDominado(jogador) == 1);
+			case CONQ_NA_AF:
+				return (continentes.get(1).foiDominado(jogador) * continentes.get(0).foiDominado(jogador) == 1);
+			case CONQ_NA_AU:
+				return (continentes.get(1).foiDominado(jogador) * continentes.get(5).foiDominado(jogador) == 1);
+			case CONQ_EU_LATAM:
+				return (continentes.get(4).foiDominado(jogador) * continentes.get(3).foiDominado(jogador) == 1);
+			case CONQ_EU_AU:
+				return (continentes.get(4).foiDominado(jogador) * continentes.get(5).foiDominado(jogador) == 1);
+       	    default:
+                System.out.println("Opção inválida objetivo");
+        }
+		return false;
+	}
+
+	public void checaFimJogo(){
+		for (Jogador jogador : jogadores){
+			if (verificaObjetivo(jogador)){
+				alguemVenceu = true;
+				instance_controller.janelaFimJogoController(jogador.getNome());
+			}
+		}
+	}
+
+	public String getCorPorNome(String nome){
+		for (Jogador jogador : jogadores){
+			if (jogador.getNome() == nome){
+				return jogador.getCor().toString();
+			}
+		}
+		return null;
+	}
+
 	public static void resetInstancia() {
         instance = null;
     }
+
+	public void jogoTeste(){
+		hardStartGame();
+		hardCodedSetup();
+	}
 
 	public void hardStartGame(){
 		GameModel gameInstance = GameModel.getInstancia();	
@@ -406,6 +482,7 @@ public class GameModel {
     }
 
 	public void hardCodedSetup() {
+		/* 
         for (Jogador jogador : jogadores) {
             for (Territorio t : jogador.getTerritorios()) {
 
@@ -413,14 +490,29 @@ public class GameModel {
                 int randomNumber = random.nextInt(5);
                 t.alteraNumSoldados(randomNumber);
             }
-        }
-		Jogador jogador1 = jogadores.get(0);
+        } */
+
+		Jogador jogador1 = jogadores.get(numJogadorAtual);
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
 		jogador1.addCarta(deckCartas.drawCard());
+		for (Territorio t : jogador1.getTerritorios()) {
+                t.alteraNumSoldados(10);
+            }
+		Jogador jogador2 = jogadores.get((numJogadorAtual+1)%jogadores.size());
+		jogador2.addCarta(deckCartas.drawCard());
+		jogador2.addCarta(deckCartas.drawCard());
+		jogador2.addCarta(deckCartas.drawCard());
+
+		Jogador jogador3 = jogadores.get((numJogadorAtual+2)%jogadores.size());
+		jogador3.addCarta(deckCartas.drawCard());
+		jogador3.addCarta(deckCartas.drawCard());
+		jogador3.addCarta(deckCartas.drawCard());
+
+		instance_controller.voltaTerrioriosController();
     }
 
 	public static void main(String[] args){
@@ -428,9 +520,7 @@ public class GameModel {
 		instance_controller = GameController.getInstanciaController();
 		instance_controller.initGameController();
 		System.out.println("Iniciando jogo...");
-		gameInstance.hardStartGame();
-		//gameInstance.hardCodedSetup();
-		//gameInstance.startGame();
+		gameInstance.startGame();
 	}
 
 }

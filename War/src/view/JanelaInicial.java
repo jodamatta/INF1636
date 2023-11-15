@@ -18,6 +18,7 @@ class JanelaInicial extends Frame{
     private Button btnContinuaJogo;
     private Button btnContinuar;
     private Button btnIniciaJogo;
+    private Button btnAdm;
     private JTextField[] campoNomeJogadores;
     private JComboBox<String>[] coresComboBox;
     private JComboBox<Integer> numJogadoresComboBox;
@@ -44,6 +45,7 @@ class JanelaInicial extends Frame{
             e.printStackTrace();
         };
 
+
     	coresDisponiveis = new ArrayList<>();
     	coresDisponiveis.add("--Selecione Cor--");
     	coresDisponiveis.addAll(Arrays.asList(gameView.getCoresView()));
@@ -61,6 +63,7 @@ class JanelaInicial extends Frame{
         btnNovoJogo = new Button("Novo Jogo");
         btnNovoJogo.setBounds(390, 620, 200, 50);
         btnNovoJogo.addActionListener(e -> {
+            btnAdm.setVisible(false);
         	btnNovoJogo.setVisible(false);
         	btnContinuaJogo.setVisible(false);
         	numJogadoresComboBox.setVisible(true);
@@ -76,9 +79,10 @@ class JanelaInicial extends Frame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // continua jogo
-                System.out.println("Continue Game Button Pressed!");
+                frame.setVisible(false); // esconde a janela inicial para janelaJogo ficar sozinha
             }
         });
+
         frame.add(btnContinuaJogo);
         
         // botao continuar
@@ -124,6 +128,8 @@ class JanelaInicial extends Frame{
         campoNomeJogadores = new JTextField[max_jogadores];
         coresComboBox = new JComboBox[max_jogadores];
         
+        initBtnAdm();
+
         corBoxListener = new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -166,13 +172,23 @@ class JanelaInicial extends Frame{
         
         btnIniciaJogo = new Button("Comecar Jogo");
         btnIniciaJogo.setBounds(550, 500, 200, 50);
-        btnIniciaJogo.addActionListener(e -> startGame((int) numJogadoresComboBox.getSelectedItem()));
+        btnIniciaJogo.addActionListener(e -> {startGame((int) numJogadoresComboBox.getSelectedItem()); frame.setVisible(false);});
         btnIniciaJogo.setVisible(false); 
         frame.add(btnIniciaJogo);
         
         frame.setVisible(true);
     }
     
+    private void initBtnAdm(){
+        btnAdm = new Button("Jogo teste");
+        btnAdm.setBounds(50, 620, 200, 50);
+        btnAdm.addActionListener(e -> {
+            frame.setVisible(false);
+            gameView.jogoTeste();
+        });
+        frame.add(btnAdm);
+    }
+
     private void mostraSetupJogadores(int numJogadores) {
         btnNovoJogo.setVisible(false);
         btnContinuaJogo.setVisible(false);
