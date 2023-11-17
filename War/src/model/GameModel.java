@@ -95,7 +95,7 @@ public class GameModel {
         objetivosAtivos = filtraObjetivos();
         Collections.shuffle(objetivosAtivos);
         for (Jogador jogador:jogadores) {
-			if(objetivosAtivos.get(0) == dictCorElimCor.get(jogador.getCor().toString())){
+			if(objetivosAtivos.get(0).toString() == dictCorElimCor.get(jogador.getCor().toString()).toString()){
 				Objetivo objetivoSorteado = objetivosAtivos.remove(1);
             	jogador.setObjetivo(objetivoSorteado.getObjetivo());  
 			} else{
@@ -250,7 +250,7 @@ public class GameModel {
 	public void printPlayers() {
 		System.out.println("Lista de jogadores:");
 	    for (Jogador player : jogadores) {
-	        System.out.println("Nome: " + player.getNome() + ", Cor: " + player.getCor().name());
+	        System.out.println("Nome: " + player.getNome() + ", Cor: " + player.getCor().name() + ", Objetivo: " + player.getObjetivo().toString());
 	    }
 	}
 

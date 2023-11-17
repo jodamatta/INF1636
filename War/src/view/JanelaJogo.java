@@ -270,6 +270,7 @@ public class JanelaJogo extends Frame{
             dictTerritorioBtn.get(nome).setVisible(true);
             cor = gameView.atualizaCor(nome);
             dictTerritorioBtn.get(nome).setBackground(dictStrCor.get(cor));
+            dictTerritorioBtn.get(nome).setForeground(dictCorFundoLetra.get(dictStrCor.get(cor)));
         }
         if(btnAtaque != null){
             remove(btnAtaque);

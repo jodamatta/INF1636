@@ -40,7 +40,7 @@ class JanelaInicial extends Frame{
 
     private void initUI() {
         try {
-            imagemDeFundo = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\War_Titulo.jpg"));
+            imagemDeFundo = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -176,6 +176,7 @@ class JanelaInicial extends Frame{
         btnIniciaJogo.setVisible(false); 
         frame.add(btnIniciaJogo);
         
+        frame.repaint();
         frame.setVisible(true);
     }
     
