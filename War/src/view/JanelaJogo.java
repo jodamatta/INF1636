@@ -26,7 +26,7 @@ public class JanelaJogo extends Frame{
     Map<String,  int[]> dictTerritorioPosicao = new HashMap<>();
     Map<String, Color> dictStrCor = new HashMap<>();
     Map<String, Button> dictTerritorioBtn = new HashMap<>();
-
+    Map<Color, Color> dictCorFundoLetra = new HashMap<>();
     private List<BufferedImage> dadosAtaque;
     private List<BufferedImage> dadosDefesa;
 
@@ -82,6 +82,15 @@ public class JanelaJogo extends Frame{
         add(btnCorJogador);
         setCorJogadorbtn();
         
+    }
+
+    {
+        dictCorFundoLetra.put(Color.RED, Color.WHITE);
+        dictCorFundoLetra.put(Color.BLUE, Color.WHITE);
+        dictCorFundoLetra.put(Color.BLACK, Color.WHITE);
+        dictCorFundoLetra.put(Color.GREEN, Color.BLACK);
+        dictCorFundoLetra.put(Color.YELLOW, Color.BLACK);
+        dictCorFundoLetra.put(Color.WHITE, Color.BLACK);
     }
 
     {
@@ -170,6 +179,7 @@ public class JanelaJogo extends Frame{
     public void setCorJogadorbtn(){
         String corJogador = gameView.getCorJogadorAtualView();
         btnCorJogador.setBackground(dictStrCor.get(corJogador));
+        btnCorJogador.setForeground(dictCorFundoLetra.get(dictStrCor.get(corJogador)));
         String numExercitosDisponiveis = String.valueOf(gameView.getNumSoldadosDisponiveisView());
         btnCorJogador.setLabel(numExercitosDisponiveis);
     }
@@ -182,7 +192,7 @@ public class JanelaJogo extends Frame{
         
         String corJogador = gameView.getTerritorioCorView(nome);
         btnTerritorio.setBackground(dictStrCor.get(corJogador)); 
-        btnTerritorio.setForeground(Color.WHITE);
+        btnTerritorio.setForeground(dictCorFundoLetra.get(dictStrCor.get(corJogador)));
         btnTerritorio.addActionListener(e -> {
             gameView.btnTerritorioController(nome);
         });
@@ -227,7 +237,7 @@ public class JanelaJogo extends Frame{
         btnAtaque.setBounds(coordenadas[0], coordenadas[1], 30, 30);
         String corJogador = gameView.getCorJogadorAtualView();
         btnAtaque.setBackground(dictStrCor.get(corJogador));
-        btnAtaque.setForeground(Color.WHITE);
+        btnAtaque.setForeground(dictCorFundoLetra.get(dictStrCor.get(corJogador)));
         btnAtaque.addActionListener(e -> {
             gameView.btnAtaqueView(nomeTerritorio);
         });
@@ -246,7 +256,7 @@ public class JanelaJogo extends Frame{
         btnMover.setBounds(coordenadas[0], coordenadas[1], 30, 30);
         String corJogador = gameView.getCorJogadorAtualView();
         btnMover.setBackground(dictStrCor.get(corJogador));
-        btnMover.setForeground(Color.WHITE);
+        btnMover.setForeground(dictCorFundoLetra.get(dictStrCor.get(corJogador)));
         btnMover.addActionListener(e -> {
             gameView.btnMoverView(nomeTerritorio);
         });

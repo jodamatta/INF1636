@@ -2,7 +2,9 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -83,13 +85,25 @@ public class GameModel {
     }
 
 	public void sorteiaObjetivos() {
+		Map<String, Objetivo> dictCorElimCor = new HashMap<>();
+		dictCorElimCor.put("Azul", new Objetivo(ListaObjetivos.ELIM_AZUL));
+		dictCorElimCor.put("Vermelho", new Objetivo(ListaObjetivos.ELIM_VERMELHO));
+		dictCorElimCor.put("Verde", new Objetivo(ListaObjetivos.ELIM_VERDE));
+		dictCorElimCor.put("Amarelo", new Objetivo(ListaObjetivos.ELIM_AMARELO));
+		dictCorElimCor.put("Branco", new Objetivo(ListaObjetivos.ELIM_BRANCO));
+		dictCorElimCor.put("Preto", new Objetivo(ListaObjetivos.ELIM_PRETO));
         objetivosAtivos = filtraObjetivos();
         Collections.shuffle(objetivosAtivos);
         for (Jogador jogador:jogadores) {
-            Objetivo objetivoSorteado = objetivosAtivos.remove(0);
-            jogador.setObjetivo(objetivoSorteado.getObjetivo());  
-        }
-    }
+			if(objetivosAtivos.get(0) == dictCorElimCor.get(jogador.getCor().toString())){
+				Objetivo objetivoSorteado = objetivosAtivos.remove(1);
+            	jogador.setObjetivo(objetivoSorteado.getObjetivo());  
+			} else{
+				Objetivo objetivoSorteado = objetivosAtivos.remove(0);
+				jogador.setObjetivo(objetivoSorteado.getObjetivo());  
+			}
+		}
+	}
 
 	public void distribuiCartasTerritorio() {
 		DeckTerritorios deckTerritoriosInical = new DeckTerritorios();
