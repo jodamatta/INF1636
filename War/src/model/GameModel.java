@@ -372,7 +372,7 @@ public class GameModel {
 		return numExercitosDisponiveis;
 	}
 
-	public void destinoAtaque(String nomeTerritorio, int numExercitos){
+	public void destinoAtaque(String nomeTerritorio, int numExercitos, boolean isTeste){
 		boolean foiDominado;
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
@@ -380,7 +380,12 @@ public class GameModel {
 				ataqueAtual.setNumAtacantes(numExercitos);
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
 				ataqueAtual.setJogadorDefensor(t.getJogador());
-				ataqueAtual.rolaDados();
+				if(isTeste){
+					instance_controller.mostraSelecaoDadosController();
+				}
+				else {
+					ataqueAtual.rolaDados();
+				}
 				foiDominado = ataqueAtual.avaliaAtaque();
 				if(foiDominado){
 					ataqueAtual.setExercitosDeslocados(1);
@@ -479,7 +484,7 @@ public class GameModel {
 		gameInstance.addJogador("Joana", "Azul");
 		gameInstance.addJogador("Miguel", "Verde");
 		gameInstance.addJogador("Murilo", "Vermelho");
-		beginGame();
+		beginTestGame();
 	}
 	
 	public void startGame(){
@@ -495,11 +500,23 @@ public class GameModel {
             jogador.limpaMao();
         }
         instance_controller.janelaJogoController();
+		instance_controller.setIsTesteController(false);
+		passaVez();
+    }
+
+	public void beginTestGame(){
+        sorteiaObjetivos();
+        distribuiCartasTerritorio();
+        inicializaTerritorios();
+        setOrdemJogada();
+        for (Jogador jogador : jogadores){
+            jogador.limpaMao();
+        }
+        instance_controller.janelaJogoController();
 		passaVez();
     }
 
 	public void hardCodedSetup() {
-		/* 
         for (Jogador jogador : jogadores) {
             for (Territorio t : jogador.getTerritorios()) {
 
@@ -507,7 +524,9 @@ public class GameModel {
                 int randomNumber = random.nextInt(5);
                 t.alteraNumSoldados(randomNumber);
             }
-        } */
+        } 
+
+		instance_controller.setIsTesteController(true);
 
 		Jogador jogador1 = jogadores.get(numJogadorAtual);
 		jogador1.addCarta(deckCartas.drawCard());
@@ -538,6 +557,7 @@ public class GameModel {
 		instance_controller.initGameController();
 		System.out.println("Iniciando jogo...");
 		gameInstance.startGame();
+
 	}
 
 }

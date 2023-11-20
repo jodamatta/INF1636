@@ -39,11 +39,11 @@ class JanelaInicial extends Frame{
     
 
     private void initUI() {
-        try {
+        /*try {
             imagemDeFundo = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
-        };
+        };*/
 
 
     	coresDisponiveis = new ArrayList<>();

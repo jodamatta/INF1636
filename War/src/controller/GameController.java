@@ -63,7 +63,11 @@ public class GameController {
         gameModel.beginGame();
     }
 
-    public void btnTerritorioController(String nomeTerritorio){
+    public void setIsTesteController(boolean flagTeste){
+        gameView.setIsTesteView(flagTeste);
+    }
+
+    public void btnTerritorioController(String nomeTerritorio, boolean isTeste){
         int faseRodada = gameModel.getFaseRodada();
         boolean ataque;
         boolean movimento;
@@ -80,7 +84,7 @@ public class GameController {
                     
                 } else{
                     ataqueFlag = 0;
-                    destinoAtaqueController(nomeTerritorio);
+                    destinoAtaqueController(nomeTerritorio, isTeste);
                     gameModel.mataAtaque();
                 }
                 break;
@@ -129,14 +133,25 @@ public class GameController {
         return true;
     }
 
-    public void destinoAtaqueController(String nomeTerritorio){
+    public void destinoAtaqueController(String nomeTerritorio, boolean isTeste){
         int numAtacantes = gameView.getNumAtacantesView();
-        gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
-        List<Integer> listDadosAtaque = gameModel.getDadosAtaque();
-        List<Integer> listDadosDefesa = gameModel.getDadosDefesa();
+        List<Integer> listDadosAtaque;
+        List<Integer> listDadosDefesa;
+        gameModel.destinoAtaque(nomeTerritorio, numAtacantes, isTeste);
+        /* 
+            gameView.mostraSelecaoDadosView();
+            listDadosAtaque = gameView.retornaValoresAtaqueView();
+            listDadosDefesa = gameView.retornaValoresDefesaView();
+        */
+        listDadosAtaque = gameModel.getDadosAtaque();
+        listDadosDefesa = gameModel.getDadosDefesa();
         gameView.voltaTerrioriosView();
         gameView.exibiDados(listDadosAtaque, listDadosDefesa);
         ataqueFlag = 0;
+    }
+
+    public void mostraSelecaoDadosController(){
+        gameView.mostraSelecaoDadosView();
     }
 
     public boolean ataqueTerritorioController(String nomeTerritorio){

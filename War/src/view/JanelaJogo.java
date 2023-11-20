@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 
@@ -21,6 +22,7 @@ public class JanelaJogo extends Frame{
     private Button btnSalvarJogo;
     private Button btnCorJogador;
     private Button btnAtaque;
+    private Button btnConfirmaDados;
     private List<Button> btnTerritorios;
     private BufferedImage imagemDeFundo;
     Map<String,  int[]> dictTerritorioPosicao = new HashMap<>();
@@ -29,6 +31,13 @@ public class JanelaJogo extends Frame{
     Map<Color, Color> dictCorFundoLetra = new HashMap<>();
     private List<BufferedImage> dadosAtaque;
     private List<BufferedImage> dadosDefesa;
+    private JComboBox<Integer>[] dadosAtaqueCB;
+    private JComboBox<Integer>[] dadosDefesaCB;
+    private Button confirmaDados;
+    private ItemListener ataqueListener;
+    private List<Integer> valoresAtaque;
+    private List<Integer> valoresDefesa;
+    private boolean isTeste;
 
     public JanelaJogo() {
         gameView = GameView.getInstanciaView();
@@ -36,14 +45,14 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\\\\\War\\\\\\\\src\\\\\\\\view\\\\\\\\images\\\\\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\joana\\\\OneDrive\\\\Documentos\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
         
         frame = new Frame("Janela de Jogo do war");
         setSize(1200, 700);
-        setLayout(null); // Desabilita o layout manager para posicionamento manual dos botões
+        setLayout(null); 
         initButtons();   // Inicializa os botões
         initTerritorios();
         addWindowListener(new WindowAdapter() {
@@ -57,6 +66,10 @@ public class JanelaJogo extends Frame{
         dadosDefesa = new ArrayList<>();
         carregarImagemDado("War\\src\\view\\images\\dado_ataque_1.png");
         setVisible(true);
+    }
+
+    public void setIsTeste(boolean flag){
+        isTeste = flag;
     }
 
     public void initButtons() {
@@ -82,6 +95,10 @@ public class JanelaJogo extends Frame{
         add(btnCorJogador);
         setCorJogadorbtn();
         
+        btnConfirmaDados = new Button("Confirmar");
+        btnConfirmaDados.setBounds(400,460,60,30);
+        add(btnConfirmaDados);
+        btnConfirmaDados.setVisible(false);
     }
 
     {
@@ -194,7 +211,7 @@ public class JanelaJogo extends Frame{
         btnTerritorio.setBackground(dictStrCor.get(corJogador)); 
         btnTerritorio.setForeground(dictCorFundoLetra.get(dictStrCor.get(corJogador)));
         btnTerritorio.addActionListener(e -> {
-            gameView.btnTerritorioController(nome);
+            gameView.btnTerritorioController(nome, isTeste);
         });
         return btnTerritorio;
     }
@@ -360,6 +377,76 @@ public class JanelaJogo extends Frame{
         for (String nome : dictTerritorioBtn.keySet()) {
             dictTerritorioBtn.get(nome).setVisible(true);
         }
+    }
+
+    
+    public void mostraSelecaoDados(int numAtacantes, int numDefensores) {
+        dadosAtaqueCB = new JComboBox[numAtacantes];
+        dadosDefesaCB = new JComboBox[numDefensores];
+        selecionaValorDadosAtaque(numAtacantes);
+        selecionaValorDadosDefesa(numDefensores);
+        btnConfirmaDados.setVisible(true);
+        btnConfirmaDados.addActionListener(e -> {
+           List<List<Integer>> resultados = retornaDados(dadosAtaqueCB,dadosDefesaCB);
+           valoresAtaque = resultados.get(0);
+           valoresDefesa = resultados.get(0);
+        });
+    }
+
+    public List<Integer> retornaValoresAtaque(){
+        return valoresAtaque;
+    }
+
+    public List<Integer> retornaValoresDefesa(){
+        return valoresDefesa;
+    }
+
+    public void selecionaValorDadosAtaque(int numDados){
+        Integer[] valoresPossiveis = {1, 2, 3, 4, 5, 6};
+
+        for (int i = 0; i < numDados; i++){
+            dadosAtaqueCB[i] = new JComboBox<>(valoresPossiveis);
+            dadosAtaqueCB[i].setBounds(400, 300 + (i * 50), 30, 30);
+            frame.add(dadosAtaqueCB[i]);
+            frame.setVisible(false);
+        }
+    }
+
+    public void selecionaValorDadosDefesa(int numDados){
+        Integer[] valoresPossiveis = {1, 2, 3, 4, 5, 6};
+
+        for (int i = 0; i < numDados; i++){
+            dadosAtaqueCB[i] = new JComboBox<>(valoresPossiveis);
+            dadosAtaqueCB[i].setBounds(450, 300 + (i * 50), 30, 30);
+            frame.add(dadosAtaqueCB[i]);
+            frame.setVisible(false);
+        }
+    }
+
+    private List<Integer> resultadoDadosAtaque(JComboBox<Integer>[] comboBoxArray) {
+        List<Integer> selectedValues = new ArrayList<>();
+        for (int i = 0; i < comboBoxArray.length; i++) {
+            selectedValues.add((int) comboBoxArray[i].getSelectedItem());
+        }
+        return selectedValues;
+    }
+
+    private List<Integer> resultadoDadosDefesa(JComboBox<Integer>[] comboBoxArray) {
+        List<Integer> selectedValues = new ArrayList<>();
+        for (int i = 0; i < comboBoxArray.length; i++) {
+            selectedValues.add((int) comboBoxArray[i].getSelectedItem());
+        }
+        return selectedValues;
+    }
+
+    public List<List<Integer>> retornaDados(JComboBox<Integer>[] comboBoxAtaque, JComboBox<Integer>[] comboBoxDefesa){
+        List<List<Integer>> resultados = new ArrayList<>();
+        List<Integer> dadosAtaque = resultadoDadosAtaque(comboBoxAtaque);
+        List<Integer> dadosDefesa = resultadoDadosDefesa(comboBoxDefesa);
+
+        resultados.add(dadosAtaque);
+        resultados.add(dadosDefesa);
+        return resultados;
     }
 
     public void paintDados(Graphics g, List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum) {

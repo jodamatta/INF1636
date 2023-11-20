@@ -79,8 +79,11 @@ public class GameView {
 
     }
 
-    public void btnTerritorioController(String nomeTerritorio){
-        controller.btnTerritorioController(nomeTerritorio);
+    public void setIsTesteView(boolean flagTeste){
+        janelaJogo.setIsTeste(flagTeste);
+    }
+    public void btnTerritorioController(String nomeTerritorio, boolean isTeste){
+        controller.btnTerritorioController(nomeTerritorio, isTeste);
     }
 
     public void passaFaseView(){
@@ -151,5 +154,17 @@ public class GameView {
 
     public void exibiDados(List<Integer> listDadosAtaque, List<Integer> listDadosDefesa){
         janelaJogo.exibiDados(listDadosAtaque, listDadosDefesa);
+    }
+
+    public List<Integer> retornaValoresAtaqueView(){
+        return janelaJogo.retornaValoresAtaque();
+    }
+
+    public List<Integer> retornaValoresDefesaView(){
+        return janelaJogo.retornaValoresDefesa();
+    }
+
+    public void mostraSelecaoDadosView(){
+        janelaJogo.mostraSelecaoDados(getNumAtacantesView(), getNumAtacantesView());
     }
 }

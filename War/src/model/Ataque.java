@@ -203,14 +203,6 @@ class Ataque {
     	this.exercitosDeslocados = n;
     }
     
-    public void hardCodeRolaDados() {
-    	//Colocar dados em ordem decrescente
-    	int[] dadosAtt = {6,5,4};
-    	int[] dadosDeff = {5,4,3};
-    	this.dadosAtaque = dadosAtt;
-    	this.dadosDefesa = dadosDeff;
-    }
-    
     public void rolaDados() {
     	Random random = new Random();
     	this.dadosAtaque = new int[this.numExercitoAtaque];
