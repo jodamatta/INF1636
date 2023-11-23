@@ -492,7 +492,37 @@ public class GameModel {
 				String NomeJogador = j.getNome();
 				String cor = j.getCor().toString();
 				String objetivo = j.getObjetivo().toString();
-				saida.write(NomeJogador+"-"+cor+"-"+objetivo+"\n");
+				saida.write(NomeJogador+"-"+cor+"-"+objetivo+"-");
+				String cartasConcatenadas = "";
+				List<Carta> cartasJogador = j.getCartas();
+				for (Carta carta : cartasJogador) {
+				        String nomeTerritorio = carta.getTerritorio();
+				        String simbolo = carta.getSimbolo();
+				        cartasConcatenadas += nomeTerritorio + "/" + simbolo + "-";
+				    }
+
+				    // Remove the trailing "-" if there are any cards
+				 if (!cartasJogador.isEmpty()) {
+				        cartasConcatenadas = cartasConcatenadas.substring(0, cartasConcatenadas.length() - 1);
+				  }
+				 
+				 String territoriosConcatenados = "";
+				 List<Territorio> territorios = j.getTerritorios();
+				 for (Territorio t : territorios) {
+					 String nome = t.getNome();
+					 String numeroSoldados = String.valueOf(t.getNumeroSoldados());
+					 String soldadosCansados = String.valueOf(t.getNumeroSoldadosCansados());
+					 territoriosConcatenados += nome + "/" + numeroSoldados + "/" + soldadosCansados + "-";
+				 }
+				 
+				 if (!territorios.isEmpty()) {
+					 territoriosConcatenados = territoriosConcatenados.substring(0, territoriosConcatenados.length() - 1);
+				  }
+				 
+				 saida.write(cartasConcatenadas + "-" + territoriosConcatenados + "\n");
+				  
+				  
+				
 				}
 			saida.close();
 		}

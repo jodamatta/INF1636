@@ -216,7 +216,6 @@ public class GameController {
         boolean rodadaInicialFlag = gameModel.passaFase();
         int faseRodada = gameModel.getFaseRodada();
         gameView.voltaTerrioriosView();
-        System.out.printf("Fase: %d", faseRodada);
         if (!rodadaInicialFlag && faseRodada == 0) {        	
         	gameView.salvarBttnEnableView();
         }
