@@ -89,8 +89,17 @@ public class GameView {
     public void passaFaseView(){
         boolean rodadaInicialFlag = controller.passaFaseController();
         janelaJogo.setLabelPassa(controller.getFaseRodadaController(), rodadaInicialFlag);
+       
     }
 
+    public void salvarBttnEnableView() {
+    	janelaJogo.setSalvarBttnState(true);
+    }
+    
+    public void salvarBttnDisableView() {
+    	janelaJogo.setSalvarBttnState(false);
+    }
+    
     public void ataqueTerritorioView(String nomeTerritorio, List<String> alvos){
         janelaJogo.ataqueAlvos(nomeTerritorio, alvos);
     }

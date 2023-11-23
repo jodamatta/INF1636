@@ -196,6 +196,7 @@ public class GameController {
         if(addValido){
             gameModel.diminuiNumSoldadosDisponiveis(1);
             gameView.atualizaNumSoldadosView(nomeTerritorio);
+            gameView.salvarBttnDisableView();
         }
     }
 
@@ -213,9 +214,20 @@ public class GameController {
 
     public boolean passaFaseController(){
         boolean rodadaInicialFlag = gameModel.passaFase();
+        int faseRodada = gameModel.getFaseRodada();
         gameView.voltaTerrioriosView();
+        System.out.printf("Fase: %d", faseRodada);
+        if (!rodadaInicialFlag && faseRodada == 0) {        	
+        	gameView.salvarBttnEnableView();
+        }
+        else {
+        	gameView.salvarBttnDisableView();
+        }
         return rodadaInicialFlag;
     }
+    
+
+    
 
     public List<String> getCartasJogadorAtualController(){
         return gameModel.getCartasJogadorAtual();

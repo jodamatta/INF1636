@@ -45,7 +45,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\joana\\\\OneDrive\\\\Documentos\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -87,6 +87,10 @@ public class JanelaJogo extends Frame{
         add(btnTrocaCartas);
 
         btnSalvarJogo = new Button("Salvar Jogo");
+        btnSalvarJogo.addActionListener(e -> {
+        	System.out.println("Salvandooooo");
+        });
+        btnSalvarJogo.setEnabled(false);
         btnSalvarJogo.setBounds(10, 30, 120, 30);
         add(btnSalvarJogo);
 
@@ -193,6 +197,9 @@ public class JanelaJogo extends Frame{
         }
     }
    
+    public void setSalvarBttnState(boolean state) {
+    	btnSalvarJogo.setEnabled(state);
+    }
     public void setCorJogadorbtn(){
         String corJogador = gameView.getCorJogadorAtualView();
         btnCorJogador.setBackground(dictStrCor.get(corJogador));
@@ -355,8 +362,9 @@ public class JanelaJogo extends Frame{
     public void carregarImagemDado(String caminho) {
         for (int i = 1; i < 7; i++) {
             try {
-                BufferedImage imagemDadoAtaque = ImageIO.read(new File("War\\src\\view\\images\\dado_ataque_"+ String.valueOf(i) +".png"));
-                BufferedImage imagemDadoDefesa = ImageIO.read(new File("War\\src\\view\\images\\dado_defesa_"+ String.valueOf(i) +".png"));
+            	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
+                BufferedImage imagemDadoAtaque = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoDefesa = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
                 dadosAtaque.add(imagemDadoAtaque);
                 dadosDefesa.add(imagemDadoDefesa);
                 repaint();
