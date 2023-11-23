@@ -100,6 +100,10 @@ public class GameView {
     	janelaJogo.setSalvarBttnState(false);
     }
     
+    public void salvarView() {
+    	controller.salvarController();
+    }
+    
     public void ataqueTerritorioView(String nomeTerritorio, List<String> alvos){
         janelaJogo.ataqueAlvos(nomeTerritorio, alvos);
     }

@@ -9,6 +9,11 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import controller.GameController;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GameModel {
 	private static GameModel instance = null;
@@ -468,6 +473,32 @@ public class GameModel {
 			}
 		}
 		return null;
+	}
+	
+	public void salvar() {
+		List<Jogador> jogadores = getJogadores();
+		String filePath = "";
+		JFileChooser fc = new JFileChooser();
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("TEXT FILES", "txt", "Text");
+		fc.setFileFilter(filtro);
+		int d = fc.showSaveDialog(null);
+		if (d == JFileChooser.APPROVE_OPTION) {
+			filePath = fc.getSelectedFile().getAbsolutePath();
+		}
+		PrintWriter saida = null;
+		try {
+			saida = new PrintWriter(new FileWriter(filePath));
+			for (Jogador j : jogadores) {
+				String NomeJogador = j.getNome();
+				String cor = j.getCor().toString();
+				String objetivo = j.getObjetivo().toString();
+				saida.write(NomeJogador+"-"+cor+"-"+objetivo+"\n");
+				}
+			saida.close();
+		}
+		catch(IOException e){
+			System.out.println(e);
+		}
 	}
 
 	public static void resetInstancia() {

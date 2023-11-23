@@ -226,7 +226,9 @@ public class GameController {
         return rodadaInicialFlag;
     }
     
-
+    public void salvarController() {
+    	gameModel.salvar();
+    }
     
 
     public List<String> getCartasJogadorAtualController(){

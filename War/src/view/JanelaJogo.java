@@ -88,7 +88,7 @@ public class JanelaJogo extends Frame{
 
         btnSalvarJogo = new Button("Salvar Jogo");
         btnSalvarJogo.addActionListener(e -> {
-        	System.out.println("Salvandooooo");
+        	gameView.salvarView();
         });
         btnSalvarJogo.setEnabled(false);
         btnSalvarJogo.setBounds(10, 30, 120, 30);
