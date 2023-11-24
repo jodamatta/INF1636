@@ -2,6 +2,8 @@ package controller;
 
 import model.GameModel;
 import view.GameView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
@@ -14,6 +16,8 @@ public class GameController {
     private String movOrigem = null;
     private String movDestino = null;
     private int numExercitosMovimento = 0;
+    private List<Integer> dadosAtaqueTeste;
+    private List<Integer> dadosDefesaTeste;
     public GameController(){
     }
 
@@ -137,7 +141,12 @@ public class GameController {
         int numAtacantes = gameView.getNumAtacantesView();
         List<Integer> listDadosAtaque;
         List<Integer> listDadosDefesa;
-        gameModel.destinoAtaque(nomeTerritorio, numAtacantes, isTeste);
+        if(isTeste){
+            gameModel.destinoAtaqueTeste(nomeTerritorio, numAtacantes);
+        }
+        else{
+            gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
+        }
         /* 
             gameView.mostraSelecaoDadosView();
             listDadosAtaque = gameView.retornaValoresAtaqueView();
@@ -152,6 +161,19 @@ public class GameController {
 
     public void mostraSelecaoDadosController(){
         gameView.mostraSelecaoDadosView();
+    }
+
+    public void avaliaAtaqueController(List<Integer> dadosAtaque, List<Integer>dadosDefesa){
+        this.dadosAtaqueTeste = dadosAtaque;
+        this.dadosDefesaTeste = dadosDefesa;
+        gameModel.avaliaAtaqueTeste();
+    }
+
+    public List<List<Integer>> retornaDadosController(){
+        List<List<Integer>> retorno = new ArrayList<>();
+        retorno.add(dadosAtaqueTeste);
+        retorno.add(dadosDefesaTeste);
+        return retorno;
     }
 
     public boolean ataqueTerritorioController(String nomeTerritorio){

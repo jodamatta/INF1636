@@ -326,5 +326,15 @@ class Ataque {
         }
         return listDadosDefesa;
     }
+
+    public void setDadosAtaque(List<Integer> dadosAtaque){
+        int[] arrayDados = dadosAtaque.stream().mapToInt(Integer::intValue).toArray();
+        this.dadosAtaque = arrayDados;
+    }
+
+    public void setDadosDefesa(List<Integer> dadosDefesa){
+        int[] arrayDados = dadosDefesa.stream().mapToInt(Integer::intValue).toArray();
+        this.dadosAtaque = arrayDados;
+    }
     
 }

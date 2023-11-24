@@ -377,7 +377,19 @@ public class GameModel {
 		return numExercitosDisponiveis;
 	}
 
-	public void destinoAtaque(String nomeTerritorio, int numExercitos, boolean isTeste){
+	public void destinoAtaqueTeste(String nomeTerritorio, int numExercitos){
+		for(Territorio t: territorios){
+			if(t.getNome() == nomeTerritorio){
+				ataqueAtual.setAlvo(t);
+				ataqueAtual.setNumAtacantes(numExercitos);
+				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
+				ataqueAtual.setJogadorDefensor(t.getJogador());
+				instance_controller.mostraSelecaoDadosController();
+			}
+		}
+	}
+
+	public void destinoAtaque(String nomeTerritorio, int numExercitos){
 		boolean foiDominado;
 		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
@@ -385,12 +397,7 @@ public class GameModel {
 				ataqueAtual.setNumAtacantes(numExercitos);
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
 				ataqueAtual.setJogadorDefensor(t.getJogador());
-				if(isTeste){
-					instance_controller.mostraSelecaoDadosController();
-				}
-				else {
-					ataqueAtual.rolaDados();
-				}
+				ataqueAtual.rolaDados();
 				foiDominado = ataqueAtual.avaliaAtaque();
 				if(foiDominado){
 					ataqueAtual.setExercitosDeslocados(1);
@@ -398,6 +405,19 @@ public class GameModel {
 				}
 				return;
 			}
+		}
+	}
+
+	public void avaliaAtaqueTeste(){
+		List<List<Integer>> dados = new ArrayList<>();
+		System.out.println("avaliaAtaqueTeste");	
+		dados = instance_controller.retornaDadosController();
+		ataqueAtual.setDadosAtaque(dados.get(0));
+		ataqueAtual.setDadosDefesa(dados.get(1));
+		boolean foiDominado = ataqueAtual.avaliaAtaque();
+		if(foiDominado){
+			ataqueAtual.setExercitosDeslocados(1);
+			ataqueAtual.conquistaAndDeslocamento();
 		}
 	}
 

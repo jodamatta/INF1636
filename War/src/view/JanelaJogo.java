@@ -398,7 +398,14 @@ public class JanelaJogo extends Frame{
            List<List<Integer>> resultados = retornaDados(dadosAtaqueCB,dadosDefesaCB);
            valoresAtaque = resultados.get(0);
            valoresDefesa = resultados.get(0);
+           gameView.avaliaAtaqueView(valoresAtaque, valoresDefesa);
         });
+        for(int i = 0; i < numAtacantes; i++){
+            dadosAtaqueCB[i].setVisible(false);
+        }
+        for(int i = 0; i < numDefensores; i++){
+            dadosDefesaCB[i].setVisible(false);
+        }
     }
 
     public List<Integer> retornaValoresAtaque(){
@@ -416,7 +423,7 @@ public class JanelaJogo extends Frame{
             dadosAtaqueCB[i] = new JComboBox<>(valoresPossiveis);
             dadosAtaqueCB[i].setBounds(400, 300 + (i * 50), 30, 30);
             frame.add(dadosAtaqueCB[i]);
-            frame.setVisible(false);
+            dadosAtaqueCB[i].setVisible(true);
         }
     }
 
@@ -424,10 +431,11 @@ public class JanelaJogo extends Frame{
         Integer[] valoresPossiveis = {1, 2, 3, 4, 5, 6};
 
         for (int i = 0; i < numDados; i++){
-            dadosAtaqueCB[i] = new JComboBox<>(valoresPossiveis);
-            dadosAtaqueCB[i].setBounds(450, 300 + (i * 50), 30, 30);
-            frame.add(dadosAtaqueCB[i]);
-            frame.setVisible(false);
+            System.out.println("Combo box de defesa");
+            dadosDefesaCB[i] = new JComboBox<>(valoresPossiveis);
+            dadosDefesaCB[i].setBounds(450, 300 + (i * 50), 30, 30);
+            frame.add(dadosDefesaCB[i]);
+            dadosDefesaCB[i].setVisible(true);
         }
     }
 

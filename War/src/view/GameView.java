@@ -180,4 +180,8 @@ public class GameView {
     public void mostraSelecaoDadosView(){
         janelaJogo.mostraSelecaoDados(getNumAtacantesView(), getNumAtacantesView());
     }
+
+    public void avaliaAtaqueView(List<Integer> dadosAtaque, List<Integer> dadosDefesa){
+        controller.avaliaAtaqueController(dadosAtaque,dadosDefesa);
+    }
 }
