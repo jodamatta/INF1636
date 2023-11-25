@@ -12,6 +12,9 @@ import controller.GameController;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -292,6 +295,11 @@ public class GameModel {
 
 	public Territorio stringToTerritorio(String nomeTerritorio){
 		for (Territorio t : territorios){
+			if (nomeTerritorio.compareTo(t.getNome()) == 0){
+				return t;
+			}
+		}
+		for (Territorio t : territorios){
 			if (t.getNome() == nomeTerritorio){
 				return t;
 			}
@@ -512,7 +520,7 @@ public class GameModel {
 				String NomeJogador = j.getNome();
 				String cor = j.getCor().toString();
 				String objetivo = j.getObjetivo().toString();
-				saida.write(NomeJogador+"-"+cor+"-"+objetivo+"-");
+				saida.write(NomeJogador+"/"+cor+"-"+objetivo+"-");
 				String cartasConcatenadas = "";
 				List<Carta> cartasJogador = j.getCartas();
 				for (Carta carta : cartasJogador) {
@@ -539,7 +547,7 @@ public class GameModel {
 					 territoriosConcatenados = territoriosConcatenados.substring(0, territoriosConcatenados.length() - 1);
 				  }
 				 
-				 saida.write(cartasConcatenadas + "-" + territoriosConcatenados + "\n");
+				 saida.write(cartasConcatenadas + "-$" + territoriosConcatenados + "\n");
 				  
 				  
 				
@@ -551,6 +559,109 @@ public class GameModel {
 		}
 	}
 
+	public void continuaJogo() {
+		System.out.println("continuando");
+		// Create a file chooser
+        JFileChooser fc = new JFileChooser();
+
+        // Set a filter to only show text files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt", "Text");
+        fc.setFileFilter(filter);
+    
+        int result = fc.showOpenDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+
+            File selectedFile = fc.getSelectedFile();
+            List<String> listaJogadores = new ArrayList<String>(); 
+            List<String> objetivos = new ArrayList<String>();
+            List<String> cartas = new ArrayList<String>(); 
+            List<String> territorios = new ArrayList<String>(); 
+            try {
+
+                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                	
+                    String playerInfo = line.split("-", 2)[0];
+                    //System.out.println(playerInfo);
+                    listaJogadores.add(playerInfo);
+
+                    String objective = line.split("-", 2)[1].split("-")[0];
+                    //System.out.println(objective);
+                    objetivos.add(objective);
+                    
+
+                    String cards = line.split("-", 2)[1].split("\\$")[0].split("-",2)[1];
+                    cards = cards.substring(0, cards.length() - 1);
+                    //System.out.println(cards);
+                    cartas.add(cards) ;                                  
+
+                    String territories = line.split("-", 2)[1].split("\\$")[1];
+                    //System.out.println(territories);
+                    territorios.add(territories);
+                }
+                reader.close();
+            } catch (IOException e) {
+                // Handle exceptions
+                e.printStackTrace();
+            }
+            
+            iniciaJogoSalvo(listaJogadores,objetivos, cartas,territorios);
+            
+            
+
+        } else {
+            System.out.println("No file selected");
+        }
+	}
+	
+	public void iniciaJogoSalvo(List<String> listaJogadores, List<String> objetivos, List<String> cartas, List<String> territoriosString) {
+		GameModel gameInstance = GameModel.getInstancia();	
+		
+		for (int i =0;i<listaJogadores.size();i++) {
+			String jogadorNome = listaJogadores.get(i).split("/")[0];
+			String jogadorCor = listaJogadores.get(i).split("/")[1];
+			gameInstance.addJogador(jogadorNome, jogadorCor);
+		}
+				
+		int jogadorNum =0;
+		for (Jogador j : jogadores) {
+			
+			String objetivoString = objetivos.get(jogadorNum);
+			//System.out.println("objetivoString " + objetivoString);
+		    ListaObjetivos listaObjetivoEnum = ListaObjetivos.valueOf(objetivoString);
+		    Objetivo obj = new Objetivo(listaObjetivoEnum);
+		    //System.out.println("Obetivo:   " + obj.toString());
+		    j.setObjetivo(obj.getObjetivo());
+		    
+		    for (String cartaString : cartas.get(jogadorNum).split("-")){
+		    	String nomeCarta = cartaString.split("/")[0];
+		    	String simboloCarta = cartaString.split("/")[1];
+		    	Carta carta = new Carta(nomeCarta, simboloCarta);
+		    	j.addCarta(carta);
+		    }
+		    
+		    for (String stringTerritorio : territoriosString.get(jogadorNum).split("-")) {
+		    	 String[] tArray = stringTerritorio.split("/");
+		    	 String nomeTerritorio = tArray[0];
+		         System.out.println(nomeTerritorio);
+		         System.out.println(nomeTerritorio.length());
+		         int exercitos = Integer.parseInt(tArray[1]);
+		         int exercitosCansados = Integer.parseInt(tArray[2]);
+		         Territorio territorio = new Territorio(nomeTerritorio, j);
+		         territorio.alteraNumSoldados(exercitos-1);
+		         territorio.addExercitoCansado(exercitosCansados);
+		         j.addTerritorio(territorio);
+		         territorios.add(territorio);
+		         continentes.get(territorio.getContinente()).addPais(territorio);
+		    };
+			jogadorNum++;
+		}
+		instance_controller.janelaJogoController();
+		instance_controller.setIsTesteController(false);
+		
+	}
 	public static void resetInstancia() {
         instance = null;
     }

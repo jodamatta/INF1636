@@ -251,6 +251,10 @@ public class GameController {
     	gameModel.salvar();
     }
     
+    public void continuaJogoController() {
+    	gameModel.continuaJogo();
+    }
+    
 
     public List<String> getCartasJogadorAtualController(){
         return gameModel.getCartasJogadorAtual();

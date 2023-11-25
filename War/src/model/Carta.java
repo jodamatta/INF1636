@@ -1,6 +1,5 @@
 package model;
 
-//Miguel
 
 class Carta{
     private String simbolo;

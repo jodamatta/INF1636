@@ -75,8 +75,8 @@ public class GameView {
         return controller.getNumSoldadosDisponiveisController();
     }
     
-    public void continuaJogo(){
-
+    public void continuaJogoView(){
+    	controller.continuaJogoController();
     }
 
     public void setIsTesteView(boolean flagTeste){

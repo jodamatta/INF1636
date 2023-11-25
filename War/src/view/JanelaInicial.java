@@ -79,6 +79,7 @@ class JanelaInicial extends Frame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // continua jogo
+            	gameView.continuaJogoView();
                 frame.setVisible(false); // esconde a janela inicial para janelaJogo ficar sozinha
             }
         });
