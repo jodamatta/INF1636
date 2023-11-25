@@ -146,17 +146,12 @@ public class GameController {
         }
         else{
             gameModel.destinoAtaque(nomeTerritorio, numAtacantes);
+            listDadosAtaque = gameModel.getDadosAtaque();
+            listDadosDefesa = gameModel.getDadosDefesa();
+            gameView.voltaTerrioriosView();
+            gameView.exibiDados(listDadosAtaque, listDadosDefesa);
+            ataqueFlag = 0;
         }
-        /* 
-            gameView.mostraSelecaoDadosView();
-            listDadosAtaque = gameView.retornaValoresAtaqueView();
-            listDadosDefesa = gameView.retornaValoresDefesaView();
-        */
-        listDadosAtaque = gameModel.getDadosAtaque();
-        listDadosDefesa = gameModel.getDadosDefesa();
-        gameView.voltaTerrioriosView();
-        gameView.exibiDados(listDadosAtaque, listDadosDefesa);
-        ataqueFlag = 0;
     }
 
     public void mostraSelecaoDadosController(){
@@ -166,7 +161,11 @@ public class GameController {
     public void avaliaAtaqueController(List<Integer> dadosAtaque, List<Integer>dadosDefesa){
         this.dadosAtaqueTeste = dadosAtaque;
         this.dadosDefesaTeste = dadosDefesa;
+        
         gameModel.avaliaAtaqueTeste();
+        gameView.voltaTerrioriosView();
+        gameView.exibiDados(dadosAtaqueTeste, dadosDefesaTeste);
+        ataqueFlag = 0;
     }
 
     public List<List<Integer>> retornaDadosController(){

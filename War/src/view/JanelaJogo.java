@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-
 public class JanelaJogo extends Frame{
     private GameView gameView;
     private Frame frame;
@@ -31,13 +30,18 @@ public class JanelaJogo extends Frame{
     Map<Color, Color> dictCorFundoLetra = new HashMap<>();
     private List<BufferedImage> dadosAtaque;
     private List<BufferedImage> dadosDefesa;
-    private JComboBox<Integer>[] dadosAtaqueCB;
-    private JComboBox<Integer>[] dadosDefesaCB;
+    private JComboBox<Integer> dadoAtaqueCB1;
+    private JComboBox<Integer> dadoAtaqueCB2;
+    private JComboBox<Integer> dadoAtaqueCB3;
+    private JComboBox<Integer> dadoDefesaCB1;
+    private JComboBox<Integer> dadoDefesaCB2;
+    private JComboBox<Integer> dadoDefesaCB3;
     private Button confirmaDados;
     private ItemListener ataqueListener;
     private List<Integer> valoresAtaque;
     private List<Integer> valoresDefesa;
     private boolean isTeste;
+    private Button teste;
 
     public JanelaJogo() {
         gameView = GameView.getInstanciaView();
@@ -45,7 +49,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\\\\\War\\\\\\\\src\\\\\\\\view\\\\\\\\images\\\\\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -100,7 +104,7 @@ public class JanelaJogo extends Frame{
         setCorJogadorbtn();
         
         btnConfirmaDados = new Button("Confirmar");
-        btnConfirmaDados.setBounds(400,460,60,30);
+        btnConfirmaDados.setBounds(370,500,60,30);
         add(btnConfirmaDados);
         btnConfirmaDados.setVisible(false);
     }
@@ -200,6 +204,7 @@ public class JanelaJogo extends Frame{
     public void setSalvarBttnState(boolean state) {
     	btnSalvarJogo.setEnabled(state);
     }
+    
     public void setCorJogadorbtn(){
         String corJogador = gameView.getCorJogadorAtualView();
         btnCorJogador.setBackground(dictStrCor.get(corJogador));
@@ -363,8 +368,8 @@ public class JanelaJogo extends Frame{
         for (int i = 1; i < 7; i++) {
             try {
             	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
-                BufferedImage imagemDadoAtaque = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
-                BufferedImage imagemDadoDefesa = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoAtaque = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoDefesa = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
                 dadosAtaque.add(imagemDadoAtaque);
                 dadosDefesa.add(imagemDadoDefesa);
                 repaint();
@@ -386,28 +391,38 @@ public class JanelaJogo extends Frame{
             dictTerritorioBtn.get(nome).setVisible(true);
         }
     }
-
     
     public void mostraSelecaoDados(int numAtacantes, int numDefensores) {
-        dadosAtaqueCB = new JComboBox[numAtacantes];
-        dadosDefesaCB = new JComboBox[numDefensores];
         selecionaValorDadosAtaque(numAtacantes);
         selecionaValorDadosDefesa(numDefensores);
+
         btnConfirmaDados.setVisible(true);
         btnConfirmaDados.addActionListener(e -> {
-           List<List<Integer>> resultados = retornaDados(dadosAtaqueCB,dadosDefesaCB);
-           valoresAtaque = resultados.get(0);
-           valoresDefesa = resultados.get(0);
+           List<List<Integer>> resultados = retornaDados(numAtacantes, numDefensores);
+           //valoresAtaque = resultados.get(0);
+           //valoresDefesa = resultados.get(0);
            gameView.avaliaAtaqueView(valoresAtaque, valoresDefesa);
         });
-        for(int i = 0; i < numAtacantes; i++){
-            dadosAtaqueCB[i].setVisible(false);
-        }
-        for(int i = 0; i < numDefensores; i++){
-            dadosDefesaCB[i].setVisible(false);
-        }
+        removeDadosTeste();
     }
 
+    public void removeDadosTeste(){
+        remove(dadoAtaqueCB1);
+        if (dadoAtaqueCB2 != null) {
+            remove(dadoAtaqueCB2);
+        }
+        if (dadoAtaqueCB3 != null) {
+            remove(dadoAtaqueCB3);
+        }
+        remove(dadoDefesaCB1);
+        if (dadoDefesaCB2 != null) {
+            remove(dadoDefesaCB2);
+        }
+        if (dadoDefesaCB3 != null) {
+            remove(dadoDefesaCB3);
+        }
+    }
+    
     public List<Integer> retornaValoresAtaque(){
         return valoresAtaque;
     }
@@ -419,43 +434,75 @@ public class JanelaJogo extends Frame{
     public void selecionaValorDadosAtaque(int numDados){
         Integer[] valoresPossiveis = {1, 2, 3, 4, 5, 6};
 
-        for (int i = 0; i < numDados; i++){
-            dadosAtaqueCB[i] = new JComboBox<>(valoresPossiveis);
-            dadosAtaqueCB[i].setBounds(400, 300 + (i * 50), 30, 30);
-            frame.add(dadosAtaqueCB[i]);
-            dadosAtaqueCB[i].setVisible(true);
+        /* 
+        JComboBox<Integer> abacaxi = new JComboBox<>(valoresPossiveis);
+        add(abacaxi);
+        abacaxi.setBounds(1000, 300 + (1 * 50), 30, 30);
+        abacaxi.setVisible(true);
+        */
+
+        JComboBox<Integer> dadoAtaqueCB1 = new JComboBox<>(valoresPossiveis);
+        add(dadoAtaqueCB1);
+        dadoAtaqueCB1.setBounds(450, 450 + (0 * 50), 30, 30);
+        dadoAtaqueCB1.setVisible(true);
+
+        if(numDados >= 2){
+            dadoAtaqueCB2 = new JComboBox<>(valoresPossiveis);
+            add(dadoAtaqueCB2);
+            dadoAtaqueCB2.setBounds(450, 450 + (1 * 50), 30, 30);
+            dadoAtaqueCB2.setVisible(true);
+        }
+        
+        if(numDados >= 3){
+            dadoAtaqueCB3 = new JComboBox<>(valoresPossiveis);
+            add(dadoAtaqueCB3);
+            dadoAtaqueCB3.setBounds(450, 450 + (2 * 50), 30, 30);
+            dadoAtaqueCB3.setVisible(true);
         }
     }
 
     public void selecionaValorDadosDefesa(int numDados){
         Integer[] valoresPossiveis = {1, 2, 3, 4, 5, 6};
 
-        for (int i = 0; i < numDados; i++){
-            System.out.println("Combo box de defesa");
-            dadosDefesaCB[i] = new JComboBox<>(valoresPossiveis);
-            dadosDefesaCB[i].setBounds(450, 300 + (i * 50), 30, 30);
-            frame.add(dadosDefesaCB[i]);
-            dadosDefesaCB[i].setVisible(true);
+        System.out.println("Combo box de defesa");
+        dadoDefesaCB1 = new JComboBox<>(valoresPossiveis);
+        add(dadoDefesaCB1);
+        dadoDefesaCB1.setBounds(500, 450 + (0*50), 30, 30);
+        dadoDefesaCB1.setVisible(true);
+
+
+        if(numDados >= 2){
+            dadoDefesaCB2 = new JComboBox<>(valoresPossiveis);
+            add(dadoDefesaCB2);
+            dadoDefesaCB2.setBounds(500, 450 + (1 * 50), 30, 30);
+            dadoDefesaCB2.setVisible(true);
+        }
+        
+        if(numDados >= 3){
+            dadoDefesaCB3 = new JComboBox<>(valoresPossiveis);
+            add(dadoDefesaCB3);
+            dadoDefesaCB3.setBounds(500, 450 + (2 * 50), 30, 30);
+            dadoDefesaCB3.setVisible(true);
         }
     }
 
-    private List<Integer> resultadoDadosAtaque(JComboBox<Integer>[] comboBoxArray) {
+    private List<Integer> resultadoDadosAtaque(List<JComboBox<Integer>> comboBoxArray) {
         List<Integer> selectedValues = new ArrayList<>();
-        for (int i = 0; i < comboBoxArray.length; i++) {
-            selectedValues.add((int) comboBoxArray[i].getSelectedItem());
+        for (int i = 0; i < comboBoxArray.size(); i++) {
+            selectedValues.add((int) comboBoxArray.get(i).getSelectedItem());
         }
         return selectedValues;
     }
 
-    private List<Integer> resultadoDadosDefesa(JComboBox<Integer>[] comboBoxArray) {
+    private List<Integer> resultadoDadosDefesa(List<JComboBox<Integer>> comboBoxArray) {
         List<Integer> selectedValues = new ArrayList<>();
-        for (int i = 0; i < comboBoxArray.length; i++) {
-            selectedValues.add((int) comboBoxArray[i].getSelectedItem());
+        for (int i = 0; i < comboBoxArray.size(); i++) {
+            selectedValues.add((int) comboBoxArray.get(i).getSelectedItem());
         }
         return selectedValues;
     }
 
-    public List<List<Integer>> retornaDados(JComboBox<Integer>[] comboBoxAtaque, JComboBox<Integer>[] comboBoxDefesa){
+    public List<List<Integer>> retornaDados(List<JComboBox<Integer>> comboBoxAtaque, List<JComboBox<Integer>> comboBoxDefesa){
         List<List<Integer>> resultados = new ArrayList<>();
         List<Integer> dadosAtaque = resultadoDadosAtaque(comboBoxAtaque);
         List<Integer> dadosDefesa = resultadoDadosDefesa(comboBoxDefesa);
