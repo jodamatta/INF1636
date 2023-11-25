@@ -517,6 +517,7 @@ public class GameModel {
 		PrintWriter saida = null;
 		try {
 			saida = new PrintWriter(new FileWriter(filePath));
+			saida.write(numJogadorAtual + "_" + numExercitosDisponiveis + "-" + rodadaInicialFlag + "\n");
 			for (Jogador j : jogadores) {
 				String NomeJogador = j.getNome();
 				String cor = j.getCor().toString();
@@ -562,6 +563,7 @@ public class GameModel {
 
 	public void continuaJogo() {
 		System.out.println("continuando");
+		int firstLineFlag = 0;
 		// Create a file chooser
         JFileChooser fc = new JFileChooser();
 
@@ -577,13 +579,20 @@ public class GameModel {
             List<String> listaJogadores = new ArrayList<String>(); 
             List<String> objetivos = new ArrayList<String>();
             List<String> cartas = new ArrayList<String>(); 
-            List<String> territorios = new ArrayList<String>(); 
+            List<String> territorios = new ArrayList<String>();
+            String generalData = "";
             try {
 
                 BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
                 String line;
                 while ((line = reader.readLine()) != null) {
+                	if (firstLineFlag == 0) {
+                		generalData = line;
+                		firstLineFlag = 1;
+                		continue;
+                	}
                 	
+        
                     String playerInfo = line.split("-", 2)[0];
                     //System.out.println(playerInfo);
                     listaJogadores.add(playerInfo);
@@ -608,7 +617,7 @@ public class GameModel {
                 e.printStackTrace();
             }
             
-            iniciaJogoSalvo(listaJogadores,objetivos, cartas,territorios);
+            iniciaJogoSalvo(listaJogadores,objetivos, cartas,territorios, generalData);
             
             
 
@@ -617,7 +626,7 @@ public class GameModel {
         }
 	}
 	
-	public void iniciaJogoSalvo(List<String> listaJogadores, List<String> objetivos, List<String> cartas, List<String> territoriosString) {
+	public void iniciaJogoSalvo(List<String> listaJogadores, List<String> objetivos, List<String> cartas, List<String> territoriosString, String generalData) {
 		GameModel gameInstance = GameModel.getInstancia();	
 		
 		for (int i =0;i<listaJogadores.size();i++) {
@@ -625,7 +634,12 @@ public class GameModel {
 			String jogadorCor = listaJogadores.get(i).split("/")[1];
 			gameInstance.addJogador(jogadorNome, jogadorCor);
 		}
-				
+		
+
+		numJogadorAtual = Integer.parseInt(generalData.split("-")[0].split("_")[0]);
+		numExercitosDisponiveis = Integer.parseInt(generalData.split("-")[0].split("_")[1]);
+		rodadaInicialFlag = Integer.parseInt(generalData.split("-")[1]);		
+
 		int jogadorNum =0;
 		for (Jogador j : jogadores) {
 			
@@ -648,8 +662,6 @@ public class GameModel {
 		    for (String stringTerritorio : territoriosString.get(jogadorNum).split("-")) {
 		    	 String[] tArray = stringTerritorio.split("/");
 		    	 String nomeTerritorio = tArray[0];
-		         System.out.println(nomeTerritorio);
-		         System.out.println(nomeTerritorio.length());
 		         int exercitos = Integer.parseInt(tArray[1]);
 		         int exercitosCansados = Integer.parseInt(tArray[2]);
 		         Territorio territorio = new Territorio(nomeTerritorio, j);
