@@ -268,7 +268,8 @@ public class GameModel {
 
 	public String getTerritorioCor(String nomeTerritorio){
 		for (Territorio t : territorios){
-			if (t.getNome() == nomeTerritorio){
+			//nomeTerritorio.compareTo(t.getNome()) == 0
+			if (t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0){
 				return t.getJogador().getCor().toString();
 			}
 		}
@@ -277,7 +278,7 @@ public class GameModel {
 
 	public int getNumSoldados(String nomeTerritorio){
 		for (Territorio t : territorios){
-			if (t.getNome() == nomeTerritorio){
+			if (t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0){
 				return t.getNumeroSoldados();
 			}
 		}
@@ -353,7 +354,7 @@ public class GameModel {
 
 	public boolean addExercitoTerritorio(String nomeTerritorio, int numExercitos){
 		for (Territorio t : territorios){
-			if (t.getNome() == nomeTerritorio && t.getJogador() == jogadores.get(numJogadorAtual)){
+			if ((t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0) && t.getJogador() == jogadores.get(numJogadorAtual)){
 				t.alteraNumSoldados(numExercitos);
 				return true;
 			}
@@ -367,7 +368,7 @@ public class GameModel {
 
 	public List<String> ataqueTerritorio(String nomeTerritorio){
 		for (Territorio t : territorios){
-			if (t.getNome() == nomeTerritorio && t.getJogador() == jogadores.get(numJogadorAtual) && t.getNumeroSoldados() > 1){
+			if ((t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0) && t.getJogador() == jogadores.get(numJogadorAtual) && t.getNumeroSoldados() > 1){
 				ataqueAtual = new Ataque(jogadores.get(numJogadorAtual));
 				ataqueAtual.setPaisOrigem(t);
 				List<String> alvos = ataqueAtual.getAlvos();
@@ -387,7 +388,7 @@ public class GameModel {
 
 	public void destinoAtaqueTeste(String nomeTerritorio, int numExercitos){
 		for(Territorio t: territorios){
-			if(t.getNome() == nomeTerritorio){
+			if(t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0){
 				ataqueAtual.setAlvo(t);
 				ataqueAtual.setNumAtacantes(numExercitos);
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
@@ -400,7 +401,7 @@ public class GameModel {
 	public void destinoAtaque(String nomeTerritorio, int numExercitos){
 		boolean foiDominado;
 		for (Territorio t : territorios){
-			if (t.getNome() == nomeTerritorio){
+			if (t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0){
 				ataqueAtual.setAlvo(t);
 				ataqueAtual.setNumAtacantes(numExercitos);
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
