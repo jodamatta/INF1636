@@ -399,8 +399,8 @@ public class JanelaJogo extends Frame{
         btnConfirmaDados.setVisible(true);
         btnConfirmaDados.addActionListener(e -> {
            List<List<Integer>> resultados = retornaDados(numAtacantes, numDefensores);
-           //valoresAtaque = resultados.get(0);
-           //valoresDefesa = resultados.get(0);
+           valoresAtaque = resultados.get(0);
+           valoresDefesa = resultados.get(0);
            gameView.avaliaAtaqueView(valoresAtaque, valoresDefesa);
         });
         removeDadosTeste();
@@ -486,26 +486,34 @@ public class JanelaJogo extends Frame{
         }
     }
 
-    private List<Integer> resultadoDadosAtaque(List<JComboBox<Integer>> comboBoxArray) {
+    private List<Integer> resultadoDadosAtaque(int numAtacantes) {
         List<Integer> selectedValues = new ArrayList<>();
-        for (int i = 0; i < comboBoxArray.size(); i++) {
-            selectedValues.add((int) comboBoxArray.get(i).getSelectedItem());
+        selectedValues.add((int) dadoAtaqueCB1.getSelectedItem());
+        if (numAtacantes >= 2) {
+            selectedValues.add((int) dadoAtaqueCB2.getSelectedItem());
+        }
+        if (numAtacantes >= 3) {
+            selectedValues.add((int) dadoAtaqueCB3.getSelectedItem());
         }
         return selectedValues;
     }
 
-    private List<Integer> resultadoDadosDefesa(List<JComboBox<Integer>> comboBoxArray) {
+    private List<Integer> resultadoDadosDefesa(int numDefensores) {
         List<Integer> selectedValues = new ArrayList<>();
-        for (int i = 0; i < comboBoxArray.size(); i++) {
-            selectedValues.add((int) comboBoxArray.get(i).getSelectedItem());
+        selectedValues.add((int) dadoDefesaCB1.getSelectedItem());
+        if (numDefensores >= 2) {
+            selectedValues.add((int) dadoDefesaCB2.getSelectedItem());
+        }
+        if (numDefensores >= 3) {
+            selectedValues.add((int) dadoDefesaCB3.getSelectedItem());
         }
         return selectedValues;
     }
 
-    public List<List<Integer>> retornaDados(List<JComboBox<Integer>> comboBoxAtaque, List<JComboBox<Integer>> comboBoxDefesa){
+    public List<List<Integer>> retornaDados(int numAtacantes, int numDefensores){
         List<List<Integer>> resultados = new ArrayList<>();
-        List<Integer> dadosAtaque = resultadoDadosAtaque(comboBoxAtaque);
-        List<Integer> dadosDefesa = resultadoDadosDefesa(comboBoxDefesa);
+        List<Integer> dadosAtaque = resultadoDadosAtaque(numAtacantes);
+        List<Integer> dadosDefesa = resultadoDadosDefesa(numDefensores);
 
         resultados.add(dadosAtaque);
         resultados.add(dadosDefesa);
