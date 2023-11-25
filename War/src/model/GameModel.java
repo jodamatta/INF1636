@@ -64,6 +64,7 @@ public class GameModel {
 		jogadores.add(jogador);
 	}
 	
+	
 	public String[] getCores() {
 		return Arrays.stream(CorJogador.values()).map(Enum::name).toArray(String[]::new);
 	}
@@ -230,6 +231,7 @@ public class GameModel {
 	}
 
 	public boolean passaFase(){
+		instance_controller.removeConfirmaController();
 		checaFimJogo();
 		if (rodadaInicialFlag < jogadores.size()){
 			passaVez();
@@ -379,8 +381,10 @@ public class GameModel {
 	}
 
 	public void mataAtaque(){
+		System.out.println("Matamos ataque");
 		ataqueAtual = null;
 	}
+	
 
 	public int getNumSoldadosDisponiveis(){
 		return numExercitosDisponiveis;
@@ -391,6 +395,7 @@ public class GameModel {
 			if(t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0){
 				ataqueAtual.setAlvo(t);
 				ataqueAtual.setNumAtacantes(numExercitos);
+				System.out.println("t.getNumeroSoldados() defensores " + t.getNumeroSoldados());
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
 				ataqueAtual.setJogadorDefensor(t.getJogador());
 				instance_controller.mostraSelecaoDadosController();
@@ -421,8 +426,22 @@ public class GameModel {
 		List<List<Integer>> dados = new ArrayList<>();
 		System.out.println("avaliaAtaqueTeste");	
 		dados = instance_controller.retornaDadosController();
+		
+		
+		for (Integer dado : dados.get(0)) {
+			System.out.println("dado Ataque: " + dado);
+		}
+		
+		for (Integer dado : dados.get(1)) {
+			System.out.println("dado defesa: " + dado);
+		}
+		
+		if (ataqueAtual == null) {
+			return;
+		}
 		ataqueAtual.setDadosAtaque(dados.get(0));
 		ataqueAtual.setDadosDefesa(dados.get(1));
+
 		boolean foiDominado = ataqueAtual.avaliaAtaque();
 		if(foiDominado){
 			ataqueAtual.setExercitosDeslocados(1);
@@ -676,6 +695,10 @@ public class GameModel {
 		instance_controller.janelaJogoController();
 		instance_controller.setIsTesteController(false);
 		
+	}
+	
+	public int getNumDefensores() {
+		return ataqueAtual.getNumDefensores();
 	}
 	public static void resetInstancia() {
         instance = null;

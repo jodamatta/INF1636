@@ -49,7 +49,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\\\\\War\\\\\\\\src\\\\\\\\view\\\\\\\\images\\\\\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -380,6 +380,12 @@ public class JanelaJogo extends Frame{
     }
 
     public void exibiDados(List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum){
+    	for (Integer dadoAraque : dadosDefesasnum) {
+    		System.out.println("dadoAraque exibeee" + dadoAraque);
+    	}
+    	for (Integer defesa : dadosDefesasnum) {
+    		System.out.println("defesa exibee" + defesa);
+    	}
         paintDados(getGraphics(), dadosAtaquesnum, dadosDefesasnum);
     }
 
@@ -393,17 +399,19 @@ public class JanelaJogo extends Frame{
     }
     
     public void mostraSelecaoDados(int numAtacantes, int numDefensores) {
+    	System.out.println("mostraSelecaoDados foi chamada");
         selecionaValorDadosAtaque(numAtacantes);
         selecionaValorDadosDefesa(numDefensores);
 
         btnConfirmaDados.setVisible(true);
         btnConfirmaDados.addActionListener(e -> {
+        	System.out.println(e);
            List<List<Integer>> resultados = retornaDados(numAtacantes, numDefensores);
            valoresAtaque = resultados.get(0);
-           valoresDefesa = resultados.get(0);
+           valoresDefesa = resultados.get(1);
            gameView.avaliaAtaqueView(valoresAtaque, valoresDefesa);
+           removeDadosTeste();
         });
-        removeDadosTeste();
     }
 
     public void removeDadosTeste(){
@@ -441,7 +449,7 @@ public class JanelaJogo extends Frame{
         abacaxi.setVisible(true);
         */
 
-        JComboBox<Integer> dadoAtaqueCB1 = new JComboBox<>(valoresPossiveis);
+        dadoAtaqueCB1 = new JComboBox<>(valoresPossiveis);
         add(dadoAtaqueCB1);
         dadoAtaqueCB1.setBounds(450, 450 + (0 * 50), 30, 30);
         dadoAtaqueCB1.setVisible(true);
@@ -464,7 +472,6 @@ public class JanelaJogo extends Frame{
     public void selecionaValorDadosDefesa(int numDados){
         Integer[] valoresPossiveis = {1, 2, 3, 4, 5, 6};
 
-        System.out.println("Combo box de defesa");
         dadoDefesaCB1 = new JComboBox<>(valoresPossiveis);
         add(dadoDefesaCB1);
         dadoDefesaCB1.setBounds(500, 450 + (0*50), 30, 30);
@@ -509,12 +516,17 @@ public class JanelaJogo extends Frame{
         }
         return selectedValues;
     }
+    
+    public void removeConfirma() {
+    	btnConfirmaDados.setVisible(false);
+    }
 
     public List<List<Integer>> retornaDados(int numAtacantes, int numDefensores){
         List<List<Integer>> resultados = new ArrayList<>();
         List<Integer> dadosAtaque = resultadoDadosAtaque(numAtacantes);
         List<Integer> dadosDefesa = resultadoDadosDefesa(numDefensores);
-
+        
+        
         resultados.add(dadosAtaque);
         resultados.add(dadosDefesa);
         return resultados;

@@ -40,6 +40,10 @@ public class GameController {
     public void janelaJogoController(){
         gameView.chamaJanelaJogo();
     }
+    
+    public void removeConfirmaController() {
+    	gameView.removeConfirmaView();
+    }
 
     public String[] getCoresController(){
         return gameModel.getCores();
@@ -54,6 +58,10 @@ public class GameController {
 
     public int getNumSoldadosController(String nomeTerritorio){
         return gameModel.getNumSoldadosTotal(nomeTerritorio);
+    }
+    
+    public int getNumDefensoreController() {
+    	return gameModel.getNumDefensores();
     }
 
     public String getTerritorioCorController(String nomeTerritorio){
@@ -81,15 +89,19 @@ public class GameController {
                 break;
             case 1:
                 if(ataqueFlag == 0){
+                	System.out.println("AAAAA ataqueFlag == 0");
                     ataque = ataqueTerritorioController(nomeTerritorio);
                     if(ataque){
                         ataqueFlag = 1;
                     }
                     
                 } else{
+                	System.out.println("AAAAA ataqueFlag == 1");
                     ataqueFlag = 0;
                     destinoAtaqueController(nomeTerritorio, isTeste);
-                    gameModel.mataAtaque();
+                    if (!isTeste) { 
+                    	gameModel.mataAtaque();
+                    }
                 }
                 break;
             case 2:
@@ -138,10 +150,12 @@ public class GameController {
     }
 
     public void destinoAtaqueController(String nomeTerritorio, boolean isTeste){
+    	
         int numAtacantes = gameView.getNumAtacantesView();
         List<Integer> listDadosAtaque;
         List<Integer> listDadosDefesa;
         if(isTeste){
+        	System.out.println("isTeste destinoAtaqueTeste");
             gameModel.destinoAtaqueTeste(nomeTerritorio, numAtacantes);
         }
         else{
@@ -161,11 +175,10 @@ public class GameController {
     public void avaliaAtaqueController(List<Integer> dadosAtaque, List<Integer>dadosDefesa){
         this.dadosAtaqueTeste = dadosAtaque;
         this.dadosDefesaTeste = dadosDefesa;
-        
         gameModel.avaliaAtaqueTeste();
         gameView.voltaTerrioriosView();
-        gameView.exibiDados(dadosAtaqueTeste, dadosDefesaTeste);
-        ataqueFlag = 0;
+        //gameView.exibiDados(dadosAtaqueTeste, dadosDefesaTeste);
+        gameModel.mataAtaque();
     }
 
     public List<List<Integer>> retornaDadosController(){

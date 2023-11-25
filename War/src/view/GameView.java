@@ -25,6 +25,10 @@ public class GameView {
 		}
 		return instance;
 	}
+    
+    public void removeConfirmaView() {
+    	janelaJogo.removeConfirma();
+    }
 
     public String[] getCoresView(){
         return controller.getCoresController();
@@ -178,7 +182,7 @@ public class GameView {
     }
 
     public void mostraSelecaoDadosView(){
-        janelaJogo.mostraSelecaoDados(getNumAtacantesView(), getNumAtacantesView());
+        janelaJogo.mostraSelecaoDados(getNumAtacantesView(), controller.getNumDefensoreController());
     }
 
     public void avaliaAtaqueView(List<Integer> dadosAtaque, List<Integer> dadosDefesa){

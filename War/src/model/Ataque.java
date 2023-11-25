@@ -195,6 +195,10 @@ class Ataque {
     	this.numExercitoDefesa = numDefensores;
     }
     
+    public int getNumDefensores() {
+    	return this.numExercitoDefesa;
+    }
+    
     public void setJogadorDefensor(Jogador defensor) {
     	this.defensor = defensor;
     }
@@ -334,7 +338,7 @@ class Ataque {
 
     public void setDadosDefesa(List<Integer> dadosDefesa){
         int[] arrayDados = dadosDefesa.stream().mapToInt(Integer::intValue).toArray();
-        this.dadosAtaque = arrayDados;
+        this.dadosDefesa = arrayDados;
     }
     
 }
