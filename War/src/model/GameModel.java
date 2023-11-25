@@ -636,10 +636,12 @@ public class GameModel {
 		    j.setObjetivo(obj.getObjetivo());
 		    
 		    for (String cartaString : cartas.get(jogadorNum).split("-")){
-		    	String nomeCarta = cartaString.split("/")[0];
-		    	String simboloCarta = cartaString.split("/")[1];
-		    	Carta carta = new Carta(nomeCarta, simboloCarta);
-		    	j.addCarta(carta);
+		    	if (cartaString.length()>0) {		    		
+		    		String nomeCarta = cartaString.split("/")[0];
+		    		String simboloCarta = cartaString.split("/")[1];
+		    		Carta carta = new Carta(nomeCarta, simboloCarta);
+		    		j.addCarta(carta);
+		    	}
 		    }
 		    
 		    for (String stringTerritorio : territoriosString.get(jogadorNum).split("-")) {
