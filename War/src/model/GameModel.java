@@ -416,6 +416,7 @@ public class GameModel {
 				if(foiDominado){
 					ataqueAtual.setExercitosDeslocados(1);
 					ataqueAtual.conquistaAndDeslocamento();
+					jogadores.get(numJogadorAtual).addCarta(deckCartas.drawCard());
 				}
 				return;
 			}
@@ -446,6 +447,7 @@ public class GameModel {
 		if(foiDominado){
 			ataqueAtual.setExercitosDeslocados(1);
 			ataqueAtual.conquistaAndDeslocamento();
+			jogadores.get(numJogadorAtual).addCarta(deckCartas.drawCard());
 		}
 	}
 
@@ -536,6 +538,7 @@ public class GameModel {
 		PrintWriter saida = null;
 		try {
 			saida = new PrintWriter(new FileWriter(filePath));
+			saida.write(String.valueOf(instance_controller.getIsTesteController())+ "\n");
 			saida.write(numJogadorAtual + "_" + numExercitosDisponiveis + "-" + rodadaInicialFlag + "\n");
 			for (Jogador j : jogadores) {
 				String NomeJogador = j.getNome();
@@ -593,7 +596,7 @@ public class GameModel {
         int result = fc.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {
-
+			String tipoJogo = "";
             File selectedFile = fc.getSelectedFile();
             List<String> listaJogadores = new ArrayList<String>(); 
             List<String> objetivos = new ArrayList<String>();
@@ -606,12 +609,17 @@ public class GameModel {
                 String line;
                 while ((line = reader.readLine()) != null) {
                 	if (firstLineFlag == 0) {
-                		generalData = line;
+                		tipoJogo = line;
                 		firstLineFlag = 1;
                 		continue;
                 	}
                 	
-        
+					if(firstLineFlag == 1) {
+						generalData = line;
+						firstLineFlag = 2;
+						continue;
+					}
+
                     String playerInfo = line.split("-", 2)[0];
                     //System.out.println(playerInfo);
                     listaJogadores.add(playerInfo);
@@ -636,7 +644,7 @@ public class GameModel {
                 e.printStackTrace();
             }
             
-            iniciaJogoSalvo(listaJogadores,objetivos, cartas,territorios, generalData);
+            iniciaJogoSalvo(tipoJogo, listaJogadores,objetivos, cartas,territorios, generalData);
             
             
 
@@ -645,9 +653,15 @@ public class GameModel {
         }
 	}
 	
-	public void iniciaJogoSalvo(List<String> listaJogadores, List<String> objetivos, List<String> cartas, List<String> territoriosString, String generalData) {
+	public void iniciaJogoSalvo(String tipoJogo, List<String> listaJogadores, List<String> objetivos, List<String> cartas, List<String> territoriosString, String generalData) {
 		GameModel gameInstance = GameModel.getInstancia();	
 		
+		if (tipoJogo.equals("true")) {
+			instance_controller.setIsTesteController(true);
+		} else {
+			instance_controller.setIsTesteController(false);
+		}
+
 		for (int i =0;i<listaJogadores.size();i++) {
 			String jogadorNome = listaJogadores.get(i).split("/")[0];
 			String jogadorCor = listaJogadores.get(i).split("/")[1];
@@ -693,7 +707,6 @@ public class GameModel {
 			jogadorNum++;
 		}
 		instance_controller.janelaJogoController();
-		instance_controller.setIsTesteController(false);
 		
 	}
 	

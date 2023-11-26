@@ -130,7 +130,7 @@ public class JanelaCartas extends Frame {
     }
     
     private void preencheDictPath(String [] arr) {
-    	 String basePath = "C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\";
+    	 String basePath = "War\\src\\view\\images\\";
     	    for (int i = 0; i < arr.length; i++) {
     	        String countryName = arr[i];
     	        String path = basePath + dicionario.get(countryName);

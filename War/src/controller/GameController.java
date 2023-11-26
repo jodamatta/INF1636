@@ -79,6 +79,10 @@ public class GameController {
         gameView.setIsTesteView(flagTeste);
     }
 
+    public boolean getIsTesteController(){
+        return gameView.getIsTesteView();
+    }
+    
     public void btnTerritorioController(String nomeTerritorio, boolean isTeste){
         int faseRodada = gameModel.getFaseRodada();
         boolean ataque;

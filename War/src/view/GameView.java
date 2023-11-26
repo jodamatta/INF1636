@@ -86,6 +86,11 @@ public class GameView {
     public void setIsTesteView(boolean flagTeste){
         janelaJogo.setIsTeste(flagTeste);
     }
+
+    public boolean getIsTesteView(){
+        return janelaJogo.getIsTeste();
+    }
+
     public void btnTerritorioController(String nomeTerritorio, boolean isTeste){
         controller.btnTerritorioController(nomeTerritorio, isTeste);
     }

@@ -8,7 +8,7 @@ enum ListaObjetivos {
     CONQ_NA_AU, // Conquistar America do Norte e Australasia
     CONQ_EU_LATAM, // Conquistar Europa e America do Sul
     CONQ_EU_AU, // Conquistar Europa e Australasia 
-    ELIM_AZUL,
+    ELIM_AZUL, // Eliminar o jogador azul ou conquistar 24 (caso não tenha azul)
     ELIM_VERMELHO,
     ELIM_AMARELO,
     ELIM_VERDE,

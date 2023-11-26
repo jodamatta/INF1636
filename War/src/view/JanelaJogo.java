@@ -41,7 +41,6 @@ public class JanelaJogo extends Frame{
     private List<Integer> valoresAtaque;
     private List<Integer> valoresDefesa;
     private boolean isTeste;
-    private Button teste;
 
     public JanelaJogo() {
         gameView = GameView.getInstanciaView();
@@ -49,7 +48,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("C:\\\\Users\\\\Murilo\\\\Desktop\\\\Projetos\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -341,6 +340,10 @@ public class JanelaJogo extends Frame{
         btnMover.setLabel(String.valueOf(numExercitosMovimento));
     }
 
+    public boolean getIsTeste(){
+        return isTeste;
+    }
+
     public void finalizaJogo(String nomeJogador, String corJogador) {
         exibirVencedor(nomeJogador, corJogador);
         int opcao = JOptionPane.showConfirmDialog(
@@ -368,8 +371,8 @@ public class JanelaJogo extends Frame{
         for (int i = 1; i < 7; i++) {
             try {
             	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
-                BufferedImage imagemDadoAtaque = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
-                BufferedImage imagemDadoDefesa = ImageIO.read(new File("C:\\\\\\\\Users\\\\\\\\miguel.batista_bigda\\\\\\\\Documents\\\\\\\\GitHub\\\\\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoAtaque = ImageIO.read(new File("War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoDefesa = ImageIO.read(new File("War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
                 dadosAtaque.add(imagemDadoAtaque);
                 dadosDefesa.add(imagemDadoDefesa);
                 repaint();
@@ -380,7 +383,7 @@ public class JanelaJogo extends Frame{
     }
 
     public void exibiDados(List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum){
-    	for (Integer dadoAraque : dadosDefesasnum) {
+    	for (Integer dadoAraque : dadosAtaquesnum) {
     		System.out.println("dadoAraque exibeee" + dadoAraque);
     	}
     	for (Integer defesa : dadosDefesasnum) {
@@ -405,12 +408,12 @@ public class JanelaJogo extends Frame{
 
         btnConfirmaDados.setVisible(true);
         btnConfirmaDados.addActionListener(e -> {
-        	System.out.println(e);
-           List<List<Integer>> resultados = retornaDados(numAtacantes, numDefensores);
-           valoresAtaque = resultados.get(0);
-           valoresDefesa = resultados.get(1);
-           gameView.avaliaAtaqueView(valoresAtaque, valoresDefesa);
-           removeDadosTeste();
+            System.out.println(e);
+            List<List<Integer>> resultados = retornaDados(numAtacantes, numDefensores);
+            valoresAtaque = resultados.get(0);
+            valoresDefesa = resultados.get(1);
+            gameView.avaliaAtaqueView(valoresAtaque, valoresDefesa);
+            removeDadosTeste();
         });
     }
 
@@ -531,10 +534,14 @@ public class JanelaJogo extends Frame{
         resultados.add(dadosDefesa);
         return resultados;
     }
+    public void dispaintDados(){
+        removeDados(getGraphics());
+    }
 
     public void paintDados(Graphics g, List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum) {
         int x = 450;
         int y = 450;
+
         for (int i = 0; i < dadosAtaquesnum.size(); i++) {
             g.drawImage(this.dadosAtaque.get(dadosAtaquesnum.get(i) - 1), x, y, this);
             y += 50;
@@ -545,6 +552,7 @@ public class JanelaJogo extends Frame{
             g.drawImage(this.dadosDefesa.get(dadosDefesasnum.get(i) - 1), x, y, this);
             y += 50;
         }
+        
     }
 
     @Override
