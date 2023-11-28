@@ -35,6 +35,7 @@ public class GameModel {
 	private static List<Jogador> jogadores = new ArrayList<>();
 	private static List<Territorio> territorios = new ArrayList<>();
 	private List<Objetivo> objetivosAtivos = new ArrayList<>();
+	private Map<String, Objetivo> dictCorElimCor = new HashMap<>();
 	private List<Continente> continentes = new ArrayList<>(Arrays.asList(
 		new Continente("Africa"),
 		new Continente("America do Norte"),
@@ -44,6 +45,15 @@ public class GameModel {
 		new Continente("Oceania")
 	)); 
 	
+	{
+		dictCorElimCor.put("Azul", new Objetivo(ListaObjetivos.ELIM_AZUL));
+		dictCorElimCor.put("Vermelho", new Objetivo(ListaObjetivos.ELIM_VERMELHO));
+		dictCorElimCor.put("Verde", new Objetivo(ListaObjetivos.ELIM_VERDE));
+		dictCorElimCor.put("Amarelo", new Objetivo(ListaObjetivos.ELIM_AMARELO));
+		dictCorElimCor.put("Branco", new Objetivo(ListaObjetivos.ELIM_BRANCO));
+		dictCorElimCor.put("Preto", new Objetivo(ListaObjetivos.ELIM_PRETO));
+	}
+
 	private GameModel() {
 	}
 	
@@ -63,7 +73,6 @@ public class GameModel {
 		Jogador jogador = new Jogador(nome, color);
 		jogadores.add(jogador);
 	}
-	
 	
 	public String[] getCores() {
 		return Arrays.stream(CorJogador.values()).map(Enum::name).toArray(String[]::new);
@@ -385,7 +394,6 @@ public class GameModel {
 		ataqueAtual = null;
 	}
 	
-
 	public int getNumSoldadosDisponiveis(){
 		return numExercitosDisponiveis;
 	}
@@ -395,7 +403,6 @@ public class GameModel {
 			if(t.getNome() == nomeTerritorio || nomeTerritorio.compareTo(t.getNome()) == 0){
 				ataqueAtual.setAlvo(t);
 				ataqueAtual.setNumAtacantes(numExercitos);
-				System.out.println("t.getNumeroSoldados() defensores " + t.getNumeroSoldados());
 				ataqueAtual.setNumDefensores(Math.min(t.getNumeroSoldados(), 3));
 				ataqueAtual.setJogadorDefensor(t.getJogador());
 				instance_controller.mostraSelecaoDadosController();
@@ -448,7 +455,21 @@ public class GameModel {
 			ataqueAtual.setExercitosDeslocados(1);
 			ataqueAtual.conquistaAndDeslocamento();
 			jogadores.get(numJogadorAtual).addCarta(deckCartas.drawCard());
+			matouCorCerta(ataqueAtual.getAlvo().getJogador(), ataqueAtual.getAtacante());
 		}
+	}
+
+	public void matouCorCerta(Jogador jogador, Jogador atacante){
+		if (!(jogador.getTerritorios().isEmpty())){
+			return;
+		}
+		ListaObjetivos objetivo = atacante.getObjetivo();
+		CorJogador cor = jogador.getCor();
+		if( objetivo == dictCorElimCor.get(cor.toString()).getObjetivo()){
+			alguemVenceu = true;
+			instance_controller.janelaFimJogoController(atacante.getNome());
+		}
+		atacante.setObjetivo(ListaObjetivos.CONQ_24);
 	}
 
 	public List<Integer> getDadosAtaque(){
@@ -468,6 +489,15 @@ public class GameModel {
 		return null;
 	}
 
+	public boolean temJogadorCor(String cor){
+		for (Jogador j : jogadores){
+			if (j.getCor().toString() == cor){
+				return j.getTerritorios().size() > 0;
+			}
+		}
+		return false;
+	}
+	
 	public boolean verificaObjetivo(Jogador jogador){
 		if(alguemVenceu){
 			return false;
@@ -476,11 +506,17 @@ public class GameModel {
 		ListaObjetivos objetivo = jogador.getObjetivo();
 		switch (objetivo) {
             case ELIM_AZUL:
-                return corToJogador("Azul").getTerritorios().isEmpty(); //checar
+				if (temJogadorCor("Azul")){
+                	return corToJogador("Azul").getTerritorios().isEmpty(); //checar
+				} return jogador.getTerritorios().size() >= 24;
             case ELIM_VERMELHO:
-                return corToJogador("Vermelho").getTerritorios().isEmpty();
+                if (temJogadorCor("Vermelho")){
+                	return corToJogador("Vermelho").getTerritorios().isEmpty(); //checar
+				} return jogador.getTerritorios().size() >= 24;
             case ELIM_VERDE:
-				return corToJogador("Verde").getTerritorios().isEmpty();
+				if (temJogadorCor("Verde")){
+                	return corToJogador("Verde").getTerritorios().isEmpty(); //checar
+				} return jogador.getTerritorios().size() >= 24;
 			case ELIM_AMARELO:
 				return corToJogador("Amarelo").getTerritorios().isEmpty();
 			case ELIM_BRANCO:
@@ -655,13 +691,6 @@ public class GameModel {
 	
 	public void iniciaJogoSalvo(String tipoJogo, List<String> listaJogadores, List<String> objetivos, List<String> cartas, List<String> territoriosString, String generalData) {
 		GameModel gameInstance = GameModel.getInstancia();	
-		
-		if (tipoJogo.equals("true")) {
-			instance_controller.setIsTesteController(true);
-		} else {
-			instance_controller.setIsTesteController(false);
-		}
-
 		for (int i =0;i<listaJogadores.size();i++) {
 			String jogadorNome = listaJogadores.get(i).split("/")[0];
 			String jogadorCor = listaJogadores.get(i).split("/")[1];
@@ -707,12 +736,17 @@ public class GameModel {
 			jogadorNum++;
 		}
 		instance_controller.janelaJogoController();
-		
+		if (tipoJogo.equals("true")) {
+			instance_controller.setIsTesteController(true);
+		} else {
+			instance_controller.setIsTesteController(false);
+		}
 	}
 	
 	public int getNumDefensores() {
 		return ataqueAtual.getNumDefensores();
 	}
+	
 	public static void resetInstancia() {
         instance = null;
     }

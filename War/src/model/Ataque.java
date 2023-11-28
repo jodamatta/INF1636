@@ -341,4 +341,7 @@ class Ataque {
         this.dadosDefesa = arrayDados;
     }
     
+    public Jogador getAtacante() {
+    	return this.atacante;
+    }
 }
