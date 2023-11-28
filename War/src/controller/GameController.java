@@ -93,14 +93,12 @@ public class GameController {
                 break;
             case 1:
                 if(ataqueFlag == 0){
-                	System.out.println("AAAAA ataqueFlag == 0");
                     ataque = ataqueTerritorioController(nomeTerritorio);
                     if(ataque){
                         ataqueFlag = 1;
                     }
                     
                 } else{
-                	System.out.println("AAAAA ataqueFlag == 1");
                     ataqueFlag = 0;
                     destinoAtaqueController(nomeTerritorio, isTeste);
                     if (!isTeste) { 

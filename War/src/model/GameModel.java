@@ -228,7 +228,9 @@ public class GameModel {
 				numExercitosDisponiveis += c.getBonus();
 			}
 		}
-		
+		if(rodadaInicialFlag >= jogadores.size()-1 && rodadaInicialFlag < 2*jogadores.size()-1){
+			numExercitosDisponiveis = 0;
+		}
 	}
 
 	public void passaVez(){
@@ -250,8 +252,10 @@ public class GameModel {
 			if(faseRodada == 3){
 				passaVez();
 				faseRodada = 0;
+				rodadaInicialFlag++;			
 			}
 		}
+		System.out.println("IncialFlag: " + rodadaInicialFlag);
 		if (rodadaInicialFlag < jogadores.size()){
 			return true;
 		}
@@ -424,6 +428,7 @@ public class GameModel {
 					ataqueAtual.setExercitosDeslocados(1);
 					ataqueAtual.conquistaAndDeslocamento();
 					jogadores.get(numJogadorAtual).addCarta(deckCartas.drawCard());
+					matouCorCerta(ataqueAtual.getAlvo().getJogador(), ataqueAtual.getAtacante());
 				}
 				return;
 			}
@@ -452,24 +457,38 @@ public class GameModel {
 
 		boolean foiDominado = ataqueAtual.avaliaAtaque();
 		if(foiDominado){
+			Jogador jogadorAlvo = ataqueAtual.getAlvo().getJogador();
+			Jogador jogadorAtacante = ataqueAtual.getAtacante();
 			ataqueAtual.setExercitosDeslocados(1);
 			ataqueAtual.conquistaAndDeslocamento();
 			jogadores.get(numJogadorAtual).addCarta(deckCartas.drawCard());
-			matouCorCerta(ataqueAtual.getAlvo().getJogador(), ataqueAtual.getAtacante());
+			matouCorCerta(jogadorAlvo, jogadorAtacante);
 		}
 	}
 
 	public void matouCorCerta(Jogador jogador, Jogador atacante){
 		if (!(jogador.getTerritorios().isEmpty())){
+			System.out.println("Jogador " + jogador.getNome() + " não foi eliminado");
 			return;
 		}
-		ListaObjetivos objetivo = atacante.getObjetivo();
 		CorJogador cor = jogador.getCor();
-		if( objetivo == dictCorElimCor.get(cor.toString()).getObjetivo()){
-			alguemVenceu = true;
-			instance_controller.janelaFimJogoController(atacante.getNome());
+		jogadores.remove(jogador);
+		for(Jogador j: jogadores){
+			if( j.getObjetivo() == dictCorElimCor.get(cor.toString()).getObjetivo()){
+				if(j.getCor() == atacante.getCor()){
+					alguemVenceu = true;
+					instance_controller.janelaFimJogoController(atacante.getNome());
+				}
+				j.setObjetivo(ListaObjetivos.CONQ_24);
+			}
 		}
-		atacante.setObjetivo(ListaObjetivos.CONQ_24);
+
+		for (int i = 0; i < jogadores.size(); i++){
+			if (jogadores.get(i).getCor() == atacante.getCor()){
+				numJogadorAtual = i;
+				return;
+			}
+		}
 	}
 
 	public List<Integer> getDadosAtaque(){
