@@ -548,6 +548,8 @@ public class GameModel {
 				return jogador.getTerritorios().size() >= 18 && jogador.getTerritorios().stream().allMatch(t -> t.getNumeroSoldados() >= 2);
 			case CONQ_AS_LATAM:
 				return (continentes.get(2).foiDominado(jogador) * continentes.get(3).foiDominado(jogador) == 1);
+			case CONQ_AS_AF:
+				return (continentes.get(2).foiDominado(jogador) * continentes.get(0).foiDominado(jogador) == 1);
 			case CONQ_NA_AF:
 				return (continentes.get(1).foiDominado(jogador) * continentes.get(0).foiDominado(jogador) == 1);
 			case CONQ_NA_AU:

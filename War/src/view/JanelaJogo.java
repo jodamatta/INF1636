@@ -534,6 +534,7 @@ public class JanelaJogo extends Frame{
         resultados.add(dadosDefesa);
         return resultados;
     }
+    
     public void dispaintDados(){
         removeDados(getGraphics());
     }

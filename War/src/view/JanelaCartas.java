@@ -146,6 +146,7 @@ public class JanelaCartas extends Frame {
     {
         dictObejetivos.put("CONQ_24", "Conquistar 24 territorios");
         dictObejetivos.put("CONQ_18_2", "Conquistar 18 territorios, cada um com no minimo 2 exercitos");
+        dictObejetivos.put("CONQ_AS_AF", "Conquistar Asia e Africa");
         dictObejetivos.put("CONQ_AS_LATAM", "Conquistar Asia e America do Sul");
         dictObejetivos.put("CONQ_NA_AF", "Conquistar America do Norte e Africa");
         dictObejetivos.put("CONQ_NA_AU", "Conquistar America do Norte e Australasia");
