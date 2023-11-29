@@ -18,6 +18,7 @@ public class GameController {
     private int numExercitosMovimento = 0;
     private List<Integer> dadosAtaqueTeste;
     private List<Integer> dadosDefesaTeste;
+    
     public GameController(){
     }
 
@@ -157,7 +158,6 @@ public class GameController {
         List<Integer> listDadosAtaque;
         List<Integer> listDadosDefesa;
         if(isTeste){
-        	System.out.println("isTeste destinoAtaqueTeste");
             gameModel.destinoAtaqueTeste(nomeTerritorio, numAtacantes);
         }
         else{

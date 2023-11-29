@@ -48,7 +48,7 @@ public class JanelaJogo extends Frame{
         	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
         	//C:\\\\Users\\\\miguel.batista_bigda\\\\Documents\\\\GitHub\\\\programacao_orientada_a_objetos\\\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg
             //C:\\Users\\joana\\OneDrive\\Documentos\\GitHub\\programacao_orientada_a_objetos\\War\\src\\view\\images\\tabuleiro_certo.jpg
-        	imagemDeFundo = ImageIO.read(new File("War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
+        	imagemDeFundo = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\\\src\\\\view\\\\images\\\\tabuleiro_certo.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         };
@@ -371,8 +371,8 @@ public class JanelaJogo extends Frame{
         for (int i = 1; i < 7; i++) {
             try {
             	//C:\\Users\\Murilo\\Desktop\\Projetos\\programacao_orientada_a_objetos\\War\\src\\view\\images
-                BufferedImage imagemDadoAtaque = ImageIO.read(new File("War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
-                BufferedImage imagemDadoDefesa = ImageIO.read(new File("War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoAtaque = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\\\src\\\\view\\\\images\\\\dado_ataque_"+ String.valueOf(i) +".png"));
+                BufferedImage imagemDadoDefesa = ImageIO.read(new File("C:\\Users\\miguel.batista_bigda\\Documents\\GitHub\\programacao_orientada_a_objetos\\War\\\\src\\\\view\\\\images\\\\dado_defesa_"+ String.valueOf(i) +".png"));
                 dadosAtaque.add(imagemDadoAtaque);
                 dadosDefesa.add(imagemDadoDefesa);
                 repaint();
@@ -383,12 +383,6 @@ public class JanelaJogo extends Frame{
     }
 
     public void exibiDados(List<Integer> dadosAtaquesnum, List<Integer> dadosDefesasnum){
-    	for (Integer dadoAraque : dadosAtaquesnum) {
-    		System.out.println("dadoAraque exibeee" + dadoAraque);
-    	}
-    	for (Integer defesa : dadosDefesasnum) {
-    		System.out.println("defesa exibee" + defesa);
-    	}
         paintDados(getGraphics(), dadosAtaquesnum, dadosDefesasnum);
     }
 
@@ -402,13 +396,11 @@ public class JanelaJogo extends Frame{
     }
     
     public void mostraSelecaoDados(int numAtacantes, int numDefensores) {
-    	System.out.println("mostraSelecaoDados foi chamada");
         selecionaValorDadosAtaque(numAtacantes);
         selecionaValorDadosDefesa(numDefensores);
 
         btnConfirmaDados.setVisible(true);
         btnConfirmaDados.addActionListener(e -> {
-            System.out.println(e);
             List<List<Integer>> resultados = retornaDados(numAtacantes, numDefensores);
             valoresAtaque = resultados.get(0);
             valoresDefesa = resultados.get(1);

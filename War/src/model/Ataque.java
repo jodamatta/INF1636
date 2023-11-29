@@ -231,16 +231,6 @@ class Ataque {
         // Convert back to int array
         this.dadosAtaque = Arrays.stream(boxedDadosAtaque).mapToInt(Integer::intValue).toArray();
         this.dadosDefesa = Arrays.stream(boxedDadosDefesa).mapToInt(Integer::intValue).toArray();
-
-        System.out.print("Ataque:\n");
-        for (int number : dadosAtaque) {
-            System.out.print(number + " ");
-        }
-        System.out.print("\nDefesa:\n");
-        for (int number : dadosDefesa) {
-            System.out.print(number + " ");
-        }
-        System.out.print("\n");
     }
     
     public boolean avaliaAtaque() {
@@ -257,8 +247,6 @@ class Ataque {
     		}
     		
     	}
-    	System.out.printf("Defensores perdidos %d\n", this.defensoresPerdidos);
-    	System.out.printf("Atacantes perdidos %d\n", this.atacantesPerdidos);
     	
     	int tropasNoTerritorioDefesa = this.paisAvlo.getNumeroSoldados();
     	if (defensoresPerdidos >= tropasNoTerritorioDefesa) {

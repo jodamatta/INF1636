@@ -151,11 +151,9 @@ public class GameModel {
 
 	public int querTrocar(Jogador jogador){
 		if( jogador.verificaTroca() != 0){
-			System.out.println("Voce tem uma troca valida. Voce quer trocar? (S/N)");
 			String resposta;
 			resposta = scanner.nextLine();
 			while (!resposta.equals("S") && !resposta.equals("N")){
-				System.out.println("Resposta inválida. Escolha S ou N");
 				resposta = scanner.nextLine();
 			}
 			if(resposta.equals("S")){
@@ -255,7 +253,6 @@ public class GameModel {
 				rodadaInicialFlag++;			
 			}
 		}
-		System.out.println("IncialFlag: " + rodadaInicialFlag);
 		if (rodadaInicialFlag < jogadores.size()){
 			return true;
 		}
@@ -394,7 +391,6 @@ public class GameModel {
 	}
 
 	public void mataAtaque(){
-		System.out.println("Matamos ataque");
 		ataqueAtual = null;
 	}
 	
@@ -436,19 +432,9 @@ public class GameModel {
 	}
 
 	public void avaliaAtaqueTeste(){
-		List<List<Integer>> dados = new ArrayList<>();
-		System.out.println("avaliaAtaqueTeste");	
+		List<List<Integer>> dados = new ArrayList<>();	
 		dados = instance_controller.retornaDadosController();
-		
-		
-		for (Integer dado : dados.get(0)) {
-			System.out.println("dado Ataque: " + dado);
-		}
-		
-		for (Integer dado : dados.get(1)) {
-			System.out.println("dado defesa: " + dado);
-		}
-		
+			
 		if (ataqueAtual == null) {
 			return;
 		}
@@ -468,7 +454,6 @@ public class GameModel {
 
 	public void matouCorCerta(Jogador jogador, Jogador atacante){
 		if (!(jogador.getTerritorios().isEmpty())){
-			System.out.println("Jogador " + jogador.getNome() + " não foi eliminado");
 			return;
 		}
 		CorJogador cor = jogador.getCor();
@@ -641,7 +626,6 @@ public class GameModel {
 	}
 
 	public void continuaJogo() {
-		System.out.println("continuando");
 		int firstLineFlag = 0;
 		// Create a file chooser
         JFileChooser fc = new JFileChooser();
@@ -853,7 +837,6 @@ public class GameModel {
 		GameModel gameInstance = GameModel.getInstancia();
 		instance_controller = GameController.getInstanciaController();
 		instance_controller.initGameController();
-		System.out.println("Iniciando jogo...");
 		gameInstance.startGame();
 
 	}
